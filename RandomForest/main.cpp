@@ -8,7 +8,7 @@ int main()
     typeCol.push_back(Type::integer_type);
     Cnumpy data = Cnumpy(2, 5, typeCol);
     std::vector<void *> dataCol = std::vector<void *>();
-    dataCol.push_back((void *)1);
+    dataCol.push_back((void *)123456789);
     dataCol.push_back((void*)2);
     dataCol.push_back((void*)3);
     dataCol.push_back((void*)4);
@@ -16,7 +16,7 @@ int main()
 
 
     std::vector<void*> dataCol2 = std::vector<void*>();
-    dataCol2.push_back((void*)1);
+    dataCol2.push_back((void*)123456789);
     dataCol2.push_back((void*)2);
     dataCol2.push_back((void*)3);
     dataCol2.push_back((void*)4);
