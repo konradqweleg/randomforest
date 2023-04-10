@@ -9,6 +9,31 @@ int main()
 {
 
 
+    //Cnumpy test
+
+    std::vector<Type> typeCol = std::vector<Type>();
+    typeCol.push_back(Type::integer_type);
+    typeCol.push_back(Type::double_type);
+    typeCol.push_back(Type::integer_type);
+    typeCol.push_back(Type::integer_type);
+    typeCol.push_back(Type::integer_type);
+
+    std::vector<std::string> nameC = std::vector<std::string>();
+    nameC.push_back("name");
+    nameC.push_back("xd");
+    nameC.push_back("xd");
+    nameC.push_back("xd2");
+    nameC.push_back("xd3");
+
+    Cnumpy data = Cnumpy(5,5,typeCol,nameC);
+
+    data.set_xy(1,1,2.0);
+    data.set_xy(2,0,1);
+    data.set_xy(3,0,2);
+    data.set_xy(4,3,3);
+
+    std::cout<<data;
+
    
 
     

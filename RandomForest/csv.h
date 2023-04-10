@@ -90,7 +90,7 @@ public:
     static int how_many_lines_in_file(std::ifstream& inFile){
 
       return  std::count(std::istreambuf_iterator<char>(inFile),
-                   std::istreambuf_iterator<char>(), '\n');
+                   std::istreambuf_iterator<char>(), '\n')+2;
     }
 
 
@@ -106,15 +106,14 @@ public:
         getline(file, line);
 
 
-        for (int g=0;g<10;++g) {
+        while (getline(file, line)) {
 
-            getline(file, line);
-            std::cout<<line<<std::endl;
-            std::cout<<x<<std::endl;
+
+         //   std::cout<<"i="<<i<<" "<<line<<std::endl;
             std::vector<std::string> lines = split(line,",");
 
             for(std::string value :lines){
-                std::cout<<"x: "<<x<<std::endl;
+
                 std::string value2;
                 if(value[0]=='.'){
                     value2="0"+value;
@@ -122,24 +121,20 @@ public:
                     value2 = value;
                 }
 
-
+            //    std::cout<<"["<<x<<","<<y<<"]"<<" = "<<value2<<std::endl;
 
               if(typeColumn[x] == Type::integer_type){
-
                    data.set_xy(x,y,std::stoi(value2));
                }else if (typeColumn[x] == Type::double_type){
-
-                   std::cout<<"D: "<<std::stod(value2);
                    data.set_xy(x,y,std::stod(value2));
                }else{
-                  std::cout<<"S: "<<value2;
                    data.set_xy(x,y,value2);
                }
 
                 x++;
             }
             x =0;
-            std::cout<<std::endl;
+
             y++;
         }
 
@@ -179,6 +174,7 @@ public:
 
 
         int rows_data = how_many_lines_in_file(newfile);
+        std::cout<<"Ile wierszy : "<<rows_data<<std::endl;
 
 
 
@@ -192,12 +188,12 @@ public:
         Cnumpy data = Cnumpy(columns_in_data,rows_data,columnType,columnsName);
 
       //  data.set_xy(2,2,2.0);
-        std::cout<<data<<std::endl;
+
+       //std::cout<<data;
+
 
         Cnumpy result = insert_data_to_cnumpy_from_file(data,path_to_file);
 
-        std::cout<<std::endl;
-        std::cout<<result<<std::endl;
 
 
 
