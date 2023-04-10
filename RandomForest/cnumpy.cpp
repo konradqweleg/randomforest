@@ -23,6 +23,21 @@ Cnumpy::Cnumpy(long x_dim, long y_dim, std::vector<Type> type_col) {
 		array_2d[x] = std::vector<void*>(y_dim);
 	}
 
+    for(int x = 0 ;x< x_dim;++x){
+        for(int y=0 ;y<y_dim;++y){
+
+
+            if (type_column[x] == Type::integer_type) {
+                array_2d[x][y] =  0;
+            }else if(type_column[x] ==Type::double_type){
+
+                array_2d[x][y] =  0;
+            }else{
+                array_2d[x][y] = 0;
+            }
+        }
+    }
+
 }
 
 void Cnumpy::set_x(long x, std::vector<void*> columnValue,Type type_col) {
@@ -96,9 +111,29 @@ std::ostream& operator<<(std::ostream& os, const Cnumpy& obj) {
 		for (int x = 0; x < obj.x_dimension; x++) {
 			
 			if (obj.type_column[x] == Type::integer_type) {
-				
-				os << std::left<< symbolVerticalBreak << std::setw(obj.setw) << ((int)obj.array_2d[x][y]) ;
-			}
+                int *p = (int *)obj.array_2d[x][y];
+                if(p!=NULL) {
+                    os << std::left << symbolVerticalBreak << std::setw(obj.setw) << *p;
+                }else{
+                    os << std::left << symbolVerticalBreak << std::setw(obj.setw) << 0.0;
+                }
+			}else if(obj.type_column[x] ==Type::double_type){
+
+                std::cout<<"Double powinno"<<std::endl;
+                double *p = (double *)obj.array_2d[x][y];
+                if(p!=NULL) {
+                    os << std::left << symbolVerticalBreak << std::setw(obj.setw) << *p;
+                }else{
+                    os << std::left << symbolVerticalBreak << std::setw(obj.setw) << 0.0;
+                }
+            }else{
+                std::string *p = (std::string *)obj.array_2d[x][y];
+                if(p!=NULL) {
+                    os << std::left << symbolVerticalBreak << std::setw(obj.setw) << *p;
+                }else{
+                    os << std::left << symbolVerticalBreak << std::setw(obj.setw) << 0.0;
+                }
+            }
 			
 			
 		}

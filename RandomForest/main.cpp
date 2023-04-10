@@ -15,10 +15,11 @@ int main()
     
 
 
-   CSV_reader::read_csv_file_as_cnumpy("data.txt");
+   Cnumpy xd = CSV_reader::read_csv_file_as_cnumpy("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\x64\\Debug\\data.txt");
 
-   int x;
-   std::cin >> x;
+
+
+   std::cout<<xd<<std::endl;
     /*std::cout << "Hello World!\n";
     /*
    
