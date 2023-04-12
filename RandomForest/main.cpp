@@ -40,7 +40,7 @@ int main()
     
 
 
-   Cnumpy xd = CSV_reader::read_csv_file_as_cnumpy("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\x64\\Debug\\data.txt");
+   Cnumpy xd = CSV_reader::read_csv_file_as_cnumpy("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\x64\\Debug\\data.txt");
 
 
 
