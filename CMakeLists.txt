@@ -6,9 +6,9 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(RandomForest)
 
 add_executable(randomforest
-        RandomForest/cnumpy.cpp
-        RandomForest/cnumpy.h
-        RandomForest/csv.cpp
-        RandomForest/csv.h
+        RandomForest/cnumpy/cnumpy.cpp
+        RandomForest/cnumpy/cnumpy.h
+        RandomForest/csv/csv.cpp
+        RandomForest/csv/csv.h
         RandomForest/main.cpp
         RandomForest/type.h)

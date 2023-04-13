@@ -1,7 +1,7 @@
 #include <iostream>
-#include "cnumpy.h"
+#include "cnumpy/cnumpy.h"
 #include "type.h"
-#include "csv.h"
+#include "csv/csv.h"
 
 #include <fstream>
 
@@ -31,6 +31,16 @@ int main()
     data.set_xy(2,0,1);
     data.set_xy(3,0,2);
     data.set_xy(4,3,3);
+
+    std::vector<int> x;
+    x.push_back(-9);
+    x.push_back(-9);
+    x.push_back(-9);
+    x.push_back(-9);
+    x.push_back(-9);
+
+
+    data.set_x(0,x);
 
     std::cout<<data;
 

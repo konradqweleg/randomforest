@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cnumpy.h"
+#include "cnumpy/cnumpy.h"
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -179,7 +179,7 @@ public:
 
         Cnumpy data = Cnumpy(columns_in_data, rows_data, column_type, columns_name);
 
-        
+
         // Reopen file in method below after count how many records is in data but probably ones open file is enought. Potential improvment
         Cnumpy result = insert_data_to_cnumpy_from_file(data, path_to_file, delimiter);
 
