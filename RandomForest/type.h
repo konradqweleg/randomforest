@@ -8,7 +8,9 @@
 enum Type {
     integer_type = 0,
     double_type = 1,
-    string_type = 2
+    string_type = 2,
+    empty_type =3;
+
 };
 
 static bool is_int(const std::string &text_with_potential_number) {

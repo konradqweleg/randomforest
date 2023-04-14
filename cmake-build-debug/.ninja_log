@@ -1,12 +1,10 @@
 # ninja log v5
 36	858	7031164884584781	CMakeFiles/randomforest.dir/RandomForest/csv.cpp.obj	995e95b44bfe37dd
 2	1210	7031164888093137	CMakeFiles/randomforest.dir/RandomForest/cnumpy.cpp.obj	df0162cabe92a8f4
-18	1178	7031164887780337	CMakeFiles/randomforest.dir/RandomForest/main.cpp.obj	64600abfb2d5874c
-1210	1429	7031164890192425	randomforest.exe	1c11eabd34917715
-2	244	7031169735209238	build.ninja	c0395d33c236ea8d
-2	463	7031169740446549	CMakeFiles/randomforest.dir/RandomForest/csv/csv.cpp.obj	b849a9d75f3180f
-7	656	7031169742368876	CMakeFiles/randomforest.dir/RandomForest/cnumpy/cnumpy.cpp.obj	b1c4968a16f17f15
 12	714	7031169742949003	CMakeFiles/randomforest.dir/RandomForest/main.cpp.obj	64600abfb2d5874c
-714	897	7031169744757936	randomforest.exe	9eed1ff3cc7b3c46
-4	626	7031170295465638	CMakeFiles/randomforest.dir/RandomForest/cnumpy/cnumpy.cpp.obj	b1c4968a16f17f15
 627	806	7031170297248228	randomforest.exe	9eed1ff3cc7b3c46
+2	244	7031179171561988	build.ninja	c0395d33c236ea8d
+2	463	7031169740446549	CMakeFiles/randomforest.dir/RandomForest/csv/csv.cpp.obj	b849a9d75f3180f
+4	626	7031170295465638	CMakeFiles/randomforest.dir/RandomForest/cnumpy/cnumpy.cpp.obj	b1c4968a16f17f15
+4	749	7031180933539277	CMakeFiles/randomforest.dir/RandomForest/main.cpp.obj	64600abfb2d5874c
+750	932	7031180935345933	randomforest.exe	9eed1ff3cc7b3c46
