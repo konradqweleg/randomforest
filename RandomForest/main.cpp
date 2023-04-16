@@ -4,6 +4,7 @@
 #include "csv/csv.h"
 
 #include <fstream>
+#include "decision_tree/decision_tree.h"
 
 int main()
 {
@@ -42,7 +43,7 @@ int main()
 
     data.set_x(0,x);
 
-    std::cout<<data;
+   // std::cout<<data;
 
    
 
@@ -50,10 +51,38 @@ int main()
     
 
 
-   Cnumpy xd = CSV_reader::read_csv_file_as_cnumpy("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv");
+   Cnumpy xd = CSV_reader::read_csv_file_as_cnumpy("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\tests\\data.csv");
 
 
 
    std::cout<<xd<<std::endl;
+
+
+   // decision_tree::quant_data(xd,0.10,"xd");
+
+
+    std::vector<int> result_column = xd.get_column<int>(2);
+
+
+    for(int a : result_column){
+        std::cout<<a<<std::endl;
+    }
+
+    std::cout<<"Entropia rezultat : "<<decision_tree::entropy_result(result_column)<<std::endl;
+
+    std::map<int,double> entropy = decision_tree::entropy_for_column(xd.get_column<int>(0),result_column);
+
+
+    for(std::map<int,double>::iterator iter = entropy.begin(); iter != entropy.end(); ++iter)
+    {
+        int k =  iter->first;
+
+        double v = iter->second;
+        std::cout<<"Key = "<<k<<" Value = "<<v<<std::endl;
+    }
+
+    std::cout<<"Gotowe";
+
+
 
 }
