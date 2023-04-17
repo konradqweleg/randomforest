@@ -51,6 +51,8 @@ public:
 
     std::vector<Type> get_type_column();
 
+
+
     int get_x_dimension(){
         return x_dimension;
     }

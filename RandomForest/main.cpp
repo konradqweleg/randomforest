@@ -70,7 +70,7 @@ int main()
 
     std::cout<<"Entropia rezultat : "<<decision_tree::entropy_result(result_column)<<std::endl;
 
-    std::map<int,double> entropy = decision_tree::entropy_for_column(xd.get_column<int>(0),result_column);
+    std::map<int,double> entropy = decision_tree::entropy_for_column(xd.get_column<int>(1),result_column);
 
 
     for(std::map<int,double>::iterator iter = entropy.begin(); iter != entropy.end(); ++iter)
@@ -80,6 +80,20 @@ int main()
         double v = iter->second;
         std::cout<<"Key = "<<k<<" Value = "<<v<<std::endl;
     }
+
+
+    std::map<int,int> awx = decision_tree::how_many_key_in_results(result_column);
+    for(std::map<int,int>::iterator iter = awx.begin(); iter != awx.end(); ++iter)
+    {
+        int k =  iter->first;
+
+        int v = iter->second;
+        std::cout<<"Key_1 = "<<k<<" Value_1 = "<<v<<std::endl;
+    }
+
+
+    std::cout<<"Profit : "<<decision_tree::get_information_profit(entropy,xd.get_column<int>(1),result_column);
+
 
     std::cout<<"Gotowe";
 
