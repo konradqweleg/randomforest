@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include "decision_tree/decision_tree.h"
+#include "quant/quant.h"
 
 int main()
 {
@@ -43,6 +44,8 @@ int main()
 
     data.set_x(0,x);
 
+
+
    // std::cout<<data;
 
    
@@ -51,14 +54,18 @@ int main()
     
 
 
-   Cnumpy xd = CSV_reader::read_csv_file_as_cnumpy("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\tests\\data.csv");
+   Cnumpy xd = CSV_reader::read_csv_file_as_cnumpy("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv");
 
+   std::vector<double> col_1 = xd.get_column<double>(0);
+   col_1 = quant_utility::quant_column_double_betweeen_method_result_avg_group(col_1,0.10);
+
+ //  xd.set_x(0,col_1);
 
 
    std::cout<<xd<<std::endl;
 
 
-   // decision_tree::quant_data(xd,0.10,"xd");
+   // decision_tree::quant_data_in_cnumpy(xd,0.10,"xd");
 
 
     std::vector<int> result_column = xd.get_column<int>(2);
