@@ -11,4 +11,6 @@ add_executable(randomforest
         RandomForest/csv/csv.cpp
         RandomForest/csv/csv.h
         RandomForest/main.cpp
-        RandomForest/type.h RandomForest/decision_tree/decision_tree.h RandomForest/decision_tree/tree_node.h)
+        RandomForest/type.h RandomForest/decision_tree/decision_tree.h RandomForest/decision_tree/tree_node.h RandomForest/Google_tests/quant_test.cpp)
+
+add_subdirectory(RandomForest/Google_tests)
