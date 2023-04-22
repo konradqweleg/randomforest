@@ -61,9 +61,10 @@ public:
             for (double value: column_data) {
                 if (value < threshold && value > threshold - step) {
 
-                    std::cout<<threshold<<std::endl;
-                    double department_range_avg = (threshold - (threshold-step))/2;
+
+                    double department_range_avg = threshold + (threshold - (threshold-step))/2;
                     result.push_back(  department_range_avg);
+                    std::cout<<" Th: "<<threshold<<"  "<<department_range_avg<<std::endl;
                 }
             }
             threshold += step;

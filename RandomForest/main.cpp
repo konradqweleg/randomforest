@@ -54,12 +54,12 @@ int main()
     
 
 
-   Cnumpy xd = CSV_reader::read_csv_file_as_cnumpy("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv");
+   Cnumpy xd = CSV_reader::read_csv_file_as_cnumpy("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\iris\\data.csv");
 
    std::vector<double> col_1 = xd.get_column<double>(0);
    col_1 = quant_utility::quant_column_double_betweeen_method_result_avg_group(col_1,0.10);
 
- //  xd.set_x(0,col_1);
+   xd.set_x(0,col_1);
 
 
    std::cout<<xd<<std::endl;
@@ -69,6 +69,8 @@ int main()
 
 
     std::vector<int> result_column = xd.get_column<int>(2);
+
+    //std::vector<std::string> xdd =xd.get_column<std::string>(3);
 
 
     for(int a : result_column){

@@ -2,6 +2,7 @@
 #include <vector>
 #include "type.h"
 #include <iomanip>
+#include <stdexcept>
 
 
 int Cnumpy::how_many_column_about_type(Type type) {

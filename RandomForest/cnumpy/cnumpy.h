@@ -37,19 +37,32 @@ public:
         return name_column;
     }
 
+
+    std::vector<std::string> get_column_string(int column){
+        std::vector<std::string> result;
+        int offset = (position_actual_column_in_type(Type::string_type, column)) * y_dimension;
+        result= std::vector<std::string>(string_store.begin() + offset, string_store.begin() + offset+y_dimension);
+        return  result;
+    }
+    std::vector<Type> get_type_column();
+
     template<typename T>
-    std::vector<T> get_column(int column){
+    std::vector<T> get_column(int column) {
+
+        std::vector<T> result;
         if(get_type_column()[column] == Type::double_type) {
 
             int offset = (position_actual_column_in_type(Type::double_type, column)) * y_dimension;
-            return  std::vector<T>(double_store.begin() + offset, double_store.begin() + offset+y_dimension);
+            result =   std::vector<T>(double_store.begin() + offset, double_store.begin() + offset+y_dimension);
         }else if(get_type_column()[column] == Type::integer_type){
             int offset = (position_actual_column_in_type(Type::integer_type, column)) * y_dimension;
-            return  std::vector<T>(int_store.begin() + offset, int_store.begin() + offset+y_dimension);
+            result =   std::vector<T>(int_store.begin() + offset, int_store.begin() + offset+y_dimension);
         }
+
+        return result;
     }
 
-    std::vector<Type> get_type_column();
+
 
 
 
