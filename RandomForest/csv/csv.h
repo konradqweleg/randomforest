@@ -92,7 +92,7 @@ private:
     static void insert_value_to_cnumpy_with_convert_string_to_match_type(Cnumpy &data, std::string value, int x_rows,
                                                                          int y_columns) {
 
-        std::vector<Type> type_column = data.get_type_column();
+        std::vector<Type> type_column = data.get_type_columns();
 
         if (type_column[x_rows] == Type::integer_type) {
             data.set_xy(x_rows, y_columns, std::stoi(value));

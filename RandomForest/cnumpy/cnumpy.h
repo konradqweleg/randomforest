@@ -1,9 +1,10 @@
 #ifndef cnumpy_h
 #define cnumpy_h
+
 #include <vector>
 #include "type.h"
 
-class Cnumpy{
+class Cnumpy {
 
 private:
 
@@ -11,87 +12,65 @@ private:
     std::vector<double> double_store = std::vector<double>();
     std::vector<int> int_store = std::vector<int>();
 
-	std::vector<Type>  type_column = std::vector<Type>();
-	std::vector<std::string> name_column = std::vector<std::string>();
+    std::vector<Type> type_column = std::vector<Type>();
 
-	long x_dimension = 0;
-	long y_dimension = 0;
+    std::vector<std::string> name_column = std::vector<std::string>();
+
+    long x_dimension = 0;
+    long y_dimension = 0;
 
 
-
-	uint8_t width_printed_value_on_sysout = 20;
+    uint8_t width_printed_value_on_sysout = 20;
 
 
     int how_many_column_about_type(Type type);
 
-    int position_actual_column_in_type(Type type,int index_column);
-	
+    int position_actual_column_in_type(Type type, int index_column);
 
-	
 
 public:
-	Cnumpy(long x_dim, long y_dim, std::vector<Type> typeCol);
-	Cnumpy(long x_dim, long y_dim, std::vector<Type> typeCol,std::vector<std::string> nameCol);
+    Cnumpy(long x_dim, long y_dim, std::vector<Type> typeCol);
 
-    std::vector<std::string> get_column_name(){
-        return name_column;
-    }
+    Cnumpy(long x_dim, long y_dim, std::vector<Type> typeCol, std::vector<std::string> nameCol);
 
+    std::vector<std::string> get_column_name();
 
-    std::vector<std::string> get_column_string(int column){
-        std::vector<std::string> result;
-        int offset = (position_actual_column_in_type(Type::string_type, column)) * y_dimension;
-        result= std::vector<std::string>(string_store.begin() + offset, string_store.begin() + offset+y_dimension);
-        return  result;
-    }
-    std::vector<Type> get_type_column();
+    std::vector<Type> get_type_columns();
 
-    template<typename T>
-    std::vector<T> get_column(int column) {
+    int offset_calculate(Type type_column, int column_index);
 
-        std::vector<T> result;
-        if(get_type_column()[column] == Type::double_type) {
+    std::vector<std::string> get_column_string(int column_index);
 
-            int offset = (position_actual_column_in_type(Type::double_type, column)) * y_dimension;
-            result =   std::vector<T>(double_store.begin() + offset, double_store.begin() + offset+y_dimension);
-        }else if(get_type_column()[column] == Type::integer_type){
-            int offset = (position_actual_column_in_type(Type::integer_type, column)) * y_dimension;
-            result =   std::vector<T>(int_store.begin() + offset, int_store.begin() + offset+y_dimension);
-        }
+    std::vector<double> get_column_double(int column);
 
-        return result;
-    }
+    std::vector<int> get_column_int(int column);
 
 
+    int get_x_dimension();
 
+    int get_y_dimension();
 
-
-    int get_x_dimension(){
-        return x_dimension;
-    }
-
-
-    int get_y_dimension(){
-        return y_dimension;
-    }
-
-	void set_xy(int x, int y, int value);
+    void set_xy(int x, int y, int value);
 
     void set_xy(int x, int y, std::string value);
 
     void set_xy(int x, int y, double value);
 
+    int get_xy_int(int x, int y);
+
+    std::string get_xy_string(int x, int y);
+
+    double get_xy_double(int x, int y);
+
     template<typename T>
-    void set_x(long x, std::vector<T> column_values) {
+    void set_column(long index_column, std::vector<T> column_values) {
         for (int i = 0; i < column_values.size(); ++i) {
-                set_xy(x, i, column_values[i]);
+            set_xy(index_column, i, column_values[i]);
         }
     };
 
 
-	
-
-	friend std::ostream& operator<<(std::ostream& os,  Cnumpy& obj);
+    friend std::ostream &operator<<(std::ostream &os, Cnumpy &obj);
 
 
 };

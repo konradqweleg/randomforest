@@ -27,8 +27,8 @@ class quant_utility {
                 continue;
             }
 
-            if (data.get_type_column()[column_index] == Type::double_type) {
-                std::vector<double> column = data.get_column<double>(column_index);
+            if (data.get_type_columns()[column_index] == Type::double_type) {
+                std::vector<double> column = data.get_column_double<double>(column_index);
                 column = quant_column_double_to_int(column, quantity_group);
 
             }

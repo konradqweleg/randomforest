@@ -30,11 +30,69 @@ int Cnumpy::position_actual_column_in_type(Type type, int index_column) {
     return column_about_type;
 }
 
+std::vector<std::string> Cnumpy::get_column_name(){
+    return name_column;
+}
 
-std::vector<Type> Cnumpy::get_type_column() {
+int Cnumpy::get_x_dimension(){
+    return x_dimension;
+}
+
+
+int Cnumpy::get_y_dimension(){
+    return y_dimension;
+}
+
+std::vector<std::string> Cnumpy::get_column_string(int column_index) {
+    int offset = offset_calculate(Type::string_type, column_index);
+    return  std::vector<std::string>(string_store.begin() + offset, string_store.begin() + offset+y_dimension);
+}
+
+std::vector<double> Cnumpy::get_column_double(int column) {
+    int offset = offset_calculate(Type::double_type,column);
+    return  std::vector<double>(double_store.begin() + offset, double_store.begin() + offset+y_dimension);
+}
+
+std::vector<int> Cnumpy::get_column_int(int column) {
+    int offset = offset_calculate(Type::integer_type,column);
+    return  std::vector<int>(int_store.begin() + offset, int_store.begin() + offset+y_dimension);
+}
+
+int Cnumpy::offset_calculate(Type type_column,int column_index){
+    int offset = (position_actual_column_in_type(type_column, column_index)) * y_dimension;
+    return offset;
+}
+
+std::vector<Type> Cnumpy::get_type_columns() {
     return type_column;
 }
 
+int Cnumpy::get_xy_int(int x, int y){
+    if (type_column[x] == Type::integer_type) {
+        int offset = (position_actual_column_in_type(Type::integer_type, x)) * y_dimension;
+        return int_store[offset + y];
+    } else {
+        throw std::invalid_argument("The value of the column type does not match the value");
+    }
+}
+
+std::string Cnumpy::get_xy_string(int x, int y){
+    if (type_column[x] == Type::string_type) {
+        int offset = (position_actual_column_in_type(Type::string_type, x)) * y_dimension;
+        return string_store[offset + y];
+    } else {
+        throw std::invalid_argument("The value of the column type does not match the value");
+    }
+}
+
+double Cnumpy::get_xy_double(int x, int y){
+    if (type_column[x] == Type::double_type) {
+        int offset = (position_actual_column_in_type(Type::double_type, x)) * y_dimension;
+        return double_store[offset + y] ;
+    } else {
+        throw std::invalid_argument("The value of the column type does not match the value");
+    }
+}
 
 void Cnumpy::set_xy(int x, int y, int value) {
 
