@@ -13,3 +13,16 @@ TEST(test_text_operation, remove_quote_from_text) {
     EXPECT_EQ("text with quote",results);
 
 }
+
+TEST(test_text_operation, split_text_by_delimiter) {
+
+    std::string text_to_split = "text,split,via,delimiter";
+    std::vector<std::string> results = Text_operation::split_string_by_delimiter(text_to_split, ",");
+
+    EXPECT_EQ(4,results.size());
+    EXPECT_EQ("text", results[0]);
+    EXPECT_EQ("split", results[1]);
+    EXPECT_EQ("via", results[2]);
+    EXPECT_EQ("delimiter", results[3]);
+
+}

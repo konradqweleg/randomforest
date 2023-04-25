@@ -54,7 +54,7 @@ int main()
 //
 //
 //
-//   Cnumpy xd = CSV_reader::read_csv_file_as_cnumpy("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\iris\\data.csv");
+   Cnumpy xd = CSV_reader::read_csv_file_as_cnumpy("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\iris\\data.csv");
 //
 //   std::vector<double> col_1 = xd.get_column_double<double>(0);
 //   col_1 = quant_utility::quant_column_double_betweeen_method_result_avg_group(col_1,0.10);

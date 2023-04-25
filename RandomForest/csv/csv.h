@@ -110,12 +110,13 @@ private:
 public:
 
 
-
+//Dodac obliczanaie lini pliku normalnie i go zamykac po prostu to samo metody odczytujace kolumny itd
 
     static Cnumpy read_csv_file_as_cnumpy(std::string path_to_file, std::string delimiter = ",") {
 
 
         std::ifstream in_file(path_to_file);
+
         std::string reads_line;
 
 
@@ -135,6 +136,7 @@ public:
 
 
         int rows_data =  Files_utility::how_many_lines_in_file(in_file);
+        std::cout<<"Rows:"<<rows_data<<std::endl;
 
 
         in_file.close();
