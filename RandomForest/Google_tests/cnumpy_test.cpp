@@ -105,7 +105,7 @@ TEST(testCnumpy, set_columns) {
 
 
 }
-//ids
+
 TEST(testCnumpy, set_xy) {
 
     Cnumpy empty_created = create_empty_cnumpy_3x3();
