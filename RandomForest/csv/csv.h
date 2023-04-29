@@ -106,6 +106,42 @@ private:
 
     }
 
+    static Cnumpy insert_data_to_cnumpy_from_file_raw(Cnumpy &data, std::vector< std::string>  & raw_data, std::string delimiter) {
+
+        std::string line;
+        int x_rows = 0;
+        int y_columns = 0;
+
+
+
+
+        for (int i =1;i<raw_data.size();++i) {
+
+            std::vector<std::string> rows_value = Text_operation::split_string_by_delimiter(raw_data[i], delimiter);
+
+            for (std::string value: rows_value) {
+
+                std::string value_with_change_potential_double_format = convert_dot_double_value_below_one_on_correct_double_value(
+                        value
+                );
+
+                insert_value_to_cnumpy_with_convert_string_to_match_type(
+                        data,
+                        value_with_change_potential_double_format,
+                        x_rows, y_columns
+                );
+
+                x_rows++;
+            }
+            x_rows = 0;
+            y_columns++;
+        }
+
+
+        return data;
+
+    }
+
 
     static std::vector<std::string> read_column_name_from_file(std::string path_to_file, std::string delimiter){
         std::ifstream in_file(path_to_file);
@@ -118,6 +154,13 @@ private:
         if (getline(in_file, reads_line)) {
             columns_name = read_column_name_from_text_line(reads_line, delimiter);
         }
+
+        return columns_name;
+    }
+
+    static std::vector<std::string> read_column_name_from_file_raw(std::vector<std::string> & raw_data, std::string delimiter){
+        std::vector<std::string> columns_name = std::vector<std::string>();
+        columns_name = read_column_name_from_text_line(raw_data[0], delimiter);
 
         return columns_name;
     }
@@ -145,12 +188,68 @@ private:
         return column_type;
     }
 
+    static std::vector<Type> read_column_type_from_file_raw(std::vector< std::string> & raw_data, std::string delimiter){
+        std::vector<Type> column_type = std::vector<Type>();
+        column_type = read_column_type(raw_data[1], delimiter);
+        return column_type;
+    }
+
+
+
+
 public:
+
+    static std::vector<std::string> read_all_files_text(std::string path_to_file){
+        std::ifstream in_file(path_to_file);
+        std::string reads_line;
+        std::vector<std::string> raw_data;
+        while (getline(in_file, reads_line)) {
+            raw_data.push_back(reads_line);
+
+        }
+
+        return raw_data;
+    }
+
 
 
 //Dodac obliczanaie lini pliku normalnie i go zamykac po prostu to samo metody odczytujace kolumny itd
 
+    static Cnumpy read_csv_file_as_cnumpy2(std::string path_to_file, std::string delimiter = ",") {
+
+
+         std::vector<std::string> raw_data = read_all_files_text(path_to_file);
+
+
+
+
+        std::vector<std::string> columns_name = read_column_name_from_file_raw(raw_data,delimiter);
+        int columns_in_data = columns_name.size();
+
+        std::vector<Type> column_type = read_column_type_from_file_raw(raw_data,delimiter);
+
+
+        int rows_data =  raw_data.size()-1;
+
+        // std::cout<<"Rows:"<<rows_data<<std::endl;
+
+        Cnumpy data = Cnumpy(columns_in_data, rows_data, column_type, columns_name);
+
+
+        // Reopen file in method below after count how many records is in data but probably ones open file is enought. Potential improvment
+        Cnumpy result = insert_data_to_cnumpy_from_file_raw(data, raw_data, delimiter);
+
+
+        return result;
+    };
+
+
+
+
     static Cnumpy read_csv_file_as_cnumpy(std::string path_to_file, std::string delimiter = ",") {
+
+
+       // std::vector<std::string> raw_data =
 
 
 
@@ -162,7 +261,7 @@ public:
 
         int rows_data =  Files_utility::how_many_lines_in_file(path_to_file);
         rows_data = rows_data - 1;
-        std::cout<<"Rows:"<<rows_data<<std::endl;
+       // std::cout<<"Rows:"<<rows_data<<std::endl;
 
 
 

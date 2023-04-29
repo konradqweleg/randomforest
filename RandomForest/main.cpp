@@ -2,7 +2,8 @@
 #include "cnumpy/cnumpy.h"
 #include "type.h"
 #include "csv/csv.h"
-
+#include <chrono>
+using namespace std::chrono;
 #include <fstream>
 #include "decision_tree/decision_tree.h"
 #include "quant/quant.h"
@@ -54,7 +55,22 @@ int main()
 //
 //
 //
+
+
+
+
+
+    auto start = high_resolution_clock::now();
    Cnumpy xd = CSV_reader::read_csv_file_as_cnumpy("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv");
+    auto stop = high_resolution_clock::now();
+
+    // Get duration. Substart timepoints to
+    // get duration. To cast it to proper unit
+    // use duration cast method
+    auto duration = duration_cast<microseconds>(stop - start);
+
+    std::cout << "Time taken by function: "
+         << duration.count() << " microseconds" << std::endl;
    std::cout<<xd;
 //
 //   std::vector<double> col_1 = xd.get_column_double<double>(0);
