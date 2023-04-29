@@ -14,8 +14,10 @@ add_executable(randomforest
         RandomForest/type.h
         RandomForest/decision_tree/decision_tree.h
         RandomForest/decision_tree/tree_node.h
- #       RandomForest/Google_tests/quant_test.cpp
-  #      RandomForest/Google_tests/cnumpy_test.cpp
-        RandomForest/text/Text_operation.cpp RandomForest/text/Text_operation.h RandomForest/files/Files_utility.cpp RandomForest/files/Files_utility.h)
+    #    RandomForest/Google_tests/quant_test.cpp
+     #   RandomForest/Google_tests/cnumpy_test.cpp
+        RandomForest/text/Text_operation.cpp RandomForest/text/Text_operation.h RandomForest/files/Files_utility.cpp RandomForest/files/Files_utility.h
+       # RandomForest/Google_tests/text_operation_test.cpp
+        )
 
-#add_subdirectory(RandomForest/Google_tests) #
+add_subdirectory(RandomForest/Google_tests) #

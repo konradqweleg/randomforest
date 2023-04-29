@@ -70,12 +70,19 @@ build CMakeFiles/randomforest.dir/RandomForest/main.cpp.obj: CXX_COMPILER__rando
   OBJECT_DIR = CMakeFiles\randomforest.dir
   OBJECT_FILE_DIR = CMakeFiles\randomforest.dir\RandomForest
 
-build CMakeFiles/randomforest.dir/RandomForest/Google_tests/quant_test.cpp.obj: CXX_COMPILER__randomforest_Debug C$:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/Google_tests/quant_test.cpp || cmake_object_order_depends_target_randomforest
-  DEP_FILE = CMakeFiles\randomforest.dir\RandomForest\Google_tests\quant_test.cpp.obj.d
+build CMakeFiles/randomforest.dir/RandomForest/text/Text_operation.cpp.obj: CXX_COMPILER__randomforest_Debug C$:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/text/Text_operation.cpp || cmake_object_order_depends_target_randomforest
+  DEP_FILE = CMakeFiles\randomforest.dir\RandomForest\text\Text_operation.cpp.obj.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++14
   INCLUDES = -IC:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest
   OBJECT_DIR = CMakeFiles\randomforest.dir
-  OBJECT_FILE_DIR = CMakeFiles\randomforest.dir\RandomForest\Google_tests
+  OBJECT_FILE_DIR = CMakeFiles\randomforest.dir\RandomForest\text
+
+build CMakeFiles/randomforest.dir/RandomForest/files/Files_utility.cpp.obj: CXX_COMPILER__randomforest_Debug C$:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/files/Files_utility.cpp || cmake_object_order_depends_target_randomforest
+  DEP_FILE = CMakeFiles\randomforest.dir\RandomForest\files\Files_utility.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++14
+  INCLUDES = -IC:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest
+  OBJECT_DIR = CMakeFiles\randomforest.dir
+  OBJECT_FILE_DIR = CMakeFiles\randomforest.dir\RandomForest\files
 
 
 # =============================================================================
@@ -85,7 +92,7 @@ build CMakeFiles/randomforest.dir/RandomForest/Google_tests/quant_test.cpp.obj: 
 #############################################
 # Link the executable randomforest.exe
 
-build randomforest.exe: CXX_EXECUTABLE_LINKER__randomforest_Debug CMakeFiles/randomforest.dir/RandomForest/cnumpy/cnumpy.cpp.obj CMakeFiles/randomforest.dir/RandomForest/csv/csv.cpp.obj CMakeFiles/randomforest.dir/RandomForest/main.cpp.obj CMakeFiles/randomforest.dir/RandomForest/Google_tests/quant_test.cpp.obj
+build randomforest.exe: CXX_EXECUTABLE_LINKER__randomforest_Debug CMakeFiles/randomforest.dir/RandomForest/cnumpy/cnumpy.cpp.obj CMakeFiles/randomforest.dir/RandomForest/csv/csv.cpp.obj CMakeFiles/randomforest.dir/RandomForest/main.cpp.obj CMakeFiles/randomforest.dir/RandomForest/text/Text_operation.cpp.obj CMakeFiles/randomforest.dir/RandomForest/files/Files_utility.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\randomforest.dir
@@ -181,6 +188,34 @@ build RandomForest/Google_tests/CMakeFiles/Google_Tests_run.dir/quant_test.cpp.o
   OBJECT_DIR = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir
   OBJECT_FILE_DIR = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir
 
+build RandomForest/Google_tests/CMakeFiles/Google_Tests_run.dir/cnumpy_test.cpp.obj: CXX_COMPILER__Google_Tests_run_Debug C$:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/Google_tests/cnumpy_test.cpp || cmake_object_order_depends_target_Google_Tests_run
+  DEP_FILE = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir\cnumpy_test.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++14
+  INCLUDES = -IC:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest -isystem C:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/Google_tests/lib/googletest/include -isystem C:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/Google_tests/lib/googletest
+  OBJECT_DIR = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir
+  OBJECT_FILE_DIR = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir
+
+build RandomForest/Google_tests/CMakeFiles/Google_Tests_run.dir/csv_test.cpp.obj: CXX_COMPILER__Google_Tests_run_Debug C$:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/Google_tests/csv_test.cpp || cmake_object_order_depends_target_Google_Tests_run
+  DEP_FILE = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir\csv_test.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++14
+  INCLUDES = -IC:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest -isystem C:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/Google_tests/lib/googletest/include -isystem C:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/Google_tests/lib/googletest
+  OBJECT_DIR = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir
+  OBJECT_FILE_DIR = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir
+
+build RandomForest/Google_tests/CMakeFiles/Google_Tests_run.dir/text_operation_test.cpp.obj: CXX_COMPILER__Google_Tests_run_Debug C$:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/Google_tests/text_operation_test.cpp || cmake_object_order_depends_target_Google_Tests_run
+  DEP_FILE = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir\text_operation_test.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++14
+  INCLUDES = -IC:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest -isystem C:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/Google_tests/lib/googletest/include -isystem C:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/Google_tests/lib/googletest
+  OBJECT_DIR = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir
+  OBJECT_FILE_DIR = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir
+
+build RandomForest/Google_tests/CMakeFiles/Google_Tests_run.dir/files_test.cpp.obj: CXX_COMPILER__Google_Tests_run_Debug C$:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/Google_tests/files_test.cpp || cmake_object_order_depends_target_Google_Tests_run
+  DEP_FILE = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir\files_test.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++14
+  INCLUDES = -IC:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest -isystem C:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/Google_tests/lib/googletest/include -isystem C:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/Google_tests/lib/googletest
+  OBJECT_DIR = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir
+  OBJECT_FILE_DIR = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Google_Tests_run
@@ -189,7 +224,7 @@ build RandomForest/Google_tests/CMakeFiles/Google_Tests_run.dir/quant_test.cpp.o
 #############################################
 # Link the executable RandomForest\Google_tests\Google_Tests_run.exe
 
-build RandomForest/Google_tests/Google_Tests_run.exe: CXX_EXECUTABLE_LINKER__Google_Tests_run_Debug RandomForest/Google_tests/CMakeFiles/Google_Tests_run.dir/quant_test.cpp.obj | lib/libgtest.a lib/libgtest_main.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a
+build RandomForest/Google_tests/Google_Tests_run.exe: CXX_EXECUTABLE_LINKER__Google_Tests_run_Debug RandomForest/Google_tests/CMakeFiles/Google_Tests_run.dir/quant_test.cpp.obj RandomForest/Google_tests/CMakeFiles/Google_Tests_run.dir/cnumpy_test.cpp.obj RandomForest/Google_tests/CMakeFiles/Google_Tests_run.dir/csv_test.cpp.obj RandomForest/Google_tests/CMakeFiles/Google_Tests_run.dir/text_operation_test.cpp.obj RandomForest/Google_tests/CMakeFiles/Google_Tests_run.dir/files_test.cpp.obj | lib/libgtest.a lib/libgtest_main.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a
   FLAGS = -g
   LINK_LIBRARIES = lib/libgtest.a  lib/libgtest_main.a  lib/libgtest.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = RandomForest\Google_tests\CMakeFiles\Google_Tests_run.dir

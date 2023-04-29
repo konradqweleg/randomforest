@@ -107,14 +107,7 @@ private:
     }
 
 
-public:
-
-
-//Dodac obliczanaie lini pliku normalnie i go zamykac po prostu to samo metody odczytujace kolumny itd
-
-    static Cnumpy read_csv_file_as_cnumpy(std::string path_to_file, std::string delimiter = ",") {
-
-
+    static std::vector<std::string> read_column_name_from_file(std::string path_to_file, std::string delimiter){
         std::ifstream in_file(path_to_file);
 
         std::string reads_line;
@@ -126,20 +119,53 @@ public:
             columns_name = read_column_name_from_text_line(reads_line, delimiter);
         }
 
+        return columns_name;
+    }
 
-        int columns_in_data = columns_name.size();
 
+    static void skip_n_lines_in_file(std::ifstream &file,int line_to_skip){
+        std::string _;
+        for(int i=0;i<line_to_skip;++i){
+            getline(file,_);
+        }
+    }
+
+    static std::vector<Type> read_column_type_from_file(std::string path_to_file, std::string delimiter){
         std::vector<Type> column_type = std::vector<Type>();
+        std::ifstream in_file(path_to_file);
+
+
+        std::string reads_line;
+       // getline(in_file, reads_line);
+        skip_n_lines_in_file(in_file,1);
         if (getline(in_file, reads_line)) {
             column_type = read_column_type(reads_line, delimiter);
         }
 
+        return column_type;
+    }
 
-        int rows_data =  Files_utility::how_many_lines_in_file(in_file);
+public:
+
+
+//Dodac obliczanaie lini pliku normalnie i go zamykac po prostu to samo metody odczytujace kolumny itd
+
+    static Cnumpy read_csv_file_as_cnumpy(std::string path_to_file, std::string delimiter = ",") {
+
+
+
+        std::vector<std::string> columns_name = read_column_name_from_file(path_to_file,delimiter);
+        int columns_in_data = columns_name.size();
+
+        std::vector<Type> column_type = read_column_type_from_file(path_to_file,delimiter);
+
+
+        int rows_data =  Files_utility::how_many_lines_in_file(path_to_file);
+        rows_data = rows_data - 1;
         std::cout<<"Rows:"<<rows_data<<std::endl;
 
 
-        in_file.close();
+
 
         Cnumpy data = Cnumpy(columns_in_data, rows_data, column_type, columns_name);
 

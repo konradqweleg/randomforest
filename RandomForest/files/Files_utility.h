@@ -10,7 +10,7 @@
 class Files_utility {
 
 public:
-    static int how_many_lines_in_file(std::ifstream &in_file);
+    static int how_many_lines_in_file(std::string path_to_file);
 
 };
 
