@@ -30,6 +30,18 @@ static bool is_double(const std::string &text_with_potential_double) {
     return end != text_with_potential_double.c_str() && *end == '\0' && value_as_double != max_double_value;
 }
 
+static std::string  convert_dot_double_value_below_one_on_correct_double_value(std::string text_with_potential_dot_double_value) {
+    //sometimes user gives double as .2 thats mean 0.2 this functions converts format from .2 to 0.2 value
+    const char dot_symbol = '.';
+    int first_symbol_in_value = 0;
+
+    if (text_with_potential_dot_double_value[first_symbol_in_value] == dot_symbol) {
+        return "0" + text_with_potential_dot_double_value;
+    } else {
+        return text_with_potential_dot_double_value;
+    }
+}
+
 static Type check_type(const std::string& value) {
 
     if (is_int(value)) {

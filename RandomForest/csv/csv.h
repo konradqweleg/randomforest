@@ -18,11 +18,11 @@ private:
 
     static std::vector<std::string> read_column_name_from_text_line(std::string line, std::string delimiter) {
         line =  Text_operation::remove_quote_from_string(line);
-        return  Text_operation::split_string_by_delimiter(line, delimiter);
+        return Text_operation::split_by_delimiter(line, delimiter);
     }
 
     static std::vector<Type> read_column_type(const std::string &first_line_data, const std::string &delimiter) {
-        std::vector<std::string> first_value_in_columns = Text_operation::split_string_by_delimiter(first_line_data, delimiter);
+        std::vector<std::string> first_value_in_columns = Text_operation::split_by_delimiter(first_line_data, delimiter);
         std::vector<Type> type_columns = std::vector<Type>();
 
         for (const std::string &column_value: first_value_in_columns) {
@@ -81,7 +81,7 @@ private:
 
         while (getline(file, line)) {
 
-            std::vector<std::string> rows_value = Text_operation::split_string_by_delimiter(line, delimiter);
+            std::vector<std::string> rows_value = Text_operation::split_by_delimiter(line, delimiter);
 
             for (std::string value: rows_value) {
 
@@ -117,7 +117,7 @@ private:
 
         for (int i =1;i<raw_data.size();++i) {
 
-            std::vector<std::string> rows_value = Text_operation::split_string_by_delimiter(raw_data[i], delimiter);
+            std::vector<std::string> rows_value = Text_operation::split_by_delimiter(raw_data[i], delimiter);
 
             for (std::string value: rows_value) {
 

@@ -13,8 +13,11 @@ class Text_operation {
 public:
     static std::string remove_quote_from_string(std::string text_to_remove_quote);
 
-    static std::vector<std::string>
-    split_string_by_delimiter(const std::string &text_to_split, const std::string &delimiter);
+    static std::vector<std::string> split_by_delimiter(const std::string &text_to_split, const std::string &delimiter);
+
+    static std::vector<std::string> split_with_remove_quote_by_delimiter(std::string line, std::string delimiter);
+
+
 };
 
 

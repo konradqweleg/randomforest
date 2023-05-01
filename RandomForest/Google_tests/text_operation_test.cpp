@@ -17,7 +17,7 @@ TEST(test_text_operation, remove_quote_from_text) {
 TEST(test_text_operation, split_text_by_delimiter) {
 
     std::string text_to_split = "text,split,via,delimiter";
-    std::vector<std::string> results = Text_operation::split_string_by_delimiter(text_to_split, ",");
+    std::vector<std::string> results = Text_operation::split_by_delimiter(text_to_split, ",");
 
     EXPECT_EQ(4,results.size());
     EXPECT_EQ("text", results[0]);
