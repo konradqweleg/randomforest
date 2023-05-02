@@ -5,7 +5,7 @@
 #include "type.h"
 
 class Cnumpy {
-
+//!! Utworz typ dla wartości xy wtedy mozna go zwracac lub wiersze !!!
 private:
 
     std::vector<std::string> string_store = std::vector<std::string>();

@@ -18,8 +18,6 @@ private:
 
     std::vector<Type> type_columns = std::vector<Type>();
 
-    std::vector<std::string> read_all_lines_from_file();
-
 
 protected:
 

@@ -28,6 +28,10 @@ public:
         return *result_cnumpy;
     }
 
+    ~ReadCSV() {
+        delete result_cnumpy;
+    }
+
 protected:
 
     std::string path_to_file;
@@ -64,10 +68,6 @@ protected:
 
     void set_result_cnumpy(Cnumpy *result) {
         result_cnumpy = result;
-    }
-
-    ~ReadCSV() {
-        delete result_cnumpy;
     }
 
 

@@ -38,3 +38,4 @@ std::vector<std::string> Text_operation::split_with_remove_quote_by_delimiter(st
     line =  Text_operation::remove_quote_from_string(line);
     return Text_operation::split_by_delimiter(line, delimiter);
 }
+

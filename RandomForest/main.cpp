@@ -15,9 +15,11 @@ using namespace std::chrono;
 
 int main() {
 
+    csv xa(new ReadCSVBuffered());
+
 
     auto start = high_resolution_clock::now();
-    Cnumpy xdd = ReadCSVBuffered().read_csv_as_cnumpy(
+    Cnumpy xdd = xa.read_cnumpy_from_csv (
             "C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv",
             ",");
     auto stop = high_resolution_clock::now();
@@ -28,7 +30,7 @@ int main() {
 
 
 
-   // std::cout << xdd;
+    std::cout << xdd;
     //
 
 //    //Cnumpy test
@@ -81,7 +83,7 @@ int main() {
 
 
     //  auto start = high_resolution_clock::now();
-    // Cnumpy xd = CSV_reader::read_csv_file_as_cnumpy("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv");
+    // Cnumpy xd = csv::read_csv_file_as_cnumpy("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv");
     // auto stop = high_resolution_clock::now();
 
     // Get duration. Substart timepoints to

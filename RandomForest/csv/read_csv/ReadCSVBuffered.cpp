@@ -3,30 +3,20 @@
 //
 
 #include "ReadCSVBuffered.h"
+#include "../../files/Files_utility.h"
 
 
-std::vector<std::string> ReadCSVBuffered::read_all_lines_from_file() {
-    std::ifstream in_file(path_to_file);
-    std::string read_lines;
-    std::vector<std::string> raw_data;
-    while (getline(in_file, read_lines)) {
-        raw_data.push_back(read_lines);
-    }
-
-    in_file.close();
-    return raw_data;
-}
 
 void ReadCSVBuffered::start_read() {
-    lines_in_file = read_all_lines_from_file();
+    lines_in_file = Files_utility::read_all_lines_from_file(path_to_file);
 }
 
 
 void ReadCSVBuffered::read_column_type() {
 
     std::string first_line_data = lines_in_file[1];
-    std::vector<std::string> first_value_in_columns = Text_operation::split_by_delimiter(first_line_data,
-                                                                                         delimiter);
+    std::vector<std::string> first_value_in_columns = Text_operation::split_by_delimiter(first_line_data,delimiter);
+
     for (const std::string &column_value: first_value_in_columns) {
         type_columns.push_back(check_type(column_value));
     }
@@ -69,13 +59,17 @@ void ReadCSVBuffered::insert_data_to_cnumpy(){
 
 
 void ReadCSVBuffered::create_empty_cnumpy()  {
+
     int columns_in_data = name_columns.size();
     int rows_data = lines_in_file.size() - 1;
     set_result_cnumpy(new Cnumpy(columns_in_data, rows_data, type_columns, name_columns));
+
 }
 
 
 void ReadCSVBuffered::read_column_name() {
+
     int first_line_in_file = 0;
     name_columns = Text_operation::split_with_remove_quote_by_delimiter(lines_in_file[first_line_in_file], delimiter);
+
 }
