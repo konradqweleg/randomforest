@@ -12,10 +12,61 @@ using namespace std::chrono;
 #include "csv/read_csv//ReadCSV.h"
 #include "csv/read_csv//ReadCSVBuffered.h"
 #include "csv/read_csv/ReadCSV_EachMethodOpenCloseFile.h"
-
+#include "entropy/Entropy.h"
 int main() {
 
-    csv xa(new ReadCSVBuffered());
+    csv csv_calc;
+    Cnumpy data_for_test_entropy = csv_calc.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\tests\\data.csv",",");
+
+    std::cout<<data_for_test_entropy;
+    Entropy x;
+    std::cout<<std::endl;
+    double entropy =  x.calculate_entropy_all_data_based_on_column(data_for_test_entropy,0);
+
+    std::cout<<"Entropy : "<<entropy<<std::endl;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*  csv xa(new ReadCSVBuffered());
 
 
     auto start = high_resolution_clock::now();
@@ -30,7 +81,7 @@ int main() {
 
 
 
-    std::cout << xdd;
+    std::cout << xdd;*/
     //
 
 //    //Cnumpy test

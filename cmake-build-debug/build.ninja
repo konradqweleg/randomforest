@@ -98,6 +98,13 @@ build CMakeFiles/randomforest.dir/RandomForest/csv/read_csv/ReadCSV_EachMethodOp
   OBJECT_DIR = CMakeFiles\randomforest.dir
   OBJECT_FILE_DIR = CMakeFiles\randomforest.dir\RandomForest\csv\read_csv
 
+build CMakeFiles/randomforest.dir/RandomForest/entropy/Entropy.cpp.obj: CXX_COMPILER__randomforest_Debug C$:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest/entropy/Entropy.cpp || cmake_object_order_depends_target_randomforest
+  DEP_FILE = CMakeFiles\randomforest.dir\RandomForest\entropy\Entropy.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++14
+  INCLUDES = -IC:/Users/Konrad/Documents/repo/randomforrest/randomforest/RandomForest
+  OBJECT_DIR = CMakeFiles\randomforest.dir
+  OBJECT_FILE_DIR = CMakeFiles\randomforest.dir\RandomForest\entropy
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target randomforest
@@ -106,7 +113,7 @@ build CMakeFiles/randomforest.dir/RandomForest/csv/read_csv/ReadCSV_EachMethodOp
 #############################################
 # Link the executable randomforest.exe
 
-build randomforest.exe: CXX_EXECUTABLE_LINKER__randomforest_Debug CMakeFiles/randomforest.dir/RandomForest/cnumpy/cnumpy.cpp.obj CMakeFiles/randomforest.dir/RandomForest/csv/csv.cpp.obj CMakeFiles/randomforest.dir/RandomForest/main.cpp.obj CMakeFiles/randomforest.dir/RandomForest/text/Text_operation.cpp.obj CMakeFiles/randomforest.dir/RandomForest/files/Files_utility.cpp.obj CMakeFiles/randomforest.dir/RandomForest/csv/read_csv/ReadCSVBuffered.cpp.obj CMakeFiles/randomforest.dir/RandomForest/csv/read_csv/ReadCSV_EachMethodOpenCloseFile.cpp.obj
+build randomforest.exe: CXX_EXECUTABLE_LINKER__randomforest_Debug CMakeFiles/randomforest.dir/RandomForest/cnumpy/cnumpy.cpp.obj CMakeFiles/randomforest.dir/RandomForest/csv/csv.cpp.obj CMakeFiles/randomforest.dir/RandomForest/main.cpp.obj CMakeFiles/randomforest.dir/RandomForest/text/Text_operation.cpp.obj CMakeFiles/randomforest.dir/RandomForest/files/Files_utility.cpp.obj CMakeFiles/randomforest.dir/RandomForest/csv/read_csv/ReadCSVBuffered.cpp.obj CMakeFiles/randomforest.dir/RandomForest/csv/read_csv/ReadCSV_EachMethodOpenCloseFile.cpp.obj CMakeFiles/randomforest.dir/RandomForest/entropy/Entropy.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\randomforest.dir

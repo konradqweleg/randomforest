@@ -19,19 +19,8 @@ class csv {
 
 private:
     ReadCSV* reader_csv = new ReadCSVBuffered();
-
-
 public:
-    Cnumpy read_cnumpy_from_csv(std::string path_to_file,std::string delimiter){
-       return (*reader_csv).read_csv_as_cnumpy(path_to_file,delimiter);
-    }
-
-
-    csv(ReadCSV * csv_reader_mechanism = new ReadCSVBuffered()){
-        reader_csv = csv_reader_mechanism;
-    }
-
-    ~csv(){
-        delete reader_csv;
-    }
+    Cnumpy read_cnumpy_from_csv(std::string path_to_file,std::string delimiter);
+    csv(ReadCSV * csv_reader_mechanism = new ReadCSVBuffered());
+    ~csv();
 };
