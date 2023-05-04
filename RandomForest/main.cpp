@@ -25,6 +25,8 @@ int main() {
 
     std::cout<<"Entropy : "<<entropy<<std::endl;
 
+    x.calculate_entropy_for_column(data_for_test_entropy,0,2);
+
 
 
 
