@@ -125,3 +125,33 @@ TEST(testCnumpy, set_xy) {
     EXPECT_EQ("", empty_created.get_xy_string(2,1));
 
 }
+
+TEST(testCnumpy,get_unique_column_value){
+    Cnumpy data = create_empty_cnumpy_3x3();
+
+    std::vector<int> int_column{10,10,30};
+    std::vector<double> double_column{10.0,30.0,10.0};
+    std::vector<std::string> string_column{"10","20","30"};
+
+    data.set_column(0,int_column);
+    data.set_column(1,double_column);
+    data.set_column(2,string_column);
+
+    Cnumpy unique_int_column_values = data.get_unique_column_values(0);
+    EXPECT_EQ(2,unique_int_column_values.get_y_dimension());
+    EXPECT_EQ(10,unique_int_column_values.get_xy_int(0,0));
+    EXPECT_EQ(30,unique_int_column_values.get_xy_int(0,1));
+
+    Cnumpy unique_double_column_values = data.get_unique_column_values(1);
+    EXPECT_EQ(2,unique_double_column_values.get_y_dimension());
+    ASSERT_DOUBLE_EQ(10.0,unique_double_column_values.get_xy_double(0,0));
+    ASSERT_DOUBLE_EQ(30.0,unique_double_column_values.get_xy_double(0,1));
+
+    Cnumpy unique_string_column_values = data.get_unique_column_values(2);
+    EXPECT_EQ(3,unique_string_column_values.get_y_dimension());
+    EXPECT_EQ("10",unique_string_column_values.get_xy_string(0,0));
+    EXPECT_EQ("20",unique_string_column_values.get_xy_string(0,1));
+    EXPECT_EQ("30",unique_string_column_values.get_xy_string(0,2));
+
+
+}

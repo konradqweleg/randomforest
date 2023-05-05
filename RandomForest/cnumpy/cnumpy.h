@@ -28,6 +28,22 @@ private:
     int position_actual_column_in_type(Type type, int index_column);
 
 
+
+    template<typename T>
+    Cnumpy create_cnumpy_1N_from_raw_values_column(std::vector<T> raw_column_data, int x_dim, int y_dim, Type column_type, std::string column_name){
+        std::vector<std::string> name_columns;
+        name_columns.push_back(column_name);
+
+        std::vector<Type> type_columns;
+        type_columns.push_back(column_type);
+
+        Cnumpy uniqued_cnumpy = Cnumpy(x_dim,y_dim,type_columns,name_columns);
+        uniqued_cnumpy.set_column(0,raw_column_data);
+
+        return uniqued_cnumpy;
+    }
+
+
 public:
     Cnumpy(long x_dim, long y_dim, std::vector<Type> typeCol);
 
@@ -44,6 +60,8 @@ public:
     std::vector<double> get_column_double(int column);
 
     std::vector<int> get_column_int(int column);
+
+    Cnumpy get_unique_column_values(int column_index);
 
 
     int get_x_dimension();

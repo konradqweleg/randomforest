@@ -51,7 +51,9 @@ public:
         return entropy;
     }
 
-    std::map<int, int> histogram_value_in_predict_column(int value,std::vector<int> column_value, std::vector<int> predict_column){
+    std::map<int, int> histogram_value_in_predict_column(int value,Cnumpy data,int column_index,int predict_column_index){
+        std::vector<int> column_value = data.get_column_int(column_index);
+        std::vector<int> predict_column = data.get_column_int(predict_column_index);
         std::map<int, int> hist;
         for (int i = 0; i < column_value.size(); ++i) {
             if (value == column_value[i]) {
@@ -84,19 +86,9 @@ public:
         for (auto value_in_column: diffrent_value_in_column) {
 
 
-            std::map<int, int> how_key_value = histogram_value_in_predict_column(value_in_column,columns_values,predict_column);
+            std::map<int, int> how_key_value = histogram_value_in_predict_column(value_in_column,data,0,2);
 
-//            std::map<int, int> how_key_value;
-//            for (int i = 0; i < columns_values.size(); ++i) {
-//                if (value_in_column == columns_values[i]) {
-//                    if (how_key_value.count(predict_column[i]) == 0) {
-//                        how_key_value[predict_column[i]] = 1;
-//                    } else {
-//                        how_key_value[predict_column[i]] = how_key_value[predict_column[i]] + 1;
-//                    }
-//                }
-//
-//            }
+
 
 
 

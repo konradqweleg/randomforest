@@ -18,15 +18,18 @@ int main() {
     csv csv_calc;
     Cnumpy data_for_test_entropy = csv_calc.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\tests\\data.csv",",");
 
-    std::cout<<data_for_test_entropy;
-    Entropy x;
-    std::cout<<std::endl;
-    double entropy =  x.calculate_entropy_all_data_based_on_column(data_for_test_entropy,0);
+    Cnumpy xd =data_for_test_entropy.get_unique_column_values(0);
+    std::cout<<xd;
 
-    std::cout<<"Entropy : "<<entropy<<std::endl;
-
-    double xqwa= x.calculate_information_gain_for_column(data_for_test_entropy, 0, 2);
-    std::cout<<" Zysk informacyjny : "<<xqwa<<std::endl;
+//    std::cout<<data_for_test_entropy;
+//    Entropy x;
+//    std::cout<<std::endl;
+//    double entropy =  x.calculate_entropy_all_data_based_on_column(data_for_test_entropy,0);
+//
+//    std::cout<<"Entropy : "<<entropy<<std::endl;
+//
+//    double xqwa= x.calculate_information_gain_for_column(data_for_test_entropy, 0, 2);
+//    std::cout<<" Zysk informacyjny : "<<xqwa<<std::endl;
 
 
 

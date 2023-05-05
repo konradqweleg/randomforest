@@ -3,7 +3,7 @@
 #include "type.h"
 #include <iomanip>
 #include <stdexcept>
-
+#include "../Collection_Utility/Collection_Utility.h"
 
 int Cnumpy::how_many_column_about_type(Type type) {
     int column_about_type = 0;
@@ -224,6 +224,53 @@ std::ostream &operator<<(std::ostream &os, Cnumpy &obj) {
 
 
     return os;
+}
+
+
+
+
+Cnumpy Cnumpy::get_unique_column_values(int column_index){
+
+    Type column_type = type_column[column_index];
+    std::string column_name = name_column[column_index];
+
+
+
+    int y_dimension;
+    int x_dimension = 1;
+    if(column_type == Type::integer_type){
+        std::set<int> unique_column_value = convertToSet(get_column_int(column_index));
+        y_dimension = unique_column_value.size();
+        std::vector<int> raw_column = convertToVector(unique_column_value);
+
+        Cnumpy uniqued_cnumpy = create_cnumpy_1N_from_raw_values_column(raw_column, x_dimension, y_dimension,
+                                                                        column_type, column_name);
+        return uniqued_cnumpy;
+
+
+    }else if(column_type == Type::double_type){
+        std::set<double> unique_column_value = convertToSet(get_column_double(column_index));
+        y_dimension = unique_column_value.size();
+        std::vector<double> raw_column = convertToVector(unique_column_value);
+
+        Cnumpy uniqued_cnumpy = create_cnumpy_1N_from_raw_values_column(raw_column, x_dimension, y_dimension,
+                                                                        column_type, column_name);
+        return uniqued_cnumpy;
+    }else{
+        std::set<std::string> unique_column_value = convertToSet(get_column_string(column_index));
+        y_dimension = unique_column_value.size();
+        std::vector<std::string> raw_column = convertToVector(unique_column_value);
+
+        Cnumpy uniqued_cnumpy = create_cnumpy_1N_from_raw_values_column(raw_column, x_dimension, y_dimension,
+                                                                        column_type, column_name);
+        return uniqued_cnumpy;
+    }
+
+
+
+
+
+
 }
 
 

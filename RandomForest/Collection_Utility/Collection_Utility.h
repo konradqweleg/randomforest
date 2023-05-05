@@ -8,13 +8,16 @@
 #include <set>
 
 
-static std::set<int> convertToSet(std::vector<int> v) {
-    std::set<int> s(v.begin(), v.end());
+template<typename T> std::set<T> convertToSet(std::vector<T> v) {
+    std::set<T> s(v.begin(), v.end());
     return s;
 }
 
 
-
+template<typename T> std::vector<T> convertToVector(std::set<T> v) {
+    std::vector<T> s(v.begin(), v.end());
+    return s;
+}
 
 
 
