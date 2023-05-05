@@ -229,6 +229,27 @@ std::ostream &operator<<(std::ostream &os, Cnumpy &obj) {
 
 
 
+Cnumpy Cnumpy::min_value(int column_index){
+    Type type = type_column[column_index];
+    if(type == Type::integer_type){
+        std::vector<int> column_raw = get_column_int(column_index);
+    }else if(type == Type::double_type){
+        std::vector<double> column_raw = get_column_double(column_index);
+    }else{
+        std::vector<std::string> column_raw = get_column_string(column_index);
+    }
+
+}
+Cnumpy Cnumpy::max_value(int column_index){
+
+}
+
+
+Cnumpy Cnumpy::hist(Cnumpy data,int column_index, int bins){
+
+}
+
+
 Cnumpy Cnumpy::get_unique_column_values(int column_index){
 
     Type column_type = type_column[column_index];
@@ -243,8 +264,8 @@ Cnumpy Cnumpy::get_unique_column_values(int column_index){
         y_dimension = unique_column_value.size();
         std::vector<int> raw_column = convertToVector(unique_column_value);
 
-        Cnumpy uniqued_cnumpy = create_cnumpy_1N_from_raw_values_column(raw_column, x_dimension, y_dimension,
-                                                                        column_type, column_name);
+        Cnumpy uniqued_cnumpy = create_cnumpy_with_one_column_from_raw_data(raw_column, x_dimension, y_dimension,
+                                                                            column_type, column_name);
         return uniqued_cnumpy;
 
 
@@ -253,16 +274,16 @@ Cnumpy Cnumpy::get_unique_column_values(int column_index){
         y_dimension = unique_column_value.size();
         std::vector<double> raw_column = convertToVector(unique_column_value);
 
-        Cnumpy uniqued_cnumpy = create_cnumpy_1N_from_raw_values_column(raw_column, x_dimension, y_dimension,
-                                                                        column_type, column_name);
+        Cnumpy uniqued_cnumpy = create_cnumpy_with_one_column_from_raw_data(raw_column, x_dimension, y_dimension,
+                                                                            column_type, column_name);
         return uniqued_cnumpy;
     }else{
         std::set<std::string> unique_column_value = convertToSet(get_column_string(column_index));
         y_dimension = unique_column_value.size();
         std::vector<std::string> raw_column = convertToVector(unique_column_value);
 
-        Cnumpy uniqued_cnumpy = create_cnumpy_1N_from_raw_values_column(raw_column, x_dimension, y_dimension,
-                                                                        column_type, column_name);
+        Cnumpy uniqued_cnumpy = create_cnumpy_with_one_column_from_raw_data(raw_column, x_dimension, y_dimension,
+                                                                            column_type, column_name);
         return uniqued_cnumpy;
     }
 

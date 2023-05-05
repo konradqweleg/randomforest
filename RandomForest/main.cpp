@@ -18,6 +18,8 @@ int main() {
     csv csv_calc;
     Cnumpy data_for_test_entropy = csv_calc.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\tests\\data.csv",",");
 
+    data_for_test_entropy.get_column_raw(0,1);
+
     Cnumpy xd =data_for_test_entropy.get_unique_column_values(0);
     std::cout<<xd;
 

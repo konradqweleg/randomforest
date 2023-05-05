@@ -30,7 +30,7 @@ private:
 
 
     template<typename T>
-    Cnumpy create_cnumpy_1N_from_raw_values_column(std::vector<T> raw_column_data, int x_dim, int y_dim, Type column_type, std::string column_name){
+    Cnumpy create_cnumpy_with_one_column_from_raw_data(std::vector<T> raw_column_data, int x_dim, int y_dim, Type column_type, std::string column_name){
         std::vector<std::string> name_columns;
         name_columns.push_back(column_name);
 
@@ -44,7 +44,13 @@ private:
     }
 
 
+
+
+
+
 public:
+
+
     Cnumpy(long x_dim, long y_dim, std::vector<Type> typeCol);
 
     Cnumpy(long x_dim, long y_dim, std::vector<Type> typeCol, std::vector<std::string> nameCol);
@@ -63,10 +69,16 @@ public:
 
     Cnumpy get_unique_column_values(int column_index);
 
+    //int or sequence of str defines number of equal width bins in a range, default is 10
+    Cnumpy hist(Cnumpy data,int column_index,int bins);
+
 
     int get_x_dimension();
 
     int get_y_dimension();
+
+    Cnumpy min_value(int column_index);
+    Cnumpy max_value(int column_index);
 
     void set_xy(int x, int y, int value);
 
