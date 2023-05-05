@@ -25,8 +25,8 @@ int main() {
 
     std::cout<<"Entropy : "<<entropy<<std::endl;
 
-    x.calculate_entropy_for_column(data_for_test_entropy,0,2);
-
+    double xqwa= x.calculate_information_gain_for_column(data_for_test_entropy, 0, 2);
+    std::cout<<" Zysk informacyjny : "<<xqwa<<std::endl;
 
 
 

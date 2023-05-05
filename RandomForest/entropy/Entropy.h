@@ -10,15 +10,18 @@
 #include "../Collection_Utility/Collection_Utility.h"
 #include <cmath>
 #include <numeric>
+
 class Entropy {
 
 
-    std::map<int,int> how_many_count_value_first_value_second_count(Cnumpy data,int index_column_to_calculate_count_value){
-        std::set<int> diffrent_value_in_determine_column = convertToSet(data.get_column_int(index_column_to_calculate_count_value));
+    std::map<int, int> calculate_histogram_for_column(Cnumpy data, int index_column_to_calculate_count_value) {
+        std::set<int> diffrent_value_in_determine_column = convertToSet(
+                data.get_column_int(index_column_to_calculate_count_value));
+        std::vector<int> determine_column = data.get_column_int(index_column_to_calculate_count_value);
         std::map<int, int> value_count_in_determine_column;
 
         for (int value: diffrent_value_in_determine_column) {
-            for (int element_determine_column: data.get_column_int(index_column_to_calculate_count_value)) {
+            for (int element_determine_column: determine_column) {
                 if (value == element_determine_column) {
                     if (value_count_in_determine_column.count(value) == 0) {
                         value_count_in_determine_column[value] = 1;
@@ -35,65 +38,66 @@ class Entropy {
 
 
 
-
-
 public:
-    double calculate_entropy_all_data_based_on_column(Cnumpy data,int index_column_determine_all_entropy){
+    double calculate_entropy_all_data_based_on_column(Cnumpy data, int index_column_determine_all_entropy) {
         std::set<int> diffrent_value_in_determine_column = convertToSet(data.get_column_int(index_column_determine_all_entropy));
-        std::map<int,int> count_value = how_many_count_value_first_value_second_count(data,index_column_determine_all_entropy);
-
-
-//   for(std::map<int,int>::iterator iter = count_value.begin(); iter != count_value.end(); ++iter)
-//    {
-//        int k =  iter->first;
-//
-//        int v = iter->second;
-//        std::cout<<"Key = "<<k<<" Value = "<<v<<std::endl;
-//    }
-
-   std::cout<<"y dim = "<<data.get_y_dimension()<<std::endl;
+        std::map<int, int> histogram_determine_column = calculate_histogram_for_column(data, index_column_determine_all_entropy);
 
         double entropy = 0.0;
         for (int key: diffrent_value_in_determine_column) {
-            entropy = entropy - (((double) count_value[key] / data.get_y_dimension()) *
-                                 log2(((double) count_value[key] / data.get_y_dimension())));
+            entropy = entropy - (((double) histogram_determine_column[key] / data.get_y_dimension()) *
+                                 log2(((double) histogram_determine_column[key] / data.get_y_dimension())));
         }
-
         return entropy;
     }
 
+    std::map<int, int> histogram_value_in_predict_column(int value,std::vector<int> column_value, std::vector<int> predict_column){
+        std::map<int, int> hist;
+        for (int i = 0; i < column_value.size(); ++i) {
+            if (value == column_value[i]) {
+                if (hist.count(predict_column[i]) == 0) {
+                    hist[predict_column[i]] = 1;
+                } else {
+                    hist[predict_column[i]] = hist[predict_column[i]] + 1;
+                }
+            }
 
-    double calculate_entropy_for_column(Cnumpy data,int column,int predict_column_index){
+        }
+
+        return hist;
+
+    }
+
+
+    double calculate_information_gain_for_column(Cnumpy data, int column, int predict_column_index) {
         std::set<int> diffrent_value_in_column = convertToSet(data.get_column_int(column));
-        std::vector<int> all_value_in_column = data.get_column_int(column);
+        std::vector<int> columns_values = data.get_column_int(column);
         std::vector<int> predict_column = data.get_column_int(predict_column_index);
 
 
-        double information_gain = calculate_entropy_all_data_based_on_column(data,2);
 
-        for(auto value_in_column : diffrent_value_in_column){
+        double information_gain = calculate_entropy_all_data_based_on_column(data, 2);
 
-            std::map<int,int> how_key_value;
-            for(int i=0;i<all_value_in_column.size();++i){
-                if(value_in_column == all_value_in_column[i]) {
-                    if (how_key_value.count(predict_column[i]) == 0) {
-                        how_key_value[predict_column[i]] = 1;
-                    }else{
-                        how_key_value[predict_column[i]] = how_key_value[predict_column[i]] +1;
-                    }
-                }
 
-            }
 
-            std::cout<<"-----------------------"<<std::endl;
-            std::cout<<std::endl;
-            for(std::map<int,int>::iterator iter = how_key_value.begin(); iter != how_key_value.end(); ++iter)
-            {
-                int k =  iter->first;
 
-                int v = iter->second;
-                std::cout<<"Key = "<<k<<" Value = "<<v<<std::endl;
-            }
+        for (auto value_in_column: diffrent_value_in_column) {
+
+
+            std::map<int, int> how_key_value = histogram_value_in_predict_column(value_in_column,columns_values,predict_column);
+
+//            std::map<int, int> how_key_value;
+//            for (int i = 0; i < columns_values.size(); ++i) {
+//                if (value_in_column == columns_values[i]) {
+//                    if (how_key_value.count(predict_column[i]) == 0) {
+//                        how_key_value[predict_column[i]] = 1;
+//                    } else {
+//                        how_key_value[predict_column[i]] = how_key_value[predict_column[i]] + 1;
+//                    }
+//                }
+//
+//            }
+
 
 
             int total_sum = std::accumulate(how_key_value.begin(), how_key_value.end(), 0,
@@ -104,25 +108,16 @@ public:
             double entropy = 0.0;
 
 
-            for(std::map<int,int>::iterator iter = how_key_value.begin(); iter != how_key_value.end(); ++iter)
-            {
-                int k =  iter->first;
-
-                int v = iter->second;
-                entropy = entropy - ((iter->second/(double)total_sum) * log2(iter->second/(double)total_sum));
-
+            for (auto iter = how_key_value.begin(); iter != how_key_value.end(); ++iter) {
+                entropy = entropy - ((iter->second / (double) total_sum) * log2(iter->second / (double) total_sum));
 
             }
 
-            information_gain = information_gain - (((double )total_sum/predict_column.size())*entropy);
-
-            std::cout<<"Entropy : "<<entropy<<std::endl;
-            std::cout<<"-----------------------"<<std::endl;
-            std::cout<<std::endl;
+            information_gain = information_gain - (((double) total_sum / predict_column.size()) * entropy);
 
         }
 
-        std::cout<<"IG: "<<information_gain<<std::endl;
+        return information_gain;
 
     }
 };
