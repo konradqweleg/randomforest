@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <stdexcept>
 #include "../Collection_Utility/Collection_Utility.h"
-
+#include <bits/stdc++.h>
 int Cnumpy::how_many_column_about_type(Type type) {
     int column_about_type = 0;
 
@@ -227,25 +227,55 @@ std::ostream &operator<<(std::ostream &os, Cnumpy &obj) {
 }
 
 
-
-
-Cnumpy Cnumpy::min_value(int column_index){
+Cnumpy Cnumpy::get_min_value_in_column(int column_index){
+    std::string min_value_column_name = "min value";
     Type type = type_column[column_index];
     if(type == Type::integer_type){
+
         std::vector<int> column_raw = get_column_int(column_index);
+        int min_value = *min_element(column_raw.begin(), column_raw.end());
+        Cnumpy result = create_cnumpy_with_one_value(min_value, Type::integer_type, min_value_column_name);
+        return result;
+
     }else if(type == Type::double_type){
         std::vector<double> column_raw = get_column_double(column_index);
+        double min_value = *min_element(column_raw.begin(), column_raw.end());
+        Cnumpy result = create_cnumpy_with_one_value(min_value, Type::double_type, min_value_column_name);
+        return result;
     }else{
         std::vector<std::string> column_raw = get_column_string(column_index);
+        std::string min_value = *min_element(column_raw.begin(), column_raw.end());
+        Cnumpy result = create_cnumpy_with_one_value(min_value, Type::string_type, min_value_column_name);
+        return result;
     }
 
 }
-Cnumpy Cnumpy::max_value(int column_index){
+Cnumpy Cnumpy::get_max_value_in_column(int column_index){
+    std::string max_value_column_name = "max value";
+    Type type = type_column[column_index];
+    if(type == Type::integer_type){
+        std::vector<int> column_raw = get_column_int(column_index);
+        int max_value = *max_element(column_raw.begin(), column_raw.end());
+        Cnumpy result = create_cnumpy_with_one_value(max_value, Type::integer_type, max_value_column_name);
+        return result;
 
+    }else if(type == Type::double_type){
+        std::vector<double> column_raw = get_column_double(column_index);
+        double max_value = *max_element(column_raw.begin(), column_raw.end());
+        Cnumpy result = create_cnumpy_with_one_value(max_value, Type::double_type, max_value_column_name);
+        return result;
+    }else{
+        std::vector<std::string> column_raw = get_column_string(column_index);
+        std::string max_value = *max_element(column_raw.begin(), column_raw.end());
+        Cnumpy result = create_cnumpy_with_one_value(max_value, Type::string_type, max_value_column_name);
+        return result;
+    }
 }
 
 
-Cnumpy Cnumpy::hist(Cnumpy data,int column_index, int bins){
+Cnumpy Cnumpy::hist(int column_index, int bins){
+    Cnumpy min_value = get_min_value_in_column(column_index);
+    Cnumpy max_value = get_max_value_in_column(column_index);
 
 }
 

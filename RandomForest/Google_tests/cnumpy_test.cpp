@@ -26,6 +26,21 @@ Cnumpy create_empty_cnumpy_3x3() {
     return data;
 }
 
+
+Cnumpy create_fill_cnumpy_3x3_increased_value_int_double_string(){
+    Cnumpy data = create_empty_cnumpy_3x3();
+
+    std::vector<int> int_column{10,20,30};
+    std::vector<double> double_column{10.0,20.0,30.0};
+    std::vector<std::string> string_column{"10","20","30"};
+
+    data.set_column(0,int_column);
+    data.set_column(1,double_column);
+    data.set_column(2,string_column);
+    return data;
+}
+
+
 TEST(testCnumpy, create_empty_cnumpy_object) {
 
     Cnumpy empty_created = create_empty_cnumpy_3x3();
@@ -152,6 +167,287 @@ TEST(testCnumpy,get_unique_column_value){
     EXPECT_EQ("10",unique_string_column_values.get_xy_string(0,0));
     EXPECT_EQ("20",unique_string_column_values.get_xy_string(0,1));
     EXPECT_EQ("30",unique_string_column_values.get_xy_string(0,2));
+
+
+}
+
+TEST(testCnumpy,get_min_value_in_column){
+    Cnumpy data = create_empty_cnumpy_3x3();
+
+    std::vector<int> int_column{30,10,0};
+    std::vector<double> double_column{20.0,10.0,30.0};
+    std::vector<std::string> string_column{"aa","cc","xx"};
+
+    data.set_column(0,int_column);
+    data.set_column(1,double_column);
+    data.set_column(2,string_column);
+
+    Cnumpy min_int_value = data.get_min_value_in_column(0);
+    Cnumpy min_double_value = data.get_min_value_in_column(1);
+    Cnumpy min_string_value = data.get_min_value_in_column(2);
+
+
+    EXPECT_EQ(0,min_int_value.get_xy_int(0,0));
+    ASSERT_DOUBLE_EQ(10.0,min_double_value.get_xy_double(0,0));
+    EXPECT_EQ("aa",min_string_value.get_xy_string(0,0));
+
+}
+
+TEST(testCnumpy,get_max_value_in_column){
+    Cnumpy data = create_empty_cnumpy_3x3();
+
+    std::vector<int> int_column{30,10,0};
+    std::vector<double> double_column{20.0,10.0,30.0};
+    std::vector<std::string> string_column{"aa","cc","xx"};
+
+    data.set_column(0,int_column);
+    data.set_column(1,double_column);
+    data.set_column(2,string_column);
+
+    Cnumpy max_int_value = data.get_max_value_in_column(0);
+    Cnumpy max_double_value = data.get_max_value_in_column(1);
+    Cnumpy max_string_value = data.get_max_value_in_column(2);
+
+
+    EXPECT_EQ(30,max_int_value.get_xy_int(0,0));
+    ASSERT_DOUBLE_EQ(30.0,max_double_value.get_xy_double(0,0));
+    EXPECT_EQ("xx",max_string_value.get_xy_string(0,0));
+
+}
+
+
+
+TEST(testCnumpy,get_xy_cnumpy){
+    Cnumpy data = create_fill_cnumpy_3x3_increased_value_int_double_string();
+
+    Cnumpy value_int_0 = data.get_xy(0,0);
+    Cnumpy value_int_1= data.get_xy(0,1);
+    Cnumpy value_int_2 = data.get_xy(0,2);
+
+    EXPECT_EQ(10,value_int_0.get_xy_int(0,0));
+    EXPECT_EQ(20,value_int_1.get_xy_int(0,0));
+    EXPECT_EQ(30,value_int_2.get_xy_int(0,0));
+
+
+
+    Cnumpy value_double_0 = data.get_xy(1,0);
+    Cnumpy value_double_1= data.get_xy(1,1);
+    Cnumpy value_double_2 = data.get_xy(1,2);
+
+    ASSERT_DOUBLE_EQ(10.0,value_double_0.get_xy_double(0,0));
+    ASSERT_DOUBLE_EQ(20.0,value_double_1.get_xy_double(0,0));
+    ASSERT_DOUBLE_EQ(30.0,value_double_2.get_xy_double(0,0));
+
+
+
+
+    Cnumpy value_string_0 = data.get_xy(2,0);
+    Cnumpy value_string_1 = data.get_xy(2,1);
+    Cnumpy value_string_2 = data.get_xy(2,2);
+
+
+    EXPECT_EQ("10",value_string_0.get_xy_string(0,0));
+    EXPECT_EQ("20",value_string_1.get_xy_string(0,0));
+    EXPECT_EQ("30",value_string_2.get_xy_string(0,0));
+
+}
+
+TEST(testCnumpy,of){
+    Cnumpy int_value_cnumpy = Cnumpy::of(5);
+    EXPECT_EQ(5,int_value_cnumpy.get_xy_int(0,0));
+
+    Cnumpy double_value_cnumpy = Cnumpy::of(15.0);
+    ASSERT_DOUBLE_EQ(15.0,double_value_cnumpy.get_xy_double(0,0));
+
+    Cnumpy string_value_cnumpy = Cnumpy::of("text");
+    EXPECT_EQ("text",string_value_cnumpy.get_xy_string(0,0));
+}
+
+
+
+TEST(testCnumpy,operator_lower){
+    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
+    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+
+    Cnumpy string_value_aa_cnumpy = Cnumpy::of("aa");
+    Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
+
+
+    EXPECT_TRUE(int_value_5_cnumpy<int_value_10_cnumpy);
+    EXPECT_TRUE(double_value_5_cnumpy<double_value_10_cnumpy);
+    EXPECT_TRUE(string_value_aa_cnumpy<string_value_bb_cnumpy);
+
+    EXPECT_FALSE(int_value_10_cnumpy<int_value_5_cnumpy);
+    EXPECT_FALSE(double_value_10_cnumpy<double_value_5_cnumpy);
+    EXPECT_FALSE(string_value_bb_cnumpy<string_value_aa_cnumpy);
+
+    EXPECT_FALSE(int_value_10_cnumpy<int_value_10_cnumpy);
+    EXPECT_FALSE(double_value_10_cnumpy<double_value_10_cnumpy);
+    EXPECT_FALSE(string_value_bb_cnumpy<string_value_bb_cnumpy);
+
+
+}
+
+TEST(testCnumpy,operator_lower_or_equal){
+    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
+    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+
+    Cnumpy string_value_aa_cnumpy = Cnumpy::of("aa");
+    Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
+
+
+    EXPECT_TRUE(int_value_5_cnumpy<=int_value_10_cnumpy);
+    EXPECT_TRUE(double_value_5_cnumpy<=double_value_10_cnumpy);
+    EXPECT_TRUE(string_value_aa_cnumpy<=string_value_bb_cnumpy);
+
+    EXPECT_FALSE(int_value_10_cnumpy<=int_value_5_cnumpy);
+    EXPECT_FALSE(double_value_10_cnumpy<=double_value_5_cnumpy);
+    EXPECT_FALSE(string_value_bb_cnumpy<=string_value_aa_cnumpy);
+
+    EXPECT_TRUE(int_value_10_cnumpy<=int_value_10_cnumpy);
+    EXPECT_TRUE(double_value_10_cnumpy<=double_value_10_cnumpy);
+    EXPECT_TRUE(string_value_bb_cnumpy<=string_value_bb_cnumpy);
+
+
+}
+
+TEST(testCnumpy,operator_greater){
+    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
+    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+
+    Cnumpy string_value_aa_cnumpy = Cnumpy::of("aa");
+    Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
+
+
+    EXPECT_FALSE(int_value_5_cnumpy>int_value_10_cnumpy);
+    EXPECT_FALSE(double_value_5_cnumpy>double_value_10_cnumpy);
+    EXPECT_FALSE(string_value_aa_cnumpy>string_value_bb_cnumpy);
+
+    EXPECT_TRUE(int_value_10_cnumpy>int_value_5_cnumpy);
+    EXPECT_TRUE(double_value_10_cnumpy>double_value_5_cnumpy);
+    EXPECT_TRUE(string_value_bb_cnumpy>string_value_aa_cnumpy);
+
+    EXPECT_FALSE(int_value_10_cnumpy>int_value_10_cnumpy);
+    EXPECT_FALSE(double_value_10_cnumpy>double_value_10_cnumpy);
+    EXPECT_FALSE(string_value_bb_cnumpy>string_value_bb_cnumpy);
+
+
+}
+
+TEST(testCnumpy,operator_greater_or_equal){
+    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
+    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+
+    Cnumpy string_value_aa_cnumpy = Cnumpy::of("aa");
+    Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
+
+
+    EXPECT_FALSE(int_value_5_cnumpy>=int_value_10_cnumpy);
+    EXPECT_FALSE(double_value_5_cnumpy>=double_value_10_cnumpy);
+    EXPECT_FALSE(string_value_aa_cnumpy>=string_value_bb_cnumpy);
+
+    EXPECT_TRUE(int_value_10_cnumpy>=int_value_5_cnumpy);
+    EXPECT_TRUE(double_value_10_cnumpy>=double_value_5_cnumpy);
+    EXPECT_TRUE(string_value_bb_cnumpy>=string_value_aa_cnumpy);
+
+    EXPECT_TRUE(int_value_10_cnumpy>=int_value_10_cnumpy);
+    EXPECT_TRUE(double_value_10_cnumpy>=double_value_10_cnumpy);
+    EXPECT_TRUE(string_value_bb_cnumpy>=string_value_bb_cnumpy);
+
+
+}
+
+
+TEST(testCnumpy,operator_equal){
+    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
+    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+
+    Cnumpy string_value_aa_cnumpy = Cnumpy::of("aa");
+    Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
+
+
+    EXPECT_FALSE(int_value_5_cnumpy==int_value_10_cnumpy);
+    EXPECT_FALSE(double_value_5_cnumpy==double_value_10_cnumpy);
+    EXPECT_FALSE(string_value_aa_cnumpy==string_value_bb_cnumpy);
+
+    EXPECT_TRUE(int_value_10_cnumpy==int_value_10_cnumpy);
+    EXPECT_TRUE(double_value_10_cnumpy==double_value_10_cnumpy);
+    EXPECT_TRUE(string_value_bb_cnumpy==string_value_bb_cnumpy);
+
+
+}
+
+TEST(testCnumpy,operator_not_equal){
+    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
+    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+
+    Cnumpy string_value_aa_cnumpy = Cnumpy::of("aa");
+    Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
+
+
+    EXPECT_TRUE(int_value_5_cnumpy!=int_value_10_cnumpy);
+    EXPECT_TRUE(double_value_5_cnumpy!=double_value_10_cnumpy);
+    EXPECT_TRUE(string_value_aa_cnumpy!=string_value_bb_cnumpy);
+
+    EXPECT_FALSE(int_value_10_cnumpy!=int_value_10_cnumpy);
+    EXPECT_FALSE(double_value_10_cnumpy!=double_value_10_cnumpy);
+    EXPECT_FALSE(string_value_bb_cnumpy!=string_value_bb_cnumpy);
+
+
+}
+
+
+TEST(testCnumpy,operator_add){
+    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+    Cnumpy result_add_int = int_value_5_cnumpy + int_value_10_cnumpy;
+
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
+    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+    Cnumpy result_add_double = double_value_5_cnumpy + double_value_10_cnumpy;
+
+    Cnumpy string_value_aa_cnumpy = Cnumpy::of("aa");
+    Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
+    Cnumpy result_add_string = string_value_aa_cnumpy + string_value_bb_cnumpy;
+
+
+    EXPECT_EQ(15, result_add_int.get_xy_int(0, 0));
+    EXPECT_DOUBLE_EQ(15.0,result_add_double.get_xy_double(0,0));
+    EXPECT_EQ("aabb", result_add_string.get_xy_string(0, 0));
+
+
+}
+
+TEST(testCnumpy,operator_subtraction){
+    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+    Cnumpy result_substract_int = int_value_5_cnumpy - int_value_10_cnumpy;
+
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
+    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+    Cnumpy result_substract_double = double_value_10_cnumpy - double_value_5_cnumpy;
+
+    EXPECT_EQ(-5, result_substract_int.get_xy_int(0, 0));
+    EXPECT_DOUBLE_EQ(5.0, result_substract_double.get_xy_double(0, 0));
+
 
 
 }

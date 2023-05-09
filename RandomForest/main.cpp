@@ -16,12 +16,23 @@ using namespace std::chrono;
 int main() {
 
     csv csv_calc;
-    Cnumpy data_for_test_entropy = csv_calc.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\tests\\data.csv",",");
+    Cnumpy data_for_test_entropy = csv_calc.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv",",");
 
-    data_for_test_entropy.get_column_raw(0,1);
+    std::cout<<data_for_test_entropy;
+    Cnumpy m_v= data_for_test_entropy.get_min_value_in_column(2);
+    Cnumpy m_v_2= data_for_test_entropy.get_min_value_in_column(1);
+    std::cout<<std::endl;
+    std::cout<<m_v;
+    std::cout<<std::endl;
+    std::cout<<m_v_2;
+    std::cout<<std::endl;
+    std::cout<<(m_v<m_v_2);
+    std::cout<<(m_v>m_v_2);
 
-    Cnumpy xd =data_for_test_entropy.get_unique_column_values(0);
-    std::cout<<xd;
+//    data_for_test_entropy.get_column_raw(0,1);
+//
+//    Cnumpy xd =data_for_test_entropy.get_unique_column_values(0);
+//    std::cout<<xd;
 
 //    std::cout<<data_for_test_entropy;
 //    Entropy x;
