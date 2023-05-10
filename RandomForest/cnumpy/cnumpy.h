@@ -331,7 +331,7 @@ public:
 
     }
 
-    Cnumpy operator-(int)
+    Cnumpy operator-()
     {
         check_is_correct_one_element_cnumpys(*this,*this);
         Type type_value = get_type_columns()[0];
@@ -358,9 +358,11 @@ public:
 
     Cnumpy operator[](int index) {
 
-        Type type_col = type_column[index];
+
 
         if(get_x_dimension() > 1){
+            Type type_col = type_column[index];
+
             if(type_col == Type::integer_type){
                 std::vector<int> column_with_integers = get_column_int(index);
                 Cnumpy column_cnumpy= create_cnumpy_with_one_column_from_raw_data(column_with_integers,1,column_with_integers.size(),type_col,"*");
@@ -377,16 +379,17 @@ public:
 
         }else{
 
+            Type type_col = type_column[0];
             if(type_col == Type::integer_type){
-                int value = get_xy_int(0,0);
+                int value = get_xy_int(0,index);
                 Cnumpy result_as_cnumpy =  create_cnumpy_with_one_value(value,Type::integer_type,"*");
                 return result_as_cnumpy;
             }else if(type_col == Type::double_type){
-                double value = get_xy_double(0,0);
+                double value = get_xy_double(0,index);
                 Cnumpy result_as_cnumpy =  create_cnumpy_with_one_value(value,Type::double_type,"*");
                 return result_as_cnumpy;
             }else{
-                std::string value = get_xy_string(0,0);
+                std::string value = get_xy_string(0,index);
                 Cnumpy result_as_cnumpy =  create_cnumpy_with_one_value(value,Type::string_type,"*");
                 return result_as_cnumpy;
             }

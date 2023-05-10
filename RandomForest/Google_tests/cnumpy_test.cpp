@@ -451,3 +451,58 @@ TEST(testCnumpy,operator_subtraction){
 
 
 }
+
+TEST(testCnumpy,operator_divide){
+    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+    Cnumpy result_substract_int = int_value_5_cnumpy / int_value_10_cnumpy;
+
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
+    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+    Cnumpy result_substract_double = double_value_10_cnumpy / double_value_5_cnumpy;
+
+    EXPECT_EQ(0, result_substract_int.get_xy_int(0, 0));
+    EXPECT_DOUBLE_EQ(2.0, result_substract_double.get_xy_double(0, 0));
+
+}
+
+TEST(testCnumpy,operator_multiple){
+    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+    Cnumpy result_substract_int = int_value_5_cnumpy * int_value_10_cnumpy;
+
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
+    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+    Cnumpy result_substract_double = double_value_10_cnumpy * double_value_5_cnumpy;
+
+    EXPECT_EQ(50, result_substract_int.get_xy_int(0, 0));
+    EXPECT_DOUBLE_EQ(50.0, result_substract_double.get_xy_double(0, 0));
+
+}
+
+TEST(testCnumpy,operator_minus){
+    Cnumpy int_value_5_cnumpy = -Cnumpy::of(5);
+    Cnumpy double_value_10_cnumpy = -Cnumpy::of(10.0);
+
+
+
+    EXPECT_EQ(-5, (int_value_5_cnumpy).get_xy_int(0, 0));
+    EXPECT_DOUBLE_EQ(-10.0, double_value_10_cnumpy.get_xy_double(0, 0));
+
+}
+
+TEST(testCnumpy,array_access_operator){
+    Cnumpy one_value_cnumpy = Cnumpy::of(5);
+    EXPECT_EQ(5, one_value_cnumpy[0].get_xy_int(0,0));
+
+    Cnumpy cnumpy_n_n = create_fill_cnumpy_3x3_increased_value_int_double_string();
+
+    Cnumpy int_rows = cnumpy_n_n[0];
+    EXPECT_EQ(10,int_rows[0].get_xy_int(0,0));
+    EXPECT_EQ(20,int_rows[1].get_xy_int(0,0));
+    EXPECT_EQ(30,int_rows[2].get_xy_int(0,0));
+
+    EXPECT_DOUBLE_EQ(20.0,(cnumpy_n_n[1][1]).get_xy_double(0,0));
+    EXPECT_EQ("20",(cnumpy_n_n[2][1]).get_xy_string(0,0));
+
+}
