@@ -23,7 +23,7 @@ int Cnumpy::how_many_column_about_type(Type type) const {
 }
 
 
-int Cnumpy::position_actual_column_in_type(Type type, int index_column) const {
+int Cnumpy::position_actual_column_in_same_column_type(Type type, int index_column) const {
     int column_about_type = 0;
 
     for (int i = 0; i < type_column.size(); ++i) {
@@ -64,7 +64,7 @@ std::vector<int> Cnumpy::get_column_int(int column) const {
 }
 
 int Cnumpy::offset_calculate(Type type_column, int column_index) const {
-    int offset = (position_actual_column_in_type(type_column, column_index)) * y_dimension;
+    int offset = (position_actual_column_in_same_column_type(type_column, column_index)) * y_dimension;
     return offset;
 }
 
@@ -74,7 +74,7 @@ std::vector<Type> Cnumpy::get_type_columns() const {
 
 int Cnumpy::get_xy_int(int x, int y) const {
     if (type_column[x] == Type::integer_type) {
-        int offset = (position_actual_column_in_type(Type::integer_type, x)) * y_dimension;
+        int offset = (position_actual_column_in_same_column_type(Type::integer_type, x)) * y_dimension;
         return int_store[offset + y];
     } else {
         throw std::invalid_argument("The value of the column type does not match the value");
@@ -83,7 +83,7 @@ int Cnumpy::get_xy_int(int x, int y) const {
 
 std::string Cnumpy::get_xy_string(int x, int y) const {
     if (type_column[x] == Type::string_type) {
-        int offset = (position_actual_column_in_type(Type::string_type, x)) * y_dimension;
+        int offset = (position_actual_column_in_same_column_type(Type::string_type, x)) * y_dimension;
         return string_store[offset + y];
     } else {
         throw std::invalid_argument("The value of the column type does not match the value");
@@ -92,7 +92,7 @@ std::string Cnumpy::get_xy_string(int x, int y) const {
 
 double Cnumpy::get_xy_double(int x, int y) const {
     if (type_column[x] == Type::double_type) {
-        int offset = (position_actual_column_in_type(Type::double_type, x)) * y_dimension;
+        int offset = (position_actual_column_in_same_column_type(Type::double_type, x)) * y_dimension;
         return double_store[offset + y];
     } else {
         throw std::invalid_argument("The value of the column type does not match the value");
@@ -103,13 +103,13 @@ double Cnumpy::get_xy_double(int x, int y) const {
 void Cnumpy::set_xy(int x, int y, Cnumpy value) {
 
     if (value.get_type_columns()[0] == Type::integer_type) {
-        int offset = (position_actual_column_in_type(Type::integer_type, x)) * y_dimension;
+        int offset = (position_actual_column_in_same_column_type(Type::integer_type, x)) * y_dimension;
         int_store[offset + y] = value.get_xy_int(0, 0);
     } else if (value.get_type_columns()[0] == Type::double_type) {
-        int offset = (position_actual_column_in_type(Type::double_type, x)) * y_dimension;
+        int offset = (position_actual_column_in_same_column_type(Type::double_type, x)) * y_dimension;
         double_store[offset + y] = value.get_xy_double(0, 0);
     } else {
-        int offset = (position_actual_column_in_type(Type::string_type, x)) * y_dimension;
+        int offset = (position_actual_column_in_same_column_type(Type::string_type, x)) * y_dimension;
         string_store[offset + y] = value.get_xy_string(0, 0);
     }
 
@@ -121,7 +121,7 @@ void Cnumpy::set_xy(int x, int y, int value) {
 
 
     if (type_column[x] == Type::integer_type) {
-        int offset = (position_actual_column_in_type(Type::integer_type, x)) * y_dimension;
+        int offset = (position_actual_column_in_same_column_type(Type::integer_type, x)) * y_dimension;
         int_store[offset + y] = value;
     } else {
         throw std::invalid_argument("The value of the column type does not match the value");
@@ -133,7 +133,7 @@ void Cnumpy::set_xy(int x, int y, int value) {
 void Cnumpy::set_xy(int x, int y, std::string value) {
 
     if (type_column[x] == Type::string_type) {
-        int offset = (position_actual_column_in_type(Type::string_type, x)) * y_dimension;
+        int offset = (position_actual_column_in_same_column_type(Type::string_type, x)) * y_dimension;
         string_store[offset + y] = value;
     } else {
         throw std::invalid_argument("The value of the column type does not match the value");
@@ -142,7 +142,7 @@ void Cnumpy::set_xy(int x, int y, std::string value) {
 
 void Cnumpy::set_xy(int x, int y, double value) {
     if (type_column[x] == Type::double_type) {
-        int offset = (position_actual_column_in_type(Type::double_type, x)) * y_dimension;
+        int offset = (position_actual_column_in_same_column_type(Type::double_type, x)) * y_dimension;
         double_store[offset + y] = value;
     } else {
         throw std::invalid_argument("The value of the column type does not match the value");
@@ -158,6 +158,9 @@ Cnumpy::Cnumpy(long x_dim, long y_dim, std::vector<Type> type_col, std::vector<s
 
 
 Cnumpy::Cnumpy(long x_dim, long y_dim, std::vector<Type> type_col) {
+
+    throws_exception_when_invalid_dimension_cnumpys(x_dim,y_dim);
+
     x_dimension = x_dim;
     y_dimension = y_dim;
     type_column = type_col;
@@ -225,17 +228,17 @@ std::ostream &operator<<(std::ostream &os, Cnumpy &obj) {
 
             if (obj.type_column[x] == Type::integer_type) {
 
-                int position = obj.position_actual_column_in_type(Type::integer_type, x) * obj.y_dimension;
+                int position = obj.position_actual_column_in_same_column_type(Type::integer_type, x) * obj.y_dimension;
 
                 os << std::left << symbolVerticalBreak << std::setw(obj.width_printed_value_on_sysout)
                    << obj.int_store[position + y];
 
             } else if (obj.type_column[x] == Type::double_type) {
-                int position = obj.position_actual_column_in_type(Type::double_type, x) * obj.y_dimension;
+                int position = obj.position_actual_column_in_same_column_type(Type::double_type, x) * obj.y_dimension;
                 os << std::left << symbolVerticalBreak << std::setw(obj.width_printed_value_on_sysout)
                    << obj.double_store[position + y];
             } else {
-                int position = obj.position_actual_column_in_type(Type::string_type, x) * obj.y_dimension;
+                int position = obj.position_actual_column_in_same_column_type(Type::string_type, x) * obj.y_dimension;
                 os << std::left << symbolVerticalBreak << std::setw(obj.width_printed_value_on_sysout)
                    << obj.string_store[position + y];
 
@@ -288,17 +291,17 @@ std::ostream &operator<<(std::ostream &os, Cnumpy &&obj) {
 
             if (obj.type_column[x] == Type::integer_type) {
 
-                int position = obj.position_actual_column_in_type(Type::integer_type, x) * obj.y_dimension;
+                int position = obj.position_actual_column_in_same_column_type(Type::integer_type, x) * obj.y_dimension;
 
                 os << std::left << symbolVerticalBreak << std::setw(obj.width_printed_value_on_sysout)
                    << obj.int_store[position + y];
 
             } else if (obj.type_column[x] == Type::double_type) {
-                int position = obj.position_actual_column_in_type(Type::double_type, x) * obj.y_dimension;
+                int position = obj.position_actual_column_in_same_column_type(Type::double_type, x) * obj.y_dimension;
                 os << std::left << symbolVerticalBreak << std::setw(obj.width_printed_value_on_sysout)
                    << obj.double_store[position + y];
             } else {
-                int position = obj.position_actual_column_in_type(Type::string_type, x) * obj.y_dimension;
+                int position = obj.position_actual_column_in_same_column_type(Type::string_type, x) * obj.y_dimension;
                 os << std::left << symbolVerticalBreak << std::setw(obj.width_printed_value_on_sysout)
                    << obj.string_store[position + y];
 
@@ -561,7 +564,7 @@ Cnumpy Cnumpy::get_xy(int x, int y) const {
 }
 
 bool Cnumpy::operator<(const Cnumpy &obj) const {
-    check_is_correct_one_element_cnumpys(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -581,7 +584,7 @@ bool Cnumpy::operator<(const Cnumpy &obj) const {
 }
 
 bool Cnumpy::operator<=(Cnumpy &obj) const {
-    check_is_correct_one_element_cnumpys(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -612,7 +615,7 @@ bool Cnumpy::operator>(Cnumpy &obj) const {
 }
 
 bool Cnumpy::operator>=(Cnumpy &obj) const {
-    check_is_correct_one_element_cnumpys(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -632,7 +635,7 @@ bool Cnumpy::operator>=(Cnumpy &obj) const {
 
 
 bool Cnumpy::operator==(Cnumpy &obj) const {
-    check_is_correct_one_element_cnumpys(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -659,7 +662,7 @@ bool Cnumpy::operator!=(Cnumpy &obj) const {
 
 
 Cnumpy Cnumpy::operator+(Cnumpy &obj) const {
-    check_is_correct_one_element_cnumpys(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -688,7 +691,7 @@ Cnumpy Cnumpy::operator+(Cnumpy &obj) const {
 }
 
 Cnumpy Cnumpy::operator-(Cnumpy &obj) const {
-    check_is_correct_one_element_cnumpys(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -712,7 +715,7 @@ Cnumpy Cnumpy::operator-(Cnumpy &obj) const {
 }
 
 Cnumpy Cnumpy::operator/(Cnumpy &obj) const {
-    check_is_correct_one_element_cnumpys(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -737,7 +740,7 @@ Cnumpy Cnumpy::operator/(Cnumpy &obj) const {
 
 
 Cnumpy Cnumpy::operator*(Cnumpy &obj) const {
-    check_is_correct_one_element_cnumpys(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -761,7 +764,7 @@ Cnumpy Cnumpy::operator*(Cnumpy &obj) const {
 }
 
 Cnumpy Cnumpy::operator-() const {
-    check_is_correct_one_element_cnumpys(*this, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element(*this, *this);
     Type type_value = get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -979,6 +982,146 @@ Cnumpy Cnumpy::operator[](int index) const {
 
     }
 
+
+}
+
+
+Cnumpy Cnumpy::set(int value){
+    if(get_x_dimension() == 1 && get_y_dimension() ==1){
+        (*this) = create_cnumpy_with_one_value(value,Type::integer_type,default_label);
+    }else{
+        throw std::invalid_argument("Cannot assign one value to all cnumpy grether then 1 element");
+    }
+}
+Cnumpy Cnumpy::set(double value){
+    if(get_x_dimension() == 1 && get_y_dimension() ==1){
+        (*this) = create_cnumpy_with_one_value(value,Type::double_type,default_label);
+    }else{
+        throw std::invalid_argument("Cannot assign one value to all cnumpy grether then 1 element");
+    }
+}
+Cnumpy Cnumpy::set(std::string value){
+    if(get_x_dimension() == 1 && get_y_dimension() ==1){
+        (*this) = create_cnumpy_with_one_value(value,Type::string_type,default_label);
+    }else{
+        throw std::invalid_argument("Cannot assign one value to all cnumpy grether then 1 element");
+    }
+}
+
+Cnumpy Cnumpy::set(std::vector<int> data){
+    if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
+        set_column(0,data);
+    }else{
+        throw std::invalid_argument("Cannot assign one column to all cnumpy grether then 1 columns");
+    }
+
+}
+Cnumpy Cnumpy::set(std::vector<double> data){
+    if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
+        set_column(0,data);
+    }else{
+        throw std::invalid_argument("Cannot assign one column to all cnumpy grether then 1 columns");
+    }
+
+}
+Cnumpy Cnumpy::set(std::vector<std::string> data){
+    if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
+        set_column(0,data);
+    }else{
+        throw std::invalid_argument("Cannot assign one column to all cnumpy grether then 1 columns");
+    }
+}
+
+Cnumpy Cnumpy::set(int x,int y,int value){
+    set_xy(x,y,value);
+}
+Cnumpy Cnumpy::set(int x,int y,double value ){
+    set_xy(x,y,value);
+}
+Cnumpy Cnumpy::set(int x,int y,std::string value){
+    set_xy(x,y,value);
+}
+
+Cnumpy Cnumpy::set(int x,std::vector<int> data){
+    if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
+        set_column(x,data);
+    }else{
+        throw std::invalid_argument("Cannot assign one column to all cnumpy grether then 1 columns");
+    }
+}
+Cnumpy Cnumpy::set(int x,std::vector<double> data){
+    if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
+        set_column(x,data);
+    }else{
+        throw std::invalid_argument("Cannot assign one column to all cnumpy grether then 1 columns");
+    }
+}
+Cnumpy Cnumpy::set(int x,std::vector<std::string> data){
+    if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
+        set_column(x,data);
+    }else{
+        throw std::invalid_argument("Cannot assign one column to all cnumpy grether then 1 columns");
+    }
+}
+
+Cnumpy Cnumpy::set(Cnumpy data){
+    //warunki !!! tylko jedna wartosc na lewo
+    (*this) = data;
+}
+Cnumpy Cnumpy::set(int x,Cnumpy data){
+
+        Type type_column = data.get_type_columns()[x];
+
+        if(type_column == Type::integer_type){
+            std::vector<int> raw_data = data.get_column_int(x);
+            set_column(x,raw_data);
+        }else if(type_column == Type::double_type){
+            std::vector<double> raw_data = data.get_column_double(x);
+            set_column(x,raw_data);
+        }else{
+            std::vector<std::string> raw_data = data.get_column_string(x);
+            set_column(x,raw_data);
+        }
+
+
+}
+
+Cnumpy Cnumpy::set(int x ,int y,Cnumpy value){
+    Type type_column = value.get_type_columns()[x];
+
+    if(type_column == Type::integer_type){
+        int raw_Data = value.get_xy_int(0,0);
+        set_xy(x,y,raw_Data);
+    }else if(type_column == Type::double_type){
+        double raw_Data = value.get_xy_double(0,0);
+        set_xy(x,y,raw_Data);
+    }else{
+        std::string raw_Data = value.get_xy_string(0,0);
+        set_xy(x,y,raw_Data);
+    }
+}
+
+Cnumpy Cnumpy::of(std::vector<int> value) {
+
+}
+
+Cnumpy Cnumpy::of(std::vector<double> value) {
+    return Cnumpy(0);
+}
+
+Cnumpy Cnumpy::of(std::vector<std::string> value) {
+    return Cnumpy(0);
+}
+
+Cnumpy::Cnumpy(std::vector<int>) {
+
+}
+
+Cnumpy::Cnumpy(std::vector<double>) {
+
+}
+
+Cnumpy::Cnumpy(std::vector<std::string>) {
 
 }
 

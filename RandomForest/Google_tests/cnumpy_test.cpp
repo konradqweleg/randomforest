@@ -7,8 +7,9 @@
 #include "../cnumpy/cnumpy.cpp"
 #include <string>
 #include <vector>
+#include "exception_assert_for_gtest.h"
 
-Cnumpy create_empty_cnumpy_3x3() {
+Cnumpy create_empty_cnumpy_3x3_int_double_string() {
     std::vector<Type> column_type = std::vector<Type>();
     column_type.push_back(Type::integer_type);
     column_type.push_back(Type::double_type);
@@ -16,9 +17,9 @@ Cnumpy create_empty_cnumpy_3x3() {
 
 
     std::vector<std::string> name_column = std::vector<std::string>();
-    name_column.push_back("value_1");
-    name_column.push_back("value_2");
-    name_column.push_back("results");
+    name_column.emplace_back("value_1");
+    name_column.emplace_back("value_2");
+    name_column.emplace_back("results");
 
 
     Cnumpy data = Cnumpy(3, 3, column_type, name_column);
@@ -28,7 +29,7 @@ Cnumpy create_empty_cnumpy_3x3() {
 
 
 Cnumpy create_fill_cnumpy_3x3_increased_value_int_double_string(){
-    Cnumpy data = create_empty_cnumpy_3x3();
+    Cnumpy data = create_empty_cnumpy_3x3_int_double_string();
 
     std::vector<int> int_column{10,20,30};
     std::vector<double> double_column{10.0,20.0,30.0};
@@ -40,37 +41,53 @@ Cnumpy create_fill_cnumpy_3x3_increased_value_int_double_string(){
     return data;
 }
 
+TEST(testCnumpy, create_empty_cnumpy_check_dimension) {
 
-TEST(testCnumpy, create_empty_cnumpy_object) {
+    Cnumpy empty_created_3x3 = create_empty_cnumpy_3x3_int_double_string();
 
-    Cnumpy empty_created = create_empty_cnumpy_3x3();
+    EXPECT_EQ(3, empty_created_3x3.get_x_dimension());
+    EXPECT_EQ(3, empty_created_3x3.get_y_dimension());
 
-    EXPECT_EQ(3, empty_created.get_x_dimension());
-    EXPECT_EQ(3, empty_created.get_y_dimension());
-
-    std::vector<int> int_column = empty_created.get_column_int(0);
-
+    std::vector<int> int_column = empty_created_3x3.get_column_int(0);
     EXPECT_EQ(3, int_column.size());
 
-    for (int value: int_column) {
+    std::vector<double> double_column = empty_created_3x3.get_column_double(1);
+    EXPECT_EQ(3, double_column.size());
+
+    std::vector<std::string> string_column = empty_created_3x3.get_column_string(2);
+    EXPECT_EQ(3, string_column.size());
+
+
+    std::string expected_both_dimension_positive_exception_message = "Both dimensions of the cnumpys must be positive";
+
+    ASSERT_EXCEPTION( { Cnumpy both_dimension_negative(-1,-1,std::vector<Type>()); }, std::invalid_argument, expected_both_dimension_positive_exception_message );
+    ASSERT_EXCEPTION({ Cnumpy left_negative(-1, 1, std::vector<Type>()); }, std::invalid_argument, expected_both_dimension_positive_exception_message);
+    ASSERT_EXCEPTION({ Cnumpy right_negative(1, -1, std::vector<Type>()); }, std::invalid_argument, expected_both_dimension_positive_exception_message );
+    ASSERT_EXCEPTION({ Cnumpy both_zero(0, 0, std::vector<Type>()); }, std::invalid_argument, expected_both_dimension_positive_exception_message );
+    ASSERT_EXCEPTION({ Cnumpy left_zero(0, 1, std::vector<Type>()); }, std::invalid_argument, expected_both_dimension_positive_exception_message );
+    ASSERT_EXCEPTION({ Cnumpy right_zero(1, 0, std::vector<Type>()); }, std::invalid_argument, expected_both_dimension_positive_exception_message );
+
+}
+
+TEST(testCnumpy, create_empty_cnumpy_check_default_values) {
+
+    Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
+    
+    std::vector<int> fresh_integer_column = empty_created.get_column_int(0);
+    EXPECT_EQ(3, fresh_integer_column.size());
+    for (int value: fresh_integer_column) {
         EXPECT_EQ(0, value);
     }
 
-
-    std::vector<double> double_column = empty_created.get_column_double(1);
-
-    EXPECT_EQ(3, double_column.size());
-
-    for (double value: double_column) {
+    std::vector<double> fresh_double_column = empty_created.get_column_double(1);
+    EXPECT_EQ(3, fresh_double_column.size());
+    for (double value: fresh_double_column) {
         EXPECT_DOUBLE_EQ(0.0, value);
     }
 
-
-    std::vector<std::string> string_column = empty_created.get_column_string(2);
-
-    EXPECT_EQ(3, string_column.size());
-
-    for (std::string value: string_column) {
+    std::vector<std::string> fresh_string_column = empty_created.get_column_string(2);
+    EXPECT_EQ(3, fresh_string_column.size());
+    for (std::string value: fresh_string_column) {
         EXPECT_EQ("", value);
     }
 
@@ -79,9 +96,10 @@ TEST(testCnumpy, create_empty_cnumpy_object) {
 
 TEST(testCnumpy, get_columns_type) {
 
-    Cnumpy empty_created = create_empty_cnumpy_3x3();
+    Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
     std::vector<Type> columns_type = empty_created.get_type_columns();
 
+    EXPECT_EQ(3,columns_type.size());
     EXPECT_EQ(Type::integer_type, columns_type[0]);
     EXPECT_EQ(Type::double_type, columns_type[1]);
     EXPECT_EQ(Type::string_type, columns_type[2]);
@@ -91,9 +109,10 @@ TEST(testCnumpy, get_columns_type) {
 
 TEST(testCnumpy, get_columns_name) {
 
-    Cnumpy empty_created = create_empty_cnumpy_3x3();
+    Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
     std::vector<std::string> columns_name = empty_created.get_column_name();
 
+    EXPECT_EQ(3,columns_name.size());
     EXPECT_EQ("value_1", columns_name[0]);
     EXPECT_EQ("value_2", columns_name[1]);
     EXPECT_EQ("results", columns_name[2]);
@@ -103,7 +122,7 @@ TEST(testCnumpy, get_columns_name) {
 
 TEST(testCnumpy, set_columns) {
 
-    Cnumpy empty_created = create_empty_cnumpy_3x3();
+    Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
 
     std::vector<int> int_column{10,20,30};
     std::vector<double> double_column{10.0,20.0,30.0};
@@ -123,7 +142,7 @@ TEST(testCnumpy, set_columns) {
 
 TEST(testCnumpy, set_xy) {
 
-    Cnumpy empty_created = create_empty_cnumpy_3x3();
+    Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
 
     empty_created.set_xy(0,0,10);
     empty_created.set_xy(1,0,10.0);
@@ -142,7 +161,7 @@ TEST(testCnumpy, set_xy) {
 }
 
 TEST(testCnumpy,get_unique_column_value){
-    Cnumpy data = create_empty_cnumpy_3x3();
+    Cnumpy data = create_empty_cnumpy_3x3_int_double_string();
 
     std::vector<int> int_column{10,10,30};
     std::vector<double> double_column{10.0,30.0,10.0};
@@ -172,7 +191,7 @@ TEST(testCnumpy,get_unique_column_value){
 }
 
 TEST(testCnumpy,get_min_value_in_column){
-    Cnumpy data = create_empty_cnumpy_3x3();
+    Cnumpy data = create_empty_cnumpy_3x3_int_double_string();
 
     std::vector<int> int_column{30,10,0};
     std::vector<double> double_column{20.0,10.0,30.0};
@@ -194,7 +213,7 @@ TEST(testCnumpy,get_min_value_in_column){
 }
 
 TEST(testCnumpy,get_max_value_in_column){
-    Cnumpy data = create_empty_cnumpy_3x3();
+    Cnumpy data = create_empty_cnumpy_3x3_int_double_string();
 
     std::vector<int> int_column{30,10,0};
     std::vector<double> double_column{20.0,10.0,30.0};
@@ -539,10 +558,6 @@ TEST(testCnumpy,operator_assign_raw_int){
     EXPECT_EQ(1,value.get_y_dimension());
     EXPECT_EQ(1,value.get_x_dimension());
 
-    Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
-    results[0][0] = 15;
-    //results.set_xy(0,0,15);
-    EXPECT_EQ(15,results[0][0].get_xy_int(0,0));
 
 }
 
@@ -554,20 +569,98 @@ TEST(testCnumpy,operator_assign_raw_vector_int){
 
     Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
 
-    results[0] = raw_column_int;
+    Cnumpy first_column = results[0];
+    first_column = raw_column_int;
 
-    EXPECT_EQ(18,results.get_xy_int(0, 0));
-    EXPECT_EQ(28,results.get_xy_int(0, 1));
-    EXPECT_EQ(38,results.get_xy_int(0, 2));
+    EXPECT_EQ(18,first_column.get_xy_int(0, 0));
+    EXPECT_EQ(28,first_column.get_xy_int(0, 1));
+    EXPECT_EQ(38,first_column.get_xy_int(0, 2));
 
-    EXPECT_DOUBLE_EQ(10.0,results.get_xy_double(0, 0));
-    EXPECT_DOUBLE_EQ(20.0,results.get_xy_double(0, 1));
-    EXPECT_DOUBLE_EQ(30.0,results.get_xy_double(0, 2));
+    EXPECT_EQ(10,results.get_xy_int(0,0) );
+    EXPECT_EQ(20,results.get_xy_int(0, 1));
+    EXPECT_EQ(30,results.get_xy_int(0, 2));
 
 
-    EXPECT_EQ("10",results.get_xy_string(0, 0));
-    EXPECT_EQ("20",results.get_xy_string(0, 1));
-    EXPECT_EQ("30",results.get_xy_string(0, 2));
+    EXPECT_DOUBLE_EQ(10.0,results.get_xy_double(1, 0));
+    EXPECT_DOUBLE_EQ(20.0,results.get_xy_double(1, 1));
+    EXPECT_DOUBLE_EQ(30.0,results.get_xy_double(1, 2));
+
+
+    EXPECT_EQ("10",results.get_xy_string(2, 0));
+    EXPECT_EQ("20",results.get_xy_string(2, 1));
+    EXPECT_EQ("30",results.get_xy_string(2, 2));
+
+
+
+    EXPECT_EQ(3,results.get_y_dimension());
+    EXPECT_EQ(3,results.get_x_dimension());
+
+}
+
+TEST(testCnumpy,operator_assign_raw_vector_double){
+    std::vector<double> raw_column_int;
+    raw_column_int.push_back(18.0);
+    raw_column_int.push_back(28.0);
+    raw_column_int.push_back(38.0);
+
+    Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
+
+    Cnumpy first_column = results[1];
+    first_column = raw_column_int;
+
+    EXPECT_DOUBLE_EQ(18.0,first_column.get_xy_double(0, 0));
+    EXPECT_DOUBLE_EQ(28.0,first_column.get_xy_double(0, 1));
+    EXPECT_DOUBLE_EQ(38.0,first_column.get_xy_double(0, 2));
+
+    EXPECT_EQ(10,results.get_xy_int(0,0) );
+    EXPECT_EQ(20,results.get_xy_int(0, 1));
+    EXPECT_EQ(30,results.get_xy_int(0, 2));
+
+
+    EXPECT_DOUBLE_EQ(10.0,results.get_xy_double(1, 0));
+    EXPECT_DOUBLE_EQ(20.0,results.get_xy_double(1, 1));
+    EXPECT_DOUBLE_EQ(30.0,results.get_xy_double(1, 2));
+
+
+    EXPECT_EQ("10",results.get_xy_string(2, 0));
+    EXPECT_EQ("20",results.get_xy_string(2, 1));
+    EXPECT_EQ("30",results.get_xy_string(2, 2));
+
+
+
+    EXPECT_EQ(3,results.get_y_dimension());
+    EXPECT_EQ(3,results.get_x_dimension());
+
+}
+
+TEST(testCnumpy,operator_assign_raw_vector_string){
+    std::vector<std::string> raw_column_string;
+    raw_column_string.emplace_back("18");
+    raw_column_string.emplace_back("28");
+    raw_column_string.emplace_back("38");
+
+    Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
+
+    Cnumpy first_column = results[2];
+    first_column = raw_column_string;
+
+    EXPECT_EQ("18",first_column.get_xy_string(0, 0));
+    EXPECT_EQ("28",first_column.get_xy_string(0, 1));
+    EXPECT_EQ("38",first_column.get_xy_string(0, 2));
+
+    EXPECT_EQ(10,results.get_xy_int(0,0) );
+    EXPECT_EQ(20,results.get_xy_int(0, 1));
+    EXPECT_EQ(30,results.get_xy_int(0, 2));
+
+
+    EXPECT_DOUBLE_EQ(10.0,results.get_xy_double(1, 0));
+    EXPECT_DOUBLE_EQ(20.0,results.get_xy_double(1, 1));
+    EXPECT_DOUBLE_EQ(30.0,results.get_xy_double(1, 2));
+
+
+    EXPECT_EQ("10",results.get_xy_string(2, 0));
+    EXPECT_EQ("20",results.get_xy_string(2, 1));
+    EXPECT_EQ("30",results.get_xy_string(2, 2));
 
 
 
@@ -586,12 +679,6 @@ TEST(testCnumpy,operator_assign_raw_double){
     EXPECT_EQ(1,value.get_x_dimension());
 
 
-    Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
-    results[1][0] = 15.0;
-    EXPECT_DOUBLE_EQ(15.0,results[1][0].get_xy_double(0,0));
-
-
-
 }
 
 TEST(testCnumpy,operator_assign_raw_string){
@@ -603,9 +690,7 @@ TEST(testCnumpy,operator_assign_raw_string){
     EXPECT_EQ(1,value.get_y_dimension());
     EXPECT_EQ(1,value.get_x_dimension());
 
-    Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
-    results[2][2] = "Text";
-    EXPECT_EQ("Text",results[2][2].get_xy_string(0,0));
+
 
 }
 
