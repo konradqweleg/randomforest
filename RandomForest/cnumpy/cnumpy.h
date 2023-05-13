@@ -5,8 +5,7 @@
 #include "type.h"
 
 /*Do zrobienia
- *  Dodanie operatorów (+=,-=,/=,mnozenie/)
- *  Dodanie const do metod ktore nie modyfikuja stanu
+ * Copy or reference. To thinking
  *  Dodanieoperatora = tak aby mozna bylo przypisywac cnumpy 1x1,cnumpy 1xn i ,cnumpy nxn
  *  dodanie itertorow
  *  Dodanie testow brakuajcych
@@ -33,18 +32,17 @@ private:
     long x_dimension = 0;
     long y_dimension = 0;
 
-
     uint8_t width_printed_value_on_sysout = 20;
 
 
-    int how_many_column_about_type(Type type);
 
+    int how_many_column_about_type(Type type) const;
     int position_actual_column_in_type(Type type, int index_column) const;
 
 
 
     template<typename T>
-    Cnumpy create_cnumpy_with_one_column_from_raw_data(std::vector<T> raw_column_data, int x_dim, int y_dim, Type column_type, std::string column_name){
+    static Cnumpy create_cnumpy_with_one_column_from_raw_data(std::vector<T> raw_column_data, int x_dim, int y_dim, Type column_type, std::string & column_name){
         std::vector<std::string> name_columns;
         name_columns.push_back(column_name);
 
@@ -59,7 +57,7 @@ private:
 
 
     template<typename T>
-    static Cnumpy create_cnumpy_with_one_value(T raw_value, Type column_type, std::string column_name){
+    static Cnumpy create_cnumpy_with_one_value(T raw_value, Type column_type, std::string & column_name){
         std::vector<std::string> name_columns;
         name_columns.push_back(column_name);
 
@@ -79,13 +77,13 @@ private:
 
 
 
-   void throw_exception_when_cnumpy_has_more_then_one_element(Cnumpy data) const{
+   static void throw_exception_when_cnumpy_has_more_then_one_element(Cnumpy data) {
        if(data.get_y_dimension() > 1 || data.get_x_dimension() > 1){
            throw std::invalid_argument( "Only one element Cnumpy can be compare");
        }
    }
 
-    void throw_exception_when_diffrent_type_value(Cnumpy data,Cnumpy data_2) const{
+    static void throw_exception_when_diffrent_type_value(Cnumpy data,Cnumpy data_2) {
         Type first_type = data.get_type_columns()[0];
         Type second_type = data_2.get_type_columns()[0];
 
@@ -94,7 +92,7 @@ private:
         }
     }
 
-    void check_is_correct_one_element_cnumpys(Cnumpy data,Cnumpy data_2) const{
+    static void check_is_correct_one_element_cnumpys(Cnumpy data,Cnumpy data_2) {
         throw_exception_when_cnumpy_has_more_then_one_element(data);
         throw_exception_when_cnumpy_has_more_then_one_element(data_2);
         throw_exception_when_diffrent_type_value(data,data_2);
@@ -111,67 +109,94 @@ public:
     static Cnumpy of(std::string value);
 
 
-    Cnumpy get_xy(int x , int y);
+    Cnumpy get_xy(int x , int y) const;
 
     bool operator<( const Cnumpy & obj) const;
 
-    bool operator<=(Cnumpy & obj);
+    bool operator<=(Cnumpy & obj) const;
 
-    bool operator>(Cnumpy & obj);
-
-
-    bool operator>=(Cnumpy & obj);
+    bool operator>(Cnumpy & obj) const;
 
 
-
-    bool operator==(Cnumpy & obj);
-
-    bool operator!=(Cnumpy & obj);
+    bool operator>=(Cnumpy & obj) const;
 
 
-    Cnumpy operator+(Cnumpy & obj);
 
-    Cnumpy operator-(Cnumpy & obj);
+    bool operator==(Cnumpy & obj) const;
 
-    Cnumpy operator/(Cnumpy & obj);
+    bool operator!=(Cnumpy & obj) const;
 
 
-    Cnumpy operator*(Cnumpy & obj);
+    Cnumpy operator+(Cnumpy & obj) const;
 
-    Cnumpy operator-();
+    Cnumpy operator-(Cnumpy & obj) const;
 
-    Cnumpy operator[](int index);
+    Cnumpy operator/(Cnumpy & obj) const;
 
+
+    Cnumpy operator*(Cnumpy & obj) const;
+
+    Cnumpy operator-() const;
+
+    Cnumpy operator[](int index) const;
+
+    Cnumpy operator+=(Cnumpy& obj);
+
+    Cnumpy operator-=(Cnumpy& obj);
+
+    Cnumpy operator/=(Cnumpy& obj);
+
+    Cnumpy operator*=(Cnumpy& obj);
+
+
+    Cnumpy operator=(int);
+
+    Cnumpy operator=(double );
+
+    Cnumpy operator=(std::string);
+
+    Cnumpy operator=(std::vector<int>);
+
+    Cnumpy operator=(std::vector<double> );
+
+    Cnumpy operator=(std::vector<std::string>);
+
+
+    Cnumpy(int value);
+
+    Cnumpy(double value);
+
+    Cnumpy(std::string value);
 
     Cnumpy(long x_dim, long y_dim, std::vector<Type> typeCol);
 
     Cnumpy(long x_dim, long y_dim, std::vector<Type> typeCol, std::vector<std::string> nameCol);
 
-    std::vector<std::string> get_column_name();
+    std::vector<std::string> get_column_name() const;
 
     std::vector<Type> get_type_columns() const;
 
-    int offset_calculate(Type type_column, int column_index);
+    int offset_calculate(Type type_column, int column_index) const;
 
-    std::vector<std::string> get_column_string(int column_index);
+    std::vector<std::string> get_column_string(int column_index) const;
 
-    std::vector<double> get_column_double(int column);
+    std::vector<double> get_column_double(int column) const;
 
-    std::vector<int> get_column_int(int column);
+    std::vector<int> get_column_int(int column) const;
 
-    Cnumpy get_unique_column_values(int column_index);
+    Cnumpy get_unique_column_values(int column_index) const;
 
     //int or sequence of str defines number of equal width bins in a range, default is 10
-    Cnumpy hist(int column_index,double bins =1.0);
+    Cnumpy hist(int column_index,double bins =1.0) const;
 
 
-    int get_x_dimension();
+    int get_x_dimension() const;
 
-    int get_y_dimension();
+    int get_y_dimension() const;
 
-    Cnumpy get_min_value_in_column(int column_index);
+    Cnumpy get_min_value_in_column(int column_index) const;
 
-    Cnumpy get_max_value_in_column(int column_index);
+    Cnumpy get_max_value_in_column(int column_index) const;
 
     void set_xy(int x, int y, int value);
 
@@ -188,7 +213,7 @@ public:
     double get_xy_double(int x, int y) const;
 
     template<typename T>
-    void set_column(long index_column, std::vector<T> column_values) {
+    void set_column(long index_column, std::vector<T> column_values)  {
         for (int i = 0; i < column_values.size(); ++i) {
             set_xy(index_column, i, column_values[i]);
         }
@@ -196,6 +221,7 @@ public:
 
 
     friend std::ostream &operator<<(std::ostream &os, Cnumpy &obj);
+    friend std::ostream &operator<<(std::ostream &os, Cnumpy &&obj);
 
 
 };

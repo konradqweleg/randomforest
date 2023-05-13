@@ -255,13 +255,38 @@ TEST(testCnumpy,get_xy_cnumpy){
 TEST(testCnumpy,of){
     Cnumpy int_value_cnumpy = Cnumpy::of(5);
     EXPECT_EQ(5,int_value_cnumpy.get_xy_int(0,0));
+    EXPECT_EQ(1,int_value_cnumpy.get_y_dimension());
+    EXPECT_EQ(1,int_value_cnumpy.get_x_dimension());
 
     Cnumpy double_value_cnumpy = Cnumpy::of(15.0);
     ASSERT_DOUBLE_EQ(15.0,double_value_cnumpy.get_xy_double(0,0));
+    EXPECT_EQ(1,double_value_cnumpy.get_y_dimension());
+    EXPECT_EQ(1,double_value_cnumpy.get_x_dimension());
 
     Cnumpy string_value_cnumpy = Cnumpy::of("text");
     EXPECT_EQ("text",string_value_cnumpy.get_xy_string(0,0));
+    EXPECT_EQ(1,double_value_cnumpy.get_y_dimension());
+    EXPECT_EQ(1,double_value_cnumpy.get_x_dimension());
 }
+
+TEST(testCnumpy,constructor_from_raw_value){
+    Cnumpy int_value_cnumpy(5);
+    EXPECT_EQ(5,int_value_cnumpy.get_xy_int(0,0));
+    EXPECT_EQ(1,int_value_cnumpy.get_y_dimension());
+    EXPECT_EQ(1,int_value_cnumpy.get_x_dimension());
+
+    Cnumpy double_value_cnumpy(15.0);
+    ASSERT_DOUBLE_EQ(15.0,double_value_cnumpy.get_xy_double(0,0));
+    EXPECT_EQ(1,double_value_cnumpy.get_y_dimension());
+    EXPECT_EQ(1,double_value_cnumpy.get_x_dimension());
+
+    Cnumpy string_value_cnumpy("text");
+    EXPECT_EQ("text",string_value_cnumpy.get_xy_string(0,0));
+    EXPECT_EQ(1,double_value_cnumpy.get_y_dimension());
+    EXPECT_EQ(1,double_value_cnumpy.get_x_dimension());
+}
+
+
 
 
 
@@ -435,6 +460,157 @@ TEST(testCnumpy,operator_add){
 
 
 }
+
+
+TEST(testCnumpy,operator_add_equal){
+    Cnumpy result_first_int_value_5_cnumpy = Cnumpy::of(5);
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+    result_first_int_value_5_cnumpy += int_value_10_cnumpy;
+
+    Cnumpy result_first_double_value_5_cnumpy = Cnumpy::of(5.0);
+    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+    result_first_double_value_5_cnumpy += double_value_10_cnumpy;
+
+    Cnumpy result_first_string_value_aa_cnumpy = Cnumpy::of("aa");
+    Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
+    result_first_string_value_aa_cnumpy += string_value_bb_cnumpy;
+
+
+    EXPECT_EQ(15, result_first_int_value_5_cnumpy.get_xy_int(0,0));
+    EXPECT_DOUBLE_EQ(15.0,result_first_double_value_5_cnumpy.get_xy_double(0,0));
+    EXPECT_EQ("aabb", result_first_string_value_aa_cnumpy.get_xy_string(0, 0));
+
+
+}
+
+TEST(testCnumpy,operator_minus_equal){
+    Cnumpy first_value_results_int = Cnumpy::of(5);
+    Cnumpy second_value_int = Cnumpy::of(10);
+    first_value_results_int -= second_value_int;
+
+    Cnumpy first_value_results_double = Cnumpy::of(5.0);
+    Cnumpy second_value_double = Cnumpy::of(10.0);
+    first_value_results_double -= second_value_double;
+
+    EXPECT_EQ(-5, first_value_results_int.get_xy_int(0, 0));
+    EXPECT_DOUBLE_EQ(-5.0, first_value_results_double.get_xy_double(0, 0));
+
+
+}
+
+TEST(testCnumpy,operator_devide_equal){
+    Cnumpy first_value_results_int = Cnumpy::of(5);
+    Cnumpy second_value_int = Cnumpy::of(10);
+    first_value_results_int /= second_value_int;
+
+    Cnumpy first_value_results_double = Cnumpy::of(5.0);
+    Cnumpy second_value_double = Cnumpy::of(10.0);
+    first_value_results_double /= second_value_double;
+
+    EXPECT_EQ(0, first_value_results_int.get_xy_int(0, 0));
+    EXPECT_DOUBLE_EQ(0.5, first_value_results_double.get_xy_double(0, 0));
+
+
+}
+
+TEST(testCnumpy,operator_multiply_equal){
+    Cnumpy first_value_results_int = Cnumpy::of(5);
+    Cnumpy second_value_int = Cnumpy::of(10);
+    first_value_results_int *= second_value_int;
+
+    Cnumpy first_value_results_double = Cnumpy::of(5.0);
+    Cnumpy second_value_double = Cnumpy::of(10.0);
+    first_value_results_double *= second_value_double;
+
+    EXPECT_EQ(50, first_value_results_int.get_xy_int(0, 0));
+    EXPECT_DOUBLE_EQ(50.0, first_value_results_double.get_xy_double(0, 0));
+
+
+}
+
+
+
+TEST(testCnumpy,operator_assign_raw_int){
+    Cnumpy value = Cnumpy::of(5);
+    int raw_value_to_assign = 20;
+    value = raw_value_to_assign;
+
+    EXPECT_EQ(20, value.get_xy_int(0, 0));
+    EXPECT_EQ(1,value.get_y_dimension());
+    EXPECT_EQ(1,value.get_x_dimension());
+
+    Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
+    results[0][0] = 15;
+    //results.set_xy(0,0,15);
+    EXPECT_EQ(15,results[0][0].get_xy_int(0,0));
+
+}
+
+TEST(testCnumpy,operator_assign_raw_vector_int){
+    std::vector<int> raw_column_int;
+    raw_column_int.push_back(18);
+    raw_column_int.push_back(28);
+    raw_column_int.push_back(38);
+
+    Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
+
+    results[0] = raw_column_int;
+
+    EXPECT_EQ(18,results.get_xy_int(0, 0));
+    EXPECT_EQ(28,results.get_xy_int(0, 1));
+    EXPECT_EQ(38,results.get_xy_int(0, 2));
+
+    EXPECT_DOUBLE_EQ(10.0,results.get_xy_double(0, 0));
+    EXPECT_DOUBLE_EQ(20.0,results.get_xy_double(0, 1));
+    EXPECT_DOUBLE_EQ(30.0,results.get_xy_double(0, 2));
+
+
+    EXPECT_EQ("10",results.get_xy_string(0, 0));
+    EXPECT_EQ("20",results.get_xy_string(0, 1));
+    EXPECT_EQ("30",results.get_xy_string(0, 2));
+
+
+
+    EXPECT_EQ(3,results.get_y_dimension());
+    EXPECT_EQ(3,results.get_x_dimension());
+
+}
+
+TEST(testCnumpy,operator_assign_raw_double){
+    Cnumpy value = Cnumpy::of(5.0);
+    double raw_value_to_assign = 20;
+    value = raw_value_to_assign;
+
+    EXPECT_EQ(20.0, value.get_xy_double(0, 0));
+    EXPECT_EQ(1,value.get_y_dimension());
+    EXPECT_EQ(1,value.get_x_dimension());
+
+
+    Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
+    results[1][0] = 15.0;
+    EXPECT_DOUBLE_EQ(15.0,results[1][0].get_xy_double(0,0));
+
+
+
+}
+
+TEST(testCnumpy,operator_assign_raw_string){
+    Cnumpy value = Cnumpy::of("5");
+    std::string raw_value_to_assign = "20";
+    value = raw_value_to_assign;
+
+    EXPECT_EQ("20", value.get_xy_string(0, 0));
+    EXPECT_EQ(1,value.get_y_dimension());
+    EXPECT_EQ(1,value.get_x_dimension());
+
+    Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
+    results[2][2] = "Text";
+    EXPECT_EQ("Text",results[2][2].get_xy_string(0,0));
+
+}
+
+
+
 
 TEST(testCnumpy,operator_subtraction){
     Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
