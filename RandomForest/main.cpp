@@ -18,11 +18,12 @@ int main() {
     csv csv_calc;
     Cnumpy data_for_test_entropy = csv_calc.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv",",");
 
+    std::cout<<data_for_test_entropy.get_xy(0,0);
    // std::cout<<data_for_test_entropy;
 //    std::cout<<data_for_test_entropy<< std::endl;
 
-    Cnumpy data = data_for_test_entropy.hist(2);
-    std::cout<<data;
+  //  Cnumpy data = data_for_test_entropy.hist(2);
+  //  std::cout<<data;
 //    Cnumpy m_v= data_for_test_entropy.get_min_value_in_column(2);
 //    Cnumpy m_v_2= data_for_test_entropy.get_min_value_in_column(1);
 //    std::cout<<std::endl;

@@ -8,6 +8,7 @@
 
 std::string Cnumpy::default_label = "*";
 int Cnumpy::first_element_index = 0;
+std::string  Cnumpy::exception_type_value_not_match_to_cnumpy_type_value = "Assigned value does not match value type in cnumpy";
 
 
 int Cnumpy::how_many_column_about_type(Type type) const {
@@ -73,80 +74,67 @@ std::vector<Type> Cnumpy::get_type_columns() const {
 }
 
 int Cnumpy::get_xy_int(int x, int y) const {
-    if (type_column[x] == Type::integer_type) {
-        int offset = (position_actual_column_in_same_column_type(Type::integer_type, x)) * y_dimension;
-        return int_store[offset + y];
-    } else {
-        throw std::invalid_argument("The value of the column type does not match the value");
-    }
+    throw_exception_when_access_to_no_exists_index(x,y);
+    throw_exception_when_different_type(type_column[x],Type::integer_type);
+    int offset_xy = calculate_position_xy_value_in_raw_store(x,y,Type::integer_type);
+    return int_store[offset_xy];
+
 }
 
 std::string Cnumpy::get_xy_string(int x, int y) const {
-    if (type_column[x] == Type::string_type) {
-        int offset = (position_actual_column_in_same_column_type(Type::string_type, x)) * y_dimension;
-        return string_store[offset + y];
-    } else {
-        throw std::invalid_argument("The value of the column type does not match the value");
-    }
+    throw_exception_when_access_to_no_exists_index(x,y);
+    throw_exception_when_different_type(type_column[x],Type::string_type);
+    int offset_xy = calculate_position_xy_value_in_raw_store(x,y,Type::string_type);
+    return string_store[offset_xy];
 }
 
 double Cnumpy::get_xy_double(int x, int y) const {
-    if (type_column[x] == Type::double_type) {
-        int offset = (position_actual_column_in_same_column_type(Type::double_type, x)) * y_dimension;
-        return double_store[offset + y];
-    } else {
-        throw std::invalid_argument("The value of the column type does not match the value");
-    }
+    throw_exception_when_access_to_no_exists_index(x,y);
+    throw_exception_when_different_type(type_column[x],Type::double_type);
+    int offset_xy = calculate_position_xy_value_in_raw_store(x,y,Type::double_type);
+    return double_store[offset_xy];
 }
 
 
 void Cnumpy::set_xy(int x, int y, Cnumpy value) {
+    int first_column_index = 0;
+    throw_exception_when_access_to_no_exists_index(x,y,value);
+    throw_exception_when_different_type(type_column[x],value.get_type_columns()[x]);
 
-    if (value.get_type_columns()[0] == Type::integer_type) {
-        int offset = (position_actual_column_in_same_column_type(Type::integer_type, x)) * y_dimension;
-        int_store[offset + y] = value.get_xy_int(0, 0);
-    } else if (value.get_type_columns()[0] == Type::double_type) {
-        int offset = (position_actual_column_in_same_column_type(Type::double_type, x)) * y_dimension;
-        double_store[offset + y] = value.get_xy_double(0, 0);
+
+    if (value.get_type_columns()[first_column_index] == Type::integer_type) {
+        int offset_xy = calculate_position_xy_value_in_raw_store(x,y,Type::integer_type);
+        int_store[offset_xy] = value.get_xy_int(0, 0);
+    } else if (value.get_type_columns()[first_column_index] == Type::double_type) {
+        int offset_xy = calculate_position_xy_value_in_raw_store(x,y,Type::double_type);
+        double_store[offset_xy] = value.get_xy_double(0, 0);
     } else {
-        int offset = (position_actual_column_in_same_column_type(Type::string_type, x)) * y_dimension;
-        string_store[offset + y] = value.get_xy_string(0, 0);
+        int offset_xy = calculate_position_xy_value_in_raw_store(x,y,Type::string_type);
+        string_store[offset_xy] = value.get_xy_string(0, 0);
     }
-
 
 }
 
 
 void Cnumpy::set_xy(int x, int y, int value) {
-
-
-    if (type_column[x] == Type::integer_type) {
-        int offset = (position_actual_column_in_same_column_type(Type::integer_type, x)) * y_dimension;
-        int_store[offset + y] = value;
-    } else {
-        throw std::invalid_argument("The value of the column type does not match the value");
-    }
-
-
+    throw_exception_when_access_to_no_exists_index(x,y);
+    throw_exception_when_different_type(type_column[x],Type::integer_type);
+    int offset_xy = calculate_position_xy_value_in_raw_store(x,y,Type::integer_type);
+    int_store[offset_xy] = value;
 }
 
 void Cnumpy::set_xy(int x, int y, std::string value) {
-
-    if (type_column[x] == Type::string_type) {
-        int offset = (position_actual_column_in_same_column_type(Type::string_type, x)) * y_dimension;
-        string_store[offset + y] = value;
-    } else {
-        throw std::invalid_argument("The value of the column type does not match the value");
-    }
+    throw_exception_when_access_to_no_exists_index(x,y);
+    throw_exception_when_different_type(type_column[x],Type::string_type);
+    int offset_xy = calculate_position_xy_value_in_raw_store(x,y,Type::string_type);
+    string_store[offset_xy] = value;
 }
 
 void Cnumpy::set_xy(int x, int y, double value) {
-    if (type_column[x] == Type::double_type) {
-        int offset = (position_actual_column_in_same_column_type(Type::double_type, x)) * y_dimension;
-        double_store[offset + y] = value;
-    } else {
-        throw std::invalid_argument("The value of the column type does not match the value");
-    }
+    throw_exception_when_access_to_no_exists_index(x,y);
+    throw_exception_when_different_type(type_column[x],Type::double_type);
+    int offset_xy = calculate_position_xy_value_in_raw_store(x,y,Type::double_type);
+    double_store[offset_xy] = value;
 }
 
 
@@ -545,6 +533,8 @@ Cnumpy::Cnumpy(std::string value) {
 
 
 Cnumpy Cnumpy::get_xy(int x, int y) const {
+
+    throw_exception_when_access_to_no_exists_index(x,y);
     Type col_type = get_type_columns()[x];
 
     if (col_type == Type::integer_type) {
@@ -552,6 +542,7 @@ Cnumpy Cnumpy::get_xy(int x, int y) const {
         Cnumpy result = create_cnumpy_with_one_value(raw_value, col_type, default_label);
         return result;
     } else if (col_type == Type::double_type) {
+
         double raw_value = get_xy_double(x, y);
         Cnumpy result = create_cnumpy_with_one_value(raw_value, col_type, default_label);
         return result;
@@ -564,7 +555,7 @@ Cnumpy Cnumpy::get_xy(int x, int y) const {
 }
 
 bool Cnumpy::operator<(const Cnumpy &obj) const {
-    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element_or_differend_type(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -584,7 +575,7 @@ bool Cnumpy::operator<(const Cnumpy &obj) const {
 }
 
 bool Cnumpy::operator<=(Cnumpy &obj) const {
-    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element_or_differend_type(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -615,7 +606,7 @@ bool Cnumpy::operator>(Cnumpy &obj) const {
 }
 
 bool Cnumpy::operator>=(Cnumpy &obj) const {
-    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element_or_differend_type(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -635,7 +626,7 @@ bool Cnumpy::operator>=(Cnumpy &obj) const {
 
 
 bool Cnumpy::operator==(Cnumpy &obj) const {
-    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element_or_differend_type(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -662,7 +653,7 @@ bool Cnumpy::operator!=(Cnumpy &obj) const {
 
 
 Cnumpy Cnumpy::operator+(Cnumpy &obj) const {
-    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element_or_differend_type(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -691,7 +682,7 @@ Cnumpy Cnumpy::operator+(Cnumpy &obj) const {
 }
 
 Cnumpy Cnumpy::operator-(Cnumpy &obj) const {
-    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element_or_differend_type(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -715,7 +706,7 @@ Cnumpy Cnumpy::operator-(Cnumpy &obj) const {
 }
 
 Cnumpy Cnumpy::operator/(Cnumpy &obj) const {
-    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element_or_differend_type(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -740,7 +731,7 @@ Cnumpy Cnumpy::operator/(Cnumpy &obj) const {
 
 
 Cnumpy Cnumpy::operator*(Cnumpy &obj) const {
-    throws_exception_when_cnumpys_have_more_than_one_element(obj, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element_or_differend_type(obj, *this);
     Type type_value = obj.get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {
@@ -764,7 +755,7 @@ Cnumpy Cnumpy::operator*(Cnumpy &obj) const {
 }
 
 Cnumpy Cnumpy::operator-() const {
-    throws_exception_when_cnumpys_have_more_than_one_element(*this, *this);
+    throws_exception_when_cnumpys_have_more_than_one_element_or_differend_type(*this, *this);
     Type type_value = get_type_columns()[first_element_index];
 
     if (type_value == Type::integer_type) {

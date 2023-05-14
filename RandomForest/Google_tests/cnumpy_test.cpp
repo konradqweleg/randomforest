@@ -43,8 +43,11 @@ Cnumpy create_fill_cnumpy_3x3_increased_value_int_double_string(){
 
 TEST(testCnumpy, create_empty_cnumpy_check_dimension) {
 
+    //when
     Cnumpy empty_created_3x3 = create_empty_cnumpy_3x3_int_double_string();
 
+
+    //then
     EXPECT_EQ(3, empty_created_3x3.get_x_dimension());
     EXPECT_EQ(3, empty_created_3x3.get_y_dimension());
 
@@ -71,8 +74,10 @@ TEST(testCnumpy, create_empty_cnumpy_check_dimension) {
 
 TEST(testCnumpy, create_empty_cnumpy_check_default_values) {
 
+    //when
     Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
-    
+
+    //then
     std::vector<int> fresh_integer_column = empty_created.get_column_int(0);
     EXPECT_EQ(3, fresh_integer_column.size());
     for (int value: fresh_integer_column) {
@@ -87,7 +92,7 @@ TEST(testCnumpy, create_empty_cnumpy_check_default_values) {
 
     std::vector<std::string> fresh_string_column = empty_created.get_column_string(2);
     EXPECT_EQ(3, fresh_string_column.size());
-    for (std::string value: fresh_string_column) {
+    for (const std::string& value: fresh_string_column) {
         EXPECT_EQ("", value);
     }
 
@@ -96,9 +101,11 @@ TEST(testCnumpy, create_empty_cnumpy_check_default_values) {
 
 TEST(testCnumpy, get_columns_type) {
 
+    //when
     Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
     std::vector<Type> columns_type = empty_created.get_type_columns();
 
+    //then
     EXPECT_EQ(3,columns_type.size());
     EXPECT_EQ(Type::integer_type, columns_type[0]);
     EXPECT_EQ(Type::double_type, columns_type[1]);
@@ -109,9 +116,11 @@ TEST(testCnumpy, get_columns_type) {
 
 TEST(testCnumpy, get_columns_name) {
 
+    //when
     Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
     std::vector<std::string> columns_name = empty_created.get_column_name();
 
+    //then
     EXPECT_EQ(3,columns_name.size());
     EXPECT_EQ("value_1", columns_name[0]);
     EXPECT_EQ("value_2", columns_name[1]);
@@ -122,33 +131,46 @@ TEST(testCnumpy, get_columns_name) {
 
 TEST(testCnumpy, set_columns) {
 
+    //given
     Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
 
     std::vector<int> int_column{10,20,30};
     std::vector<double> double_column{10.0,20.0,30.0};
     std::vector<std::string> string_column{"10","20","30"};
 
+    //when
     empty_created.set_column(0,int_column);
     empty_created.set_column(1,double_column);
     empty_created.set_column(2,string_column);
 
 
+    //then
     EXPECT_EQ(int_column, empty_created.get_column_int(0));
     EXPECT_EQ(double_column, empty_created.get_column_double(1));
     EXPECT_EQ(string_column, empty_created.get_column_string(2));
+
+    EXPECT_EQ(3, empty_created.get_y_dimension());
+    EXPECT_EQ(3, empty_created.get_x_dimension());
+
+    ASSERT_EXCEPTION({ empty_created.set_column(-1,int_column); }, std::invalid_argument, "Both index row and column must be positive > 0" );
+    ASSERT_EXCEPTION({ empty_created.set_column(5,int_column); }, std::invalid_argument, "Both index row and column must be positive lower then cnumpy data index" );
+    ASSERT_EXCEPTION({ empty_created.set_column(2,int_column); }, std::invalid_argument, "Assigned value does not match value type in cnumpy" );
 
 
 }
 
 TEST(testCnumpy, set_xy) {
 
+    //given
     Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
 
+    //when
     empty_created.set_xy(0,0,10);
     empty_created.set_xy(1,0,10.0);
     empty_created.set_xy(2,0,"10");
 
 
+    //then
     EXPECT_EQ(10, empty_created.get_xy_int(0,0));
     EXPECT_EQ(0, empty_created.get_xy_int(0,1));
 
@@ -157,6 +179,13 @@ TEST(testCnumpy, set_xy) {
 
     EXPECT_EQ("10", empty_created.get_xy_string(2,0));
     EXPECT_EQ("", empty_created.get_xy_string(2,1));
+
+    //when
+    //then
+    ASSERT_EXCEPTION({ empty_created.set_xy(-1,0,10); }, std::invalid_argument, "Both index row and column must be positive > 0" );
+    ASSERT_EXCEPTION({ empty_created.set_xy(0,-1,10); }, std::invalid_argument, "Both index row and column must be positive > 0" );
+    ASSERT_EXCEPTION({ empty_created.set_xy(4,0,10); }, std::invalid_argument, "Both index row and column must be positive lower then cnumpy data index" );
+    ASSERT_EXCEPTION({ empty_created.set_xy(1,0,10); }, std::invalid_argument, "Assigned value does not match value type in cnumpy" );
 
 }
 
@@ -268,6 +297,21 @@ TEST(testCnumpy,get_xy_cnumpy){
     EXPECT_EQ("10",value_string_0.get_xy_string(0,0));
     EXPECT_EQ("20",value_string_1.get_xy_string(0,0));
     EXPECT_EQ("30",value_string_2.get_xy_string(0,0));
+
+    ASSERT_EXCEPTION({ data.get_xy_int(-1,3); }, std::invalid_argument, "Both index row and column must be positive > 0" );
+    ASSERT_EXCEPTION({ data.get_xy_int(5,3); }, std::invalid_argument, "Both index row and column must be positive lower then cnumpy data index" );
+    ASSERT_EXCEPTION({ data.get_xy_int(2,3); }, std::invalid_argument, "Both index row and column must be positive lower then cnumpy data index" );
+
+    ASSERT_EXCEPTION({ data.get_xy_double(-1,3); }, std::invalid_argument, "Both index row and column must be positive > 0" );
+    ASSERT_EXCEPTION({ data.get_xy_double(5,3); }, std::invalid_argument, "Both index row and column must be positive lower then cnumpy data index" );
+    ASSERT_EXCEPTION({ data.get_xy_double(0,3); }, std::invalid_argument, "Both index row and column must be positive lower then cnumpy data index" );
+
+    ASSERT_EXCEPTION({ data.get_xy_string(-1,3); }, std::invalid_argument, "Both index row and column must be positive > 0" );
+    ASSERT_EXCEPTION({ data.get_xy_string(5,3); }, std::invalid_argument, "Both index row and column must be positive lower then cnumpy data index" );
+    ASSERT_EXCEPTION({ data.get_xy_string(0,3); }, std::invalid_argument, "Assigned value does not match value type in cnumpy" );
+    // ASSERT_EXCEPTION({ empty_created.set_xy(1,0,10); }, std::invalid_argument, "Assigned value does not match value type in cnumpy" );
+
+
 
 }
 

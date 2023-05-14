@@ -16,6 +16,7 @@
  *  Dodanie testow brakuajcych
  *  wyjatkow kiedy argument poza  zakresem cnumpy
  *  refaktor kodu hist i pozostalych metod
+ *  metoda na nazwe kolumny i typ
  */
 
 
@@ -26,6 +27,7 @@ private:
 
     static std::string default_label;
     static int first_element_index;
+    static std::string exception_type_value_not_match_to_cnumpy_type_value;
 
     std::vector<std::string> string_store = std::vector<std::string>();
     std::vector<double> double_store = std::vector<double>();
@@ -100,10 +102,24 @@ private:
         }
     }
 
-    static void throws_exception_when_cnumpys_have_more_than_one_element(Cnumpy data, Cnumpy data_2) {
+    static void throw_exception_when_different_type(Type type_first,Type type_second){
+        if (type_first == type_second) {
+
+        } else {
+            throw std::invalid_argument(exception_type_value_not_match_to_cnumpy_type_value);
+        }
+    }
+
+    static void throws_exception_when_cnumpys_have_more_than_one_element_or_differend_type(Cnumpy data, Cnumpy data_2) {
         throw_exception_when_cnumpy_has_more_then_one_element(data);
         throw_exception_when_cnumpy_has_more_then_one_element(data_2);
         throw_exception_when_different_type_values(data, data_2);
+    }
+
+    static void throws_exception_when_different_type(Type first, Type second) {
+       if(first != second){
+           throw std::invalid_argument("The types of elements cnumpy are different");
+       }
     }
 
     bool are_the_correct_dimensions_of_the_cnumpys(int x_dim,int y_dim){
@@ -119,9 +135,32 @@ private:
 
     }
 
+    void throw_exception_when_access_to_no_exists_index(int x,int y,Cnumpy & data){
+        if(x<0 || y<0){
+            throw std::invalid_argument("Both index row and column must be positive > 0");
+        }
+
+        if(data.get_x_dimension() <= x || data.get_y_dimension() <= y ){
+            throw std::invalid_argument("Both index row and column must be positive lower then cnumpy data index");
+        }
+    }
+
+    void throw_exception_when_access_to_no_exists_index(int x,int y) const{
+        if(x<0 || y<0){
+            throw std::invalid_argument("Both index row and column must be positive > 0");
+        }
+
+        if(get_x_dimension() <= x || get_y_dimension() <= y ){
+            throw std::invalid_argument("Both index row and column must be positive lower then cnumpy data index");
+        }
+    }
 
 
 
+    int calculate_position_xy_value_in_raw_store(int x,int y, Type type_column) const {
+        int offset_column = (position_actual_column_in_same_column_type(type_column, x)) * y_dimension;
+        return offset_column + y;
+    }
     int offset_calculate(Type type_column, int column_index) const;
 
 public:
@@ -180,6 +219,10 @@ public:
 
     template<typename T>
     void set_column(long index_column, std::vector<T> column_values) {
+
+        int first_y_index = 0;
+        throw_exception_when_access_to_no_exists_index(index_column,first_y_index,*this);
+
         for (int i = 0; i < column_values.size(); ++i) {
             set_xy(index_column, i, column_values[i]);
         }
