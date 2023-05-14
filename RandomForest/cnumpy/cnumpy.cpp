@@ -802,7 +802,9 @@ Cnumpy Cnumpy::operator*=(Cnumpy& obj){
 
 Cnumpy Cnumpy::operator=(int value){
     int one_column = 1;
-    if (get_x_dimension() == one_column) {
+
+    if ((get_x_dimension() == one_column) && (get_y_dimension()==1)) {
+
         int index_type_for_first_column = 0;
         Type type_col = type_column[index_type_for_first_column];
         if (type_col == Type::integer_type) {
@@ -819,7 +821,7 @@ Cnumpy Cnumpy::operator=(int value){
 
 Cnumpy Cnumpy::operator=(double value){
     int one_column = 1;
-    if (get_x_dimension() == one_column) {
+    if (get_x_dimension() == one_column  && get_y_dimension()==1) {
         int index_type_for_first_column = 0;
         Type type_col = type_column[index_type_for_first_column];
         if (type_col == Type::double_type) {
@@ -837,7 +839,8 @@ Cnumpy Cnumpy::operator=(double value){
 
 Cnumpy Cnumpy::operator=(std::string value){
     int one_column = 1;
-    if (get_x_dimension() == one_column) {
+    if (get_x_dimension() == one_column  && get_y_dimension()==1) {
+
         int index_type_for_first_column = 0;
         Type type_col = type_column[index_type_for_first_column];
         if (type_col == Type::string_type) {
@@ -848,6 +851,7 @@ Cnumpy Cnumpy::operator=(std::string value){
             throw std::invalid_argument("Assigned value have other type then cnumpy ");
         }
     }else{
+
         throw std::invalid_argument("Assign raw double to cnumpy is possible only for one column numpy");
     }
 }
@@ -859,7 +863,7 @@ Cnumpy Cnumpy::operator=(std::vector<int> column_data){
 
     int one_column_array = 1;
     int first_column_index = 0;
-    if (get_x_dimension() == one_column_array) {
+    if (get_x_dimension() == one_column_array && get_y_dimension()==column_data.size()) {
         Type type_col = get_type_columns()[first_column_index];
 
         if (type_col == Type::integer_type) {
@@ -880,7 +884,7 @@ Cnumpy Cnumpy::operator=(std::vector<int> column_data){
 Cnumpy Cnumpy::operator=(std::vector<double> column_data ){
     int one_column_array = 1;
     int first_column_index = 0;
-    if (get_x_dimension() == one_column_array) {
+    if (get_x_dimension() == one_column_array && get_y_dimension()==column_data.size() ) {
         Type type_col = get_type_columns()[first_column_index];
 
         if (type_col == Type::double_type) {
@@ -896,14 +900,14 @@ Cnumpy Cnumpy::operator=(std::vector<double> column_data ){
         }
 
     }else{
-        throw std::invalid_argument("Assign raw vector int to cnumpy is possible only for one column cnumpy");
+        throw std::invalid_argument("Assign raw vector int to cnumpy is possible only for match size");
     }
 }
 
 Cnumpy Cnumpy::operator=(std::vector<std::string> column_data){
     int one_column_array = 1;
     int first_column_index = 0;
-    if (get_x_dimension() == one_column_array) {
+    if (get_x_dimension() == one_column_array && get_y_dimension()==column_data.size()) {
         Type type_col = get_type_columns()[first_column_index];
 
         if (type_col == Type::string_type) {
