@@ -8,7 +8,7 @@
 
 std::string Cnumpy::default_label = "*";
 int Cnumpy::first_element_index = 0;
-std::string  Cnumpy::exception_type_value_not_match_to_cnumpy_type_value = "Assigned value does not match value type in cnumpy";
+
 
 
 int Cnumpy::how_many_column_about_type(Type type) const {
@@ -700,7 +700,7 @@ Cnumpy Cnumpy::operator-(Cnumpy &obj) const {
         Cnumpy result_as_cnumpy = create_cnumpy_with_one_value(result, Type::double_type, default_label);
         return result_as_cnumpy;
     } else {
-        throw std::invalid_argument("Subtraction operation on two texts is prohibited");
+        throw std::invalid_argument(Exception_Cnumpy_Message::TEXT_SUBTRACTION_OPERATION_IS_NOT_ALLOWED);
     }
 
 }
@@ -724,7 +724,7 @@ Cnumpy Cnumpy::operator/(Cnumpy &obj) const {
         Cnumpy result_as_cnumpy = create_cnumpy_with_one_value(result, Type::double_type, default_label);
         return result_as_cnumpy;
     } else {
-        throw std::invalid_argument("Divide operation on two texts is prohibited");
+        throw std::invalid_argument(Exception_Cnumpy_Message::TEXT_DIVIDE_OPERATION_IS_NOT_ALLOWED);
     }
 
 }
@@ -749,7 +749,7 @@ Cnumpy Cnumpy::operator*(Cnumpy &obj) const {
         Cnumpy result_as_cnumpy = create_cnumpy_with_one_value(result, Type::double_type, default_label);
         return result_as_cnumpy;
     } else {
-        throw std::invalid_argument("Multiplication operation on two texts is forbidden");
+        throw std::invalid_argument(Exception_Cnumpy_Message::TEXT_MULTIPLICATION_IS_NOT_ALLOWED);
     }
 
 }
@@ -773,14 +773,13 @@ Cnumpy Cnumpy::operator-() const {
         Cnumpy result_as_cnumpy = create_cnumpy_with_one_value(result, Type::double_type, default_label);
         return result_as_cnumpy;
     } else {
-        throw std::invalid_argument("Multiplication minus on  text is forbidden");
+        throw std::invalid_argument(Exception_Cnumpy_Message::TEXT_NEGATION_IS_NOT_ALLOWED);
     }
 
 }
 
 
 Cnumpy Cnumpy::operator+=(Cnumpy& obj){
-
     (*this) =  (*this) + obj;
     return *this;
 }
@@ -812,10 +811,10 @@ Cnumpy Cnumpy::operator=(int value){
             (*this) = result_as_cnumpy;
             return result_as_cnumpy;
         }else{
-            throw std::invalid_argument("Assigned value have other type then cnumpy ");
+            throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
         }
     }else{
-        throw std::invalid_argument("Assign raw int to cnumpy is possible only for one column numpy");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 }
 
@@ -830,10 +829,10 @@ Cnumpy Cnumpy::operator=(double value){
             (*this) = result_as_cnumpy;
             return result_as_cnumpy;
         }else{
-            throw std::invalid_argument("Assigned value have other type then cnumpy ");
+            throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
         }
     }else{
-        throw std::invalid_argument("Assign raw string to cnumpy is possible only for one column numpy");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 }
 
@@ -848,11 +847,11 @@ Cnumpy Cnumpy::operator=(std::string value){
             (*this) = result_as_cnumpy;
             return result_as_cnumpy;
         }else{
-            throw std::invalid_argument("Assigned value have other type then cnumpy ");
+            throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
         }
     }else{
 
-        throw std::invalid_argument("Assign raw double to cnumpy is possible only for one column numpy");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 }
 
@@ -873,11 +872,11 @@ Cnumpy Cnumpy::operator=(std::vector<int> column_data){
 
             return *this;
         }else{
-            throw std::invalid_argument("Assigned value have other type then cnumpy ");
+            throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
         }
 
     }else{
-        throw std::invalid_argument("Assign raw vector int to cnumpy is possible only for one column cnumpy");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 }
 
@@ -896,11 +895,11 @@ Cnumpy Cnumpy::operator=(std::vector<double> column_data ){
 
             return *this;
         }else{
-            throw std::invalid_argument("Assigned value have other type then cnumpy ");
+            throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
         }
 
     }else{
-        throw std::invalid_argument("Assign raw vector int to cnumpy is possible only for match size");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 }
 
@@ -919,11 +918,11 @@ Cnumpy Cnumpy::operator=(std::vector<std::string> column_data){
 
             return *this;
         }else{
-            throw std::invalid_argument("Assigned value have other type then cnumpy ");
+            throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
         }
 
     }else{
-        throw std::invalid_argument("Assign raw vector int to cnumpy is possible only for one column cnumpy");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 
 
@@ -985,21 +984,21 @@ Cnumpy Cnumpy::set(int value){
     if(get_x_dimension() == 1 && get_y_dimension() ==1){
         (*this) = create_cnumpy_with_one_value(value,Type::integer_type,default_label);
     }else{
-        throw std::invalid_argument("Cannot assign one value to all cnumpy grether then 1 element");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 }
 Cnumpy Cnumpy::set(double value){
     if(get_x_dimension() == 1 && get_y_dimension() ==1){
         (*this) = create_cnumpy_with_one_value(value,Type::double_type,default_label);
     }else{
-        throw std::invalid_argument("Cannot assign one value to all cnumpy grether then 1 element");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 }
 Cnumpy Cnumpy::set(std::string value){
     if(get_x_dimension() == 1 && get_y_dimension() ==1){
         (*this) = create_cnumpy_with_one_value(value,Type::string_type,default_label);
     }else{
-        throw std::invalid_argument("Cannot assign one value to all cnumpy grether then 1 element");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 }
 
@@ -1007,7 +1006,7 @@ Cnumpy Cnumpy::set(std::vector<int> data){
     if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
         set_column(0,data);
     }else{
-        throw std::invalid_argument("Cannot assign one column to all cnumpy grether then 1 columns");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 
 }
@@ -1015,7 +1014,7 @@ Cnumpy Cnumpy::set(std::vector<double> data){
     if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
         set_column(0,data);
     }else{
-        throw std::invalid_argument("Cannot assign one column to all cnumpy grether then 1 columns");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 
 }
@@ -1023,7 +1022,7 @@ Cnumpy Cnumpy::set(std::vector<std::string> data){
     if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
         set_column(0,data);
     }else{
-        throw std::invalid_argument("Cannot assign one column to all cnumpy grether then 1 columns");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 }
 
@@ -1041,21 +1040,21 @@ Cnumpy Cnumpy::set(int x,std::vector<int> data){
     if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
         set_column(x,data);
     }else{
-        throw std::invalid_argument("Cannot assign one column to all cnumpy grether then 1 columns");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 }
 Cnumpy Cnumpy::set(int x,std::vector<double> data){
     if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
         set_column(x,data);
     }else{
-        throw std::invalid_argument("Cannot assign one column to all cnumpy grether then 1 columns");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 }
 Cnumpy Cnumpy::set(int x,std::vector<std::string> data){
     if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
         set_column(x,data);
     }else{
-        throw std::invalid_argument("Cannot assign one column to all cnumpy grether then 1 columns");
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
 }
 

@@ -6,6 +6,7 @@
 #include <string>
 #include "../text/Text_operation.h"
 #include "../text/Text_operation.cpp"
+
 TEST(test_text_operation, remove_quote_from_text) {
 
     std::string text_with_quote = "\"text with quote\"";

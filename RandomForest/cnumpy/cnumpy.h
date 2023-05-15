@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "type.h"
-
+#include "Exception_Cnumpy_Message.h"
 
 /*
  * Warning this version Cnumpy operator [] use copy semantic so you shouldn't useage it to assign use method set
@@ -27,7 +27,7 @@ private:
 
     static std::string default_label;
     static int first_element_index;
-    static std::string exception_type_value_not_match_to_cnumpy_type_value;
+
 
     std::vector<std::string> string_store = std::vector<std::string>();
     std::vector<double> double_store = std::vector<double>();
@@ -87,7 +87,7 @@ private:
 
     static void throw_exception_when_cnumpy_has_more_then_one_element(Cnumpy data) {
         if (data.get_y_dimension() > 1 || data.get_x_dimension() > 1) {
-            throw std::invalid_argument("Cnumpy has more than one element");
+            throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_FOR_ONE_ELEMENT_CNUMPY);
         }
     }
 
@@ -97,7 +97,7 @@ private:
 
         for (int i = 0; i < first_types.size(); ++i) {
             if (first_types[i] != second_types[i]) {
-                throw std::invalid_argument("The types of columns are different");
+                throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
             }
         }
     }
@@ -106,7 +106,7 @@ private:
         if (type_first == type_second) {
 
         } else {
-            throw std::invalid_argument(exception_type_value_not_match_to_cnumpy_type_value);
+            throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
         }
     }
 
@@ -118,7 +118,7 @@ private:
 
     static void throws_exception_when_different_type(Type first, Type second) {
        if(first != second){
-           throw std::invalid_argument("The types of elements cnumpy are different");
+           throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
        }
     }
 
@@ -130,28 +130,28 @@ private:
         bool is_correct_dimension = are_the_correct_dimensions_of_the_cnumpys(x_dim,y_dim);
 
         if(!is_correct_dimension){
-            throw std::invalid_argument("Both dimensions of the cnumpys must be positive");
+            throw std::invalid_argument(Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO);
         }
 
     }
 
     void throw_exception_when_access_to_no_exists_index(int x,int y,Cnumpy & data){
         if(x<0 || y<0){
-            throw std::invalid_argument("Both index row and column must be positive > 0");
+            throw std::invalid_argument(Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
         }
 
         if(data.get_x_dimension() <= x || data.get_y_dimension() <= y ){
-            throw std::invalid_argument("Both index row and column must be positive lower then cnumpy data index");
+            throw std::invalid_argument(Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
         }
     }
 
     void throw_exception_when_access_to_no_exists_index(int x,int y) const{
         if(x<0 || y<0){
-            throw std::invalid_argument("Both index row and column must be positive > 0");
+            throw std::invalid_argument(Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
         }
 
         if(get_x_dimension() <= x || get_y_dimension() <= y ){
-            throw std::invalid_argument("Both index row and column must be positive lower then cnumpy data index");
+            throw std::invalid_argument(Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
         }
     }
 

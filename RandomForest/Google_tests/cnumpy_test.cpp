@@ -8,7 +8,8 @@
 #include <string>
 #include <vector>
 #include "exception_assert_for_gtest.h"
-
+#include "../cnumpy/Exception_Cnumpy_Message.h"
+#include "../cnumpy/Exception_Cnumpy_Message.cpp"
 Cnumpy create_empty_cnumpy_3x3_int_double_string() {
     std::vector<Type> column_type = std::vector<Type>();
     column_type.push_back(Type::integer_type);
@@ -61,15 +62,18 @@ TEST(testCnumpy, create_empty_cnumpy_check_dimension) {
     EXPECT_EQ(3, string_column.size());
 
 
-    std::string expected_both_dimension_positive_exception_message = "Both dimensions of the cnumpys must be positive";
+}
 
-    ASSERT_EXCEPTION( { Cnumpy both_dimension_negative(-1,-1,std::vector<Type>()); }, std::invalid_argument, expected_both_dimension_positive_exception_message );
-    ASSERT_EXCEPTION({ Cnumpy left_negative(-1, 1, std::vector<Type>()); }, std::invalid_argument, expected_both_dimension_positive_exception_message);
-    ASSERT_EXCEPTION({ Cnumpy right_negative(1, -1, std::vector<Type>()); }, std::invalid_argument, expected_both_dimension_positive_exception_message );
-    ASSERT_EXCEPTION({ Cnumpy both_zero(0, 0, std::vector<Type>()); }, std::invalid_argument, expected_both_dimension_positive_exception_message );
-    ASSERT_EXCEPTION({ Cnumpy left_zero(0, 1, std::vector<Type>()); }, std::invalid_argument, expected_both_dimension_positive_exception_message );
-    ASSERT_EXCEPTION({ Cnumpy right_zero(1, 0, std::vector<Type>()); }, std::invalid_argument, expected_both_dimension_positive_exception_message );
+TEST(testCnumpy, create_cnumpy_with_unallowed_dimension){
 
+    //when
+    //then
+    ASSERT_EXCEPTION( { Cnumpy both_dimension_negative(-1,-1,std::vector<Type>()); }, std::invalid_argument, Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO );
+    ASSERT_EXCEPTION({ Cnumpy left_negative(-1, 1, std::vector<Type>()); }, std::invalid_argument, Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO);
+    ASSERT_EXCEPTION({ Cnumpy right_negative(1, -1, std::vector<Type>()); }, std::invalid_argument, Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO );
+    ASSERT_EXCEPTION({ Cnumpy both_zero(0, 0, std::vector<Type>()); }, std::invalid_argument, Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO );
+    ASSERT_EXCEPTION({ Cnumpy left_zero(0, 1, std::vector<Type>()); }, std::invalid_argument, Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO );
+    ASSERT_EXCEPTION({ Cnumpy right_zero(1, 0, std::vector<Type>()); }, std::invalid_argument, Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO );
 }
 
 TEST(testCnumpy, create_empty_cnumpy_check_default_values) {
@@ -148,15 +152,23 @@ TEST(testCnumpy, set_columns) {
     EXPECT_EQ(int_column, empty_created.get_column_int(0));
     EXPECT_EQ(double_column, empty_created.get_column_double(1));
     EXPECT_EQ(string_column, empty_created.get_column_string(2));
-
     EXPECT_EQ(3, empty_created.get_y_dimension());
     EXPECT_EQ(3, empty_created.get_x_dimension());
 
-    ASSERT_EXCEPTION({ empty_created.set_column(-1,int_column); }, std::invalid_argument, "Both index row and column must be positive > 0" );
-    ASSERT_EXCEPTION({ empty_created.set_column(5,int_column); }, std::invalid_argument, "Both index row and column must be positive lower then cnumpy data index" );
-    ASSERT_EXCEPTION({ empty_created.set_column(2,int_column); }, std::invalid_argument, "Assigned value does not match value type in cnumpy" );
 
 
+
+}
+
+TEST(testCnumpy,set_columns_use_unallowed_index){
+    //given
+    Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
+    std::vector<int> int_column{10,20,30};
+
+    //then
+    ASSERT_EXCEPTION({ empty_created.set_column(-1,int_column); }, std::invalid_argument,Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO );
+    ASSERT_EXCEPTION({ empty_created.set_column(5,int_column); }, std::invalid_argument, Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY );
+    ASSERT_EXCEPTION({ empty_created.set_column(2,int_column); }, std::invalid_argument, Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH );
 }
 
 TEST(testCnumpy, set_xy) {
