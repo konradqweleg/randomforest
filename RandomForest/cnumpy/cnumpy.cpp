@@ -121,6 +121,7 @@ void Cnumpy::set_xy(int x, int y, int value) {
     throw_exception_when_different_type(type_column[x],Type::integer_type);
     int offset_xy = calculate_position_xy_value_in_raw_store(x,y,Type::integer_type);
     int_store[offset_xy] = value;
+
 }
 
 void Cnumpy::set_xy(int x, int y, std::string value) {
@@ -985,86 +986,110 @@ Cnumpy Cnumpy::operator[](int index) const {
 
 
 Cnumpy Cnumpy::set(int value){
+
+    throw_exception_when_different_type(type_column[0],Type::integer_type);
+
     if(get_x_dimension() == 1 && get_y_dimension() ==1){
-        (*this) = create_cnumpy_with_one_value(value,Type::integer_type,default_label);
+
+        set_xy(0,0,value);
     }else{
+
         throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
+    return *this;
 }
 Cnumpy Cnumpy::set(double value){
+    throw_exception_when_different_type(type_column[0],Type::double_type);
     if(get_x_dimension() == 1 && get_y_dimension() ==1){
         (*this) = create_cnumpy_with_one_value(value,Type::double_type,default_label);
     }else{
         throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
+
+    return *this;
 }
 Cnumpy Cnumpy::set(std::string value){
+    throw_exception_when_different_type(type_column[0],Type::string_type);
     if(get_x_dimension() == 1 && get_y_dimension() ==1){
         (*this) = create_cnumpy_with_one_value(value,Type::string_type,default_label);
     }else{
         throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
+    return *this;
 }
 
 Cnumpy Cnumpy::set(std::vector<int> data){
+    throw_exception_when_different_type(type_column[0],Type::integer_type);
     if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
         set_column(0,data);
     }else{
         throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
-
+    return *this;
 }
 Cnumpy Cnumpy::set(std::vector<double> data){
+    throw_exception_when_different_type(type_column[0],Type::double_type);
     if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
         set_column(0,data);
     }else{
         throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
-
+    return *this;
 }
 Cnumpy Cnumpy::set(std::vector<std::string> data){
+    throw_exception_when_different_type(type_column[0],Type::string_type);
     if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
         set_column(0,data);
     }else{
         throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
+    return *this;
 }
 
 Cnumpy Cnumpy::set(int x,int y,int value){
     set_xy(x,y,value);
+    return *this;
 }
 Cnumpy Cnumpy::set(int x,int y,double value ){
     set_xy(x,y,value);
+    return *this;
 }
 Cnumpy Cnumpy::set(int x,int y,std::string value){
     set_xy(x,y,value);
+    return *this;
 }
 
 Cnumpy Cnumpy::set(int x,std::vector<int> data){
-    if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
+
+    if(get_y_dimension() == data.size() ){
         set_column(x,data);
     }else{
         throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
+    return *this;
 }
 Cnumpy Cnumpy::set(int x,std::vector<double> data){
-    if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
+    if( get_y_dimension() == data.size() ){
         set_column(x,data);
     }else{
         throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
+    return *this;
 }
 Cnumpy Cnumpy::set(int x,std::vector<std::string> data){
-    if(get_x_dimension() == 1 && get_y_dimension() == data.size() ){
+    if(get_y_dimension() == data.size() ){
         set_column(x,data);
     }else{
         throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
     }
+    return *this;
 }
 
+//to ponizej
 Cnumpy Cnumpy::set(Cnumpy data){
     //warunki !!! tylko jedna wartosc na lewo
     (*this) = data;
+    return *this;
 }
 Cnumpy Cnumpy::set(int x,Cnumpy data){
 
@@ -1080,7 +1105,7 @@ Cnumpy Cnumpy::set(int x,Cnumpy data){
             std::vector<std::string> raw_data = data.get_column_string(x);
             set_column(x,raw_data);
         }
-
+    return *this;
 
 }
 
@@ -1097,6 +1122,7 @@ Cnumpy Cnumpy::set(int x ,int y,Cnumpy value){
         std::string raw_Data = value.get_xy_string(0,0);
         set_xy(x,y,raw_Data);
     }
+    return *this;
 }
 
 Cnumpy Cnumpy::of(std::vector<int> value) {

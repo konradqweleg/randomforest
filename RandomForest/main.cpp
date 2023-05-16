@@ -15,10 +15,13 @@ using namespace std::chrono;
 #include "entropy/Entropy.h"
 int main() {
 
-    csv csv_calc;
-    Cnumpy data_for_test_entropy = csv_calc.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv",",");
+//    csv csv_calc;
+//    Cnumpy data_for_test_entropy = csv_calc.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv",",");
 
-    std::cout<<data_for_test_entropy.get_xy(0,0);
+    Cnumpy xd = Cnumpy::of(100);
+    //xd.set_xy(0,0,10);
+    xd.set(10);
+//   std::cout<<data_for_test_entropy.get_xy(0,0);
    // std::cout<<data_for_test_entropy;
 //    std::cout<<data_for_test_entropy<< std::endl;
 

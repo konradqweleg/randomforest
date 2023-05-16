@@ -1072,3 +1072,316 @@ TEST(testCnumpy, array_access_operator) {
     EXPECT_EQ("20", (cnumpy_n_n[2][1]).get_xy_string(0, 0));
 
 }
+
+TEST(testCnumpy,assign_raw_value){
+    //given
+    Cnumpy int_raw = Cnumpy::of(2);
+    Cnumpy double_raw = Cnumpy::of(2.0);
+    Cnumpy string_raw = Cnumpy::of("text");
+
+    //when
+    int_raw = 10;
+    double_raw = 10.0;
+    string_raw = std::string("texttext");
+
+    //then
+    ASSERT_EQ(10,int_raw.get_xy_int(0,0));
+    ASSERT_EQ("texttext",string_raw.get_xy_string(0,0));
+    ASSERT_DOUBLE_EQ(10.0,double_raw.get_xy_double(0,0));
+
+}
+
+TEST(testCnumpy,assign_raw_value_newly_create_object){
+    //given
+    Cnumpy int_raw = 10;
+    Cnumpy double_raw = 10.0;
+    Cnumpy string_raw = std::string("texttext");
+
+    //then
+    ASSERT_EQ(10,int_raw.get_xy_int(0,0));
+    ASSERT_EQ("texttext",string_raw.get_xy_string(0,0));
+    ASSERT_DOUBLE_EQ(10.0,double_raw.get_xy_double(0,0));
+
+}
+
+TEST(testCnumpy,assign_raw_value_bad_type){
+    //given
+    Cnumpy int_raw = Cnumpy::of(2);
+    Cnumpy double_raw = Cnumpy::of(2.0);
+    Cnumpy string_raw = Cnumpy::of("text");
+
+    //then
+    ASSERT_EXCEPTION({ int_raw = 9.0; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ double_raw = 11;}, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ string_raw = 10; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+
+}
+
+TEST(testCnumpy,set_raw_value){
+    //given
+    Cnumpy int_raw = Cnumpy::of(2);
+    Cnumpy double_raw = Cnumpy::of(2.0);
+    Cnumpy string_raw = Cnumpy::of("text");
+
+
+
+    //when
+    int_raw.set(10);
+    double_raw.set(10.0);
+    string_raw.set(std::string("texttext"));
+
+
+    //then
+    ASSERT_EQ(10,int_raw.get_xy_int(0,0));
+    ASSERT_EQ("texttext",string_raw.get_xy_string(0,0));
+    ASSERT_DOUBLE_EQ(10.0,double_raw.get_xy_double(0,0));
+
+}
+
+
+TEST(testCnumpy,set_raw_value_bad_type){
+    //given
+    Cnumpy int_raw = Cnumpy::of(2);
+    Cnumpy double_raw = Cnumpy::of(2.0);
+    Cnumpy string_raw = Cnumpy::of("text");
+
+    //then
+    ASSERT_EXCEPTION({ int_raw.set (9.0); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ double_raw.set (11);}, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ string_raw.set(10); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+
+}
+
+
+
+TEST(testCnumpy,set_raw_vector_values){
+    //given
+    Cnumpy data_3x_3 = create_empty_cnumpy_3x3_int_double_string();
+
+    std::vector<int> int_column{100, 200, 300};
+    std::vector<double> double_column{100.0, 200.0, 300.0};
+    std::vector<std::string> string_column{"100", "200", "300"};
+
+    Cnumpy int_cnumpy = data_3x_3[0];
+    Cnumpy double_cnumpy = data_3x_3[1];
+    Cnumpy string_cnumpy = data_3x_3[2];
+
+    //when
+    int_cnumpy.set(int_column);
+    double_cnumpy.set(double_column);
+    string_cnumpy.set(string_column);
+
+    //then
+    ASSERT_EQ(100,int_cnumpy.get_xy_int(0,0));
+    ASSERT_EQ(200,int_cnumpy.get_xy_int(0,1));
+    ASSERT_EQ(300,int_cnumpy.get_xy_int(0,2));
+
+    ASSERT_DOUBLE_EQ(100.0,double_cnumpy.get_xy_double(0,0));
+    ASSERT_DOUBLE_EQ(200.0,double_cnumpy.get_xy_double(0,1));
+    ASSERT_DOUBLE_EQ(300.0,double_cnumpy.get_xy_double(0,2));
+
+    ASSERT_EQ("100",string_cnumpy.get_xy_string(0,0));
+    ASSERT_EQ("200",string_cnumpy.get_xy_string(0,1));
+    ASSERT_EQ("300",string_cnumpy.get_xy_string(0,2));
+
+}
+
+
+
+TEST(testCnumpy,set_raw_vector_value_bad_type){
+    //given
+    Cnumpy data_3x_3 = create_empty_cnumpy_3x3_int_double_string();
+
+    std::vector<int> int_column{100, 200, 300};
+    std::vector<double> double_column{100.0, 200.0, 300.0};
+    std::vector<std::string> string_column{"100", "200", "300"};
+
+    Cnumpy int_cnumpy = data_3x_3[0];
+    Cnumpy double_cnumpy = data_3x_3[1];
+    Cnumpy string_cnumpy = data_3x_3[2];
+
+
+    //then
+    ASSERT_EXCEPTION({ int_cnumpy.set(double_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+    ASSERT_EXCEPTION({ double_cnumpy.set(int_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+    ASSERT_EXCEPTION({ string_cnumpy.set(int_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+
+}
+
+TEST(testCnumpy,set_raw_value_bad_dimesnion){
+    //given
+    Cnumpy int_raw = Cnumpy::of(24);
+    Cnumpy double_raw = Cnumpy::of(24.0);
+    Cnumpy string_raw = Cnumpy::of("texdsft");
+
+    Cnumpy data_3x_3 = create_empty_cnumpy_3x3_int_double_string();
+
+    std::vector<int> int_column{100, 200, 300};
+    std::vector<double> double_column{100.0, 200.0, 300.0};
+    std::vector<std::string> string_column{"100", "200", "300"};
+
+    //then
+    ASSERT_EXCEPTION({ int_raw.set (int_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+    ASSERT_EXCEPTION({ double_raw.set (double_column);}, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+    ASSERT_EXCEPTION({ string_raw.set(string_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+
+    ASSERT_EXCEPTION({ data_3x_3[0].set(10); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+    ASSERT_EXCEPTION({ data_3x_3[1].set (22.0);}, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+    ASSERT_EXCEPTION({ data_3x_3[2].set(std::string("raw")); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+
+
+
+
+}
+
+TEST(testCnumpy,set_raw_value_with_xy_index){
+    //given
+    Cnumpy data_3x3 = create_empty_cnumpy_3x3_int_double_string();
+
+    //when
+    data_3x3.set(0,0,19);
+    data_3x3.set(1,2,20.0);
+    data_3x3.set(2,0,"21");
+
+    //then
+    ASSERT_EQ(19,data_3x3.get_xy_int(0,0));
+    ASSERT_EQ(0,data_3x3.get_xy_int(0,1));
+    ASSERT_EQ(0,data_3x3.get_xy_int(0,2));
+
+    ASSERT_DOUBLE_EQ(20.0,data_3x3.get_xy_double(1,2));
+    ASSERT_DOUBLE_EQ(0.0,data_3x3.get_xy_double(1,0));
+    ASSERT_DOUBLE_EQ(0.0,data_3x3.get_xy_double(1,1));
+
+    ASSERT_EQ("21",data_3x3.get_xy_string(2,0));
+    ASSERT_EQ("",data_3x3.get_xy_string(2,1));
+    ASSERT_EQ("",data_3x3.get_xy_string(2,2));
+
+
+}
+
+TEST(testCnumpy,set_raw_value_with_xy_index_bad_type){
+    //given
+    Cnumpy data_3x3 = create_empty_cnumpy_3x3_int_double_string();
+
+    //then
+    ASSERT_EXCEPTION({ data_3x3.set(0,0,10.5); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ data_3x3.set (1,0,22);}, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ data_3x3.set(2,0,7); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+
+}
+
+TEST(testCnumpy,set_raw_value_with_xy_index_bad_indexes){
+    //given
+    Cnumpy data_3x3 = create_empty_cnumpy_3x3_int_double_string();
+
+    //then
+    ASSERT_EXCEPTION({ data_3x3.set(-4,0,10.5); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+    ASSERT_EXCEPTION({ data_3x3.set (9,0,22);}, std::invalid_argument,
+                     Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+    ASSERT_EXCEPTION({ data_3x3.set(0,-10,7); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+
+
+}
+
+
+TEST(testCnumpy,set_raw_vector_with_x_index){
+    //given
+    Cnumpy data_3x3 = create_empty_cnumpy_3x3_int_double_string();
+    std::vector<int> int_column{100, 200, 300};
+    std::vector<double> double_column{100.0, 200.0, 300.0};
+    std::vector<std::string> string_column{"100", "200", "300"};
+
+    //when
+    data_3x3.set(0,int_column);
+    data_3x3.set(1,double_column);
+    data_3x3.set(2,string_column);
+
+    //then
+    ASSERT_EQ(100,data_3x3.get_xy_int(0,0));
+    ASSERT_EQ(200,data_3x3.get_xy_int(0,1));
+    ASSERT_EQ(300,data_3x3.get_xy_int(0,2));
+
+
+    ASSERT_DOUBLE_EQ(100.0,data_3x3.get_xy_double(1,0));
+    ASSERT_DOUBLE_EQ(200.0,data_3x3.get_xy_double(1,1));
+    ASSERT_DOUBLE_EQ(300.0,data_3x3.get_xy_double(1,2));
+
+    ASSERT_EQ("100",data_3x3.get_xy_string(2,0));
+    ASSERT_EQ("200",data_3x3.get_xy_string(2,1));
+    ASSERT_EQ("300",data_3x3.get_xy_string(2,2));
+
+
+}
+
+TEST(testCnumpy,set_raw_vector_with_x_index_bad_type){
+    //given
+    Cnumpy data_3x3 = create_empty_cnumpy_3x3_int_double_string();
+    std::vector<int> int_column{100, 200, 300};
+    std::vector<double> double_column{100.0, 200.0, 300.0};
+    std::vector<std::string> string_column{"100", "200", "300"};
+
+    //then
+    ASSERT_EXCEPTION({ data_3x3.set(0,string_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ data_3x3.set (1,int_column);}, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ data_3x3.set(2,double_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+
+}
+
+TEST(testCnumpy,set_raw_vector_with_x_index_bad_indexes){
+    //given
+    Cnumpy data_3x3 = create_empty_cnumpy_3x3_int_double_string();
+    std::vector<int> int_column{100, 200, 300};
+    std::vector<double> double_column{100.0, 200.0, 300.0};
+    std::vector<std::string> string_column{"100", "200", "300"};
+    //then
+    ASSERT_EXCEPTION({ data_3x3.set(-1,int_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+    ASSERT_EXCEPTION({ data_3x3.set (10,int_column);}, std::invalid_argument,
+                     Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+
+    ASSERT_EXCEPTION({ data_3x3.set(-10,double_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+    ASSERT_EXCEPTION({ data_3x3.set(10,double_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+
+
+    ASSERT_EXCEPTION({ data_3x3.set(-5,string_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+
+    ASSERT_EXCEPTION({ data_3x3.set(30,double_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+
+
+
+}
+
