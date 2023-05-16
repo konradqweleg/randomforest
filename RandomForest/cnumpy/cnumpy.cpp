@@ -1085,32 +1085,55 @@ Cnumpy Cnumpy::set(int x,std::vector<std::string> data){
     return *this;
 }
 
-//to ponizej
-Cnumpy Cnumpy::set(Cnumpy data){
-    //warunki !!! tylko jedna wartosc na lewo
-    (*this) = data;
+
+Cnumpy Cnumpy::set(Cnumpy data) {
+
+    if (data.get_x_dimension() == 1 && data.get_y_dimension() == 1 && get_x_dimension() == 1 && get_y_dimension() == 1) {
+        throw_exception_when_different_type(type_column[0], data.get_type_columns()[0]);
+        (*this) = data;
+
+    }else{
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_FOR_ONE_ELEMENT_CNUMPY);
+    }
+
+
     return *this;
 }
-Cnumpy Cnumpy::set(int x,Cnumpy data){
+Cnumpy Cnumpy::set(int x,Cnumpy data) {
 
-        Type type_column = data.get_type_columns()[x];
+    if(x >= get_x_dimension()){
+        throw std::invalid_argument(Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+    }else if(x < 0){
+        throw std::invalid_argument(Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+    }else {
 
-        if(type_column == Type::integer_type){
-            std::vector<int> raw_data = data.get_column_int(x);
-            set_column(x,raw_data);
-        }else if(type_column == Type::double_type){
-            std::vector<double> raw_data = data.get_column_double(x);
-            set_column(x,raw_data);
-        }else{
-            std::vector<std::string> raw_data = data.get_column_string(x);
-            set_column(x,raw_data);
+        throw_exception_when_different_type(get_type_columns()[x], data.get_type_columns()[0]);
+
+        if (data.get_x_dimension() == 1 && data.get_y_dimension() == get_y_dimension()) {
+
+            Type type_column = get_type_columns()[x];
+
+            if (type_column == Type::integer_type) {
+                std::vector<int> raw_data = data.get_column_int(0);
+                set_column(x, raw_data);
+            } else if (type_column == Type::double_type) {
+                std::vector<double> raw_data = data.get_column_double(0);
+                set_column(x, raw_data);
+            } else {
+                std::vector<std::string> raw_data = data.get_column_string(0);
+                set_column(x, raw_data);
+            }
+
+        } else {
+            throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
         }
-    return *this;
+        return *this;
+    }
 
 }
 
 Cnumpy Cnumpy::set(int x ,int y,Cnumpy value){
-    Type type_column = value.get_type_columns()[x];
+    Type type_column = get_type_columns()[x];
 
     if(type_column == Type::integer_type){
         int raw_Data = value.get_xy_int(0,0);
@@ -1125,30 +1148,108 @@ Cnumpy Cnumpy::set(int x ,int y,Cnumpy value){
     return *this;
 }
 
-Cnumpy Cnumpy::of(std::vector<int> value) {
+Cnumpy Cnumpy::of(std::vector<int> data) {
+    Cnumpy result = create_cnumpy_with_one_column_from_raw_data(data,1,data.size(),Type::integer_type,default_label);
+    return result;
+}
+
+Cnumpy Cnumpy::of(std::vector<double> data) {
+    Cnumpy result = create_cnumpy_with_one_column_from_raw_data(data,1,data.size(),Type::double_type,default_label);
+    return result;
+}
+
+Cnumpy Cnumpy::of(std::vector<std::string> data) {
+    Cnumpy result = create_cnumpy_with_one_column_from_raw_data(data,1,data.size(),Type::string_type,default_label);
+    return result;
+}
+
+Cnumpy::Cnumpy(std::vector<int>data) {
+    Cnumpy result = create_cnumpy_with_one_column_from_raw_data(data,1,data.size(),Type::integer_type,default_label);
+    (*this) = result;
+}
+
+Cnumpy::Cnumpy(std::vector<double>data) {
+    Cnumpy result = create_cnumpy_with_one_column_from_raw_data(data,1,data.size(),Type::double_type,default_label);
+    (*this) = result;
+}
+
+Cnumpy::Cnumpy(std::vector<std::string>data) {
+    Cnumpy result = create_cnumpy_with_one_column_from_raw_data(data,1,data.size(),Type::string_type,default_label);
+    (*this) = result;
+}
+
+
+void Cnumpy::throw_exception_when_cnumpy_has_more_then_one_element(Cnumpy data) {
+    if (data.get_y_dimension() > 1 || data.get_x_dimension() > 1) {
+        throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_FOR_ONE_ELEMENT_CNUMPY);
+    }
+}
+
+void Cnumpy::throw_exception_when_different_type_values(Cnumpy first_data, Cnumpy second_data) {
+    std::vector<Type> first_types = first_data.get_type_columns();
+    std::vector<Type> second_types = second_data.get_type_columns();
+
+    for (int i = 0; i < first_types.size(); ++i) {
+        if (first_types[i] != second_types[i]) {
+            throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+        }
+    }
+}
+
+void Cnumpy::throw_exception_when_different_type(Type type_first,Type type_second){
+    if (type_first == type_second) {
+
+    } else {
+        throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    }
+}
+
+ void Cnumpy::throws_exception_when_cnumpys_have_more_than_one_element_or_differend_type(Cnumpy data, Cnumpy data_2) {
+    throw_exception_when_cnumpy_has_more_then_one_element(data);
+    throw_exception_when_cnumpy_has_more_then_one_element(data_2);
+    throw_exception_when_different_type_values(data, data_2);
+}
+
+
+bool Cnumpy::are_the_correct_dimensions_of_the_cnumpys(int x_dim,int y_dim){
+    return (x_dim>0) && (y_dim>0);
+}
+
+void Cnumpy::throws_exception_when_invalid_dimension_cnumpys(int x_dim,int y_dim){
+    bool is_correct_dimension = are_the_correct_dimensions_of_the_cnumpys(x_dim,y_dim);
+
+    if(!is_correct_dimension){
+        throw std::invalid_argument(Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO);
+    }
 
 }
 
-Cnumpy Cnumpy::of(std::vector<double> value) {
-    return Cnumpy(0);
+void Cnumpy::throw_exception_when_access_to_no_exists_index(int x,int y,Cnumpy & data){
+    if(x<0 || y<0){
+        throw std::invalid_argument(Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+    }
+
+    if(data.get_x_dimension() <= x || data.get_y_dimension() <= y ){
+        throw std::invalid_argument(Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+    }
 }
 
-Cnumpy Cnumpy::of(std::vector<std::string> value) {
-    return Cnumpy(0);
+void Cnumpy::throw_exception_when_access_to_no_exists_index(int x,int y) const{
+    if(x<0 || y<0){
+        throw std::invalid_argument(Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+    }
+
+    if(get_x_dimension() <= x || get_y_dimension() <= y ){
+        throw std::invalid_argument(Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+    }
 }
 
-Cnumpy::Cnumpy(std::vector<int>) {
 
+
+int Cnumpy::calculate_position_xy_value_in_raw_store(int x,int y, Type type_column) const {
+    int offset_column = (position_actual_column_in_same_column_type(type_column, x)) * y_dimension;
+    return offset_column + y;
 }
-
-Cnumpy::Cnumpy(std::vector<double>) {
-
-}
-
-Cnumpy::Cnumpy(std::vector<std::string>) {
-
-}
-
 
 
 

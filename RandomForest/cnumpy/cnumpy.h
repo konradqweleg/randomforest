@@ -85,82 +85,24 @@ private:
     }
 
 
-    static void throw_exception_when_cnumpy_has_more_then_one_element(Cnumpy data) {
-        if (data.get_y_dimension() > 1 || data.get_x_dimension() > 1) {
-            throw std::invalid_argument(Exception_Cnumpy_Message::OPERATION_ALLOWED_FOR_ONE_ELEMENT_CNUMPY);
-        }
-    }
+    static void throw_exception_when_cnumpy_has_more_then_one_element(Cnumpy data);
 
-    static void throw_exception_when_different_type_values(Cnumpy first_data, Cnumpy second_data) {
-        std::vector<Type> first_types = first_data.get_type_columns();
-        std::vector<Type> second_types = second_data.get_type_columns();
+    static void throw_exception_when_different_type_values(Cnumpy first_data, Cnumpy second_data);
 
-        for (int i = 0; i < first_types.size(); ++i) {
-            if (first_types[i] != second_types[i]) {
-                throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
-            }
-        }
-    }
+    static void throw_exception_when_different_type(Type type_first,Type type_second);
 
-    static void throw_exception_when_different_type(Type type_first,Type type_second){
-        if (type_first == type_second) {
+    static void throws_exception_when_cnumpys_have_more_than_one_element_or_differend_type(Cnumpy data, Cnumpy data_2);
 
-        } else {
-            throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
-        }
-    }
+    bool are_the_correct_dimensions_of_the_cnumpys(int x_dim,int y_dim);
 
-    static void throws_exception_when_cnumpys_have_more_than_one_element_or_differend_type(Cnumpy data, Cnumpy data_2) {
-        throw_exception_when_cnumpy_has_more_then_one_element(data);
-        throw_exception_when_cnumpy_has_more_then_one_element(data_2);
-        throw_exception_when_different_type_values(data, data_2);
-    }
+    void throws_exception_when_invalid_dimension_cnumpys(int x_dim,int y_dim);
 
-    static void throws_exception_when_different_type(Type first, Type second) {
-       if(first != second){
-           throw std::invalid_argument(Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
-       }
-    }
+    void throw_exception_when_access_to_no_exists_index(int x,int y,Cnumpy & data);
 
-    bool are_the_correct_dimensions_of_the_cnumpys(int x_dim,int y_dim){
-        return (x_dim>0) && (y_dim>0);
-    }
+    void throw_exception_when_access_to_no_exists_index(int x,int y)const;
 
-    void throws_exception_when_invalid_dimension_cnumpys(int x_dim,int y_dim){
-        bool is_correct_dimension = are_the_correct_dimensions_of_the_cnumpys(x_dim,y_dim);
+    int calculate_position_xy_value_in_raw_store(int x,int y, Type type_column) const ;
 
-        if(!is_correct_dimension){
-            throw std::invalid_argument(Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO);
-        }
-
-    }
-
-    void throw_exception_when_access_to_no_exists_index(int x,int y,Cnumpy & data){
-        if(x<0 || y<0){
-            throw std::invalid_argument(Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
-        }
-
-        if(data.get_x_dimension() <= x || data.get_y_dimension() <= y ){
-            throw std::invalid_argument(Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
-        }
-    }
-
-    void throw_exception_when_access_to_no_exists_index(int x,int y) const{
-        if(x<0 || y<0){
-            throw std::invalid_argument(Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
-        }
-
-        if(get_x_dimension() <= x || get_y_dimension() <= y ){
-            throw std::invalid_argument(Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
-        }
-    }
-
-
-
-    int calculate_position_xy_value_in_raw_store(int x,int y, Type type_column) const {
-        int offset_column = (position_actual_column_in_same_column_type(type_column, x)) * y_dimension;
-        return offset_column + y;
-    }
     int offset_calculate(Type type_column, int column_index) const;
 
 public:
