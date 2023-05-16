@@ -10,6 +10,7 @@
 #include "exception_assert_for_gtest.h"
 #include "../cnumpy/Exception_Cnumpy_Message.h"
 #include "../cnumpy/Exception_Cnumpy_Message.cpp"
+
 Cnumpy create_empty_cnumpy_3x3_int_double_string() {
     std::vector<Type> column_type = std::vector<Type>();
     column_type.push_back(Type::integer_type);
@@ -29,16 +30,16 @@ Cnumpy create_empty_cnumpy_3x3_int_double_string() {
 }
 
 
-Cnumpy create_fill_cnumpy_3x3_increased_value_int_double_string(){
+Cnumpy create_fill_cnumpy_3x3_increased_value_int_double_string() {
     Cnumpy data = create_empty_cnumpy_3x3_int_double_string();
 
-    std::vector<int> int_column{10,20,30};
-    std::vector<double> double_column{10.0,20.0,30.0};
-    std::vector<std::string> string_column{"10","20","30"};
+    std::vector<int> int_column{10, 20, 30};
+    std::vector<double> double_column{10.0, 20.0, 30.0};
+    std::vector<std::string> string_column{"10", "20", "30"};
 
-    data.set_column(0,int_column);
-    data.set_column(1,double_column);
-    data.set_column(2,string_column);
+    data.set_column(0, int_column);
+    data.set_column(1, double_column);
+    data.set_column(2, string_column);
     return data;
 }
 
@@ -64,16 +65,22 @@ TEST(testCnumpy, create_empty_cnumpy_check_dimension) {
 
 }
 
-TEST(testCnumpy, create_cnumpy_with_unallowed_dimension){
+TEST(testCnumpy, create_cnumpy_with_unallowed_dimension) {
 
     //when
     //then
-    ASSERT_EXCEPTION( { Cnumpy both_dimension_negative(-1,-1,std::vector<Type>()); }, std::invalid_argument, Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO );
-    ASSERT_EXCEPTION({ Cnumpy left_negative(-1, 1, std::vector<Type>()); }, std::invalid_argument, Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO);
-    ASSERT_EXCEPTION({ Cnumpy right_negative(1, -1, std::vector<Type>()); }, std::invalid_argument, Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO );
-    ASSERT_EXCEPTION({ Cnumpy both_zero(0, 0, std::vector<Type>()); }, std::invalid_argument, Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO );
-    ASSERT_EXCEPTION({ Cnumpy left_zero(0, 1, std::vector<Type>()); }, std::invalid_argument, Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO );
-    ASSERT_EXCEPTION({ Cnumpy right_zero(1, 0, std::vector<Type>()); }, std::invalid_argument, Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO );
+    ASSERT_EXCEPTION({ Cnumpy both_dimension_negative(-1, -1, std::vector<Type>()); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO);
+    ASSERT_EXCEPTION({ Cnumpy left_negative(-1, 1, std::vector<Type>()); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO);
+    ASSERT_EXCEPTION({ Cnumpy right_negative(1, -1, std::vector<Type>()); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO);
+    ASSERT_EXCEPTION({ Cnumpy both_zero(0, 0, std::vector<Type>()); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO);
+    ASSERT_EXCEPTION({ Cnumpy left_zero(0, 1, std::vector<Type>()); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO);
+    ASSERT_EXCEPTION({ Cnumpy right_zero(1, 0, std::vector<Type>()); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::BOTH_DIMENSION_MUST_BE_ABOVE_ZERO);
 }
 
 TEST(testCnumpy, create_empty_cnumpy_check_default_values) {
@@ -96,7 +103,7 @@ TEST(testCnumpy, create_empty_cnumpy_check_default_values) {
 
     std::vector<std::string> fresh_string_column = empty_created.get_column_string(2);
     EXPECT_EQ(3, fresh_string_column.size());
-    for (const std::string& value: fresh_string_column) {
+    for (const std::string &value: fresh_string_column) {
         EXPECT_EQ("", value);
     }
 
@@ -110,7 +117,7 @@ TEST(testCnumpy, get_columns_type) {
     std::vector<Type> columns_type = empty_created.get_type_columns();
 
     //then
-    EXPECT_EQ(3,columns_type.size());
+    EXPECT_EQ(3, columns_type.size());
     EXPECT_EQ(Type::integer_type, columns_type[0]);
     EXPECT_EQ(Type::double_type, columns_type[1]);
     EXPECT_EQ(Type::string_type, columns_type[2]);
@@ -125,7 +132,7 @@ TEST(testCnumpy, get_columns_name) {
     std::vector<std::string> columns_name = empty_created.get_column_name();
 
     //then
-    EXPECT_EQ(3,columns_name.size());
+    EXPECT_EQ(3, columns_name.size());
     EXPECT_EQ("value_1", columns_name[0]);
     EXPECT_EQ("value_2", columns_name[1]);
     EXPECT_EQ("results", columns_name[2]);
@@ -138,14 +145,14 @@ TEST(testCnumpy, set_columns) {
     //given
     Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
 
-    std::vector<int> int_column{10,20,30};
-    std::vector<double> double_column{10.0,20.0,30.0};
-    std::vector<std::string> string_column{"10","20","30"};
+    std::vector<int> int_column{10, 20, 30};
+    std::vector<double> double_column{10.0, 20.0, 30.0};
+    std::vector<std::string> string_column{"10", "20", "30"};
 
     //when
-    empty_created.set_column(0,int_column);
-    empty_created.set_column(1,double_column);
-    empty_created.set_column(2,string_column);
+    empty_created.set_column(0, int_column);
+    empty_created.set_column(1, double_column);
+    empty_created.set_column(2, string_column);
 
 
     //then
@@ -156,19 +163,20 @@ TEST(testCnumpy, set_columns) {
     EXPECT_EQ(3, empty_created.get_x_dimension());
 
 
-
-
 }
 
-TEST(testCnumpy,set_columns_use_unallowed_index){
+TEST(testCnumpy, set_columns_use_unallowed_index) {
     //given
     Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
-    std::vector<int> int_column{10,20,30};
+    std::vector<int> int_column{10, 20, 30};
 
     //then
-    ASSERT_EXCEPTION({ empty_created.set_column(-1,int_column); }, std::invalid_argument,Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO );
-    ASSERT_EXCEPTION({ empty_created.set_column(5,int_column); }, std::invalid_argument, Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY );
-    ASSERT_EXCEPTION({ empty_created.set_column(2,int_column); }, std::invalid_argument, Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH );
+    ASSERT_EXCEPTION({ empty_created.set_column(-1, int_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+    ASSERT_EXCEPTION({ empty_created.set_column(5, int_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+    ASSERT_EXCEPTION({ empty_created.set_column(2, int_column); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
 }
 
 TEST(testCnumpy, set_xy) {
@@ -177,81 +185,86 @@ TEST(testCnumpy, set_xy) {
     Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
 
     //when
-    empty_created.set_xy(0,0,10);
-    empty_created.set_xy(1,0,10.0);
-    empty_created.set_xy(2,0,"10");
+    empty_created.set_xy(0, 0, 10);
+    empty_created.set_xy(1, 0, 10.0);
+    empty_created.set_xy(2, 0, "10");
 
 
     //then
-    EXPECT_EQ(10, empty_created.get_xy_int(0,0));
-    EXPECT_EQ(0, empty_created.get_xy_int(0,1));
+    EXPECT_EQ(10, empty_created.get_xy_int(0, 0));
+    EXPECT_EQ(0, empty_created.get_xy_int(0, 1));
 
-    EXPECT_EQ(10.0, empty_created.get_xy_double(1,0));
-    EXPECT_EQ(0.0, empty_created.get_xy_double(1,1));
+    EXPECT_EQ(10.0, empty_created.get_xy_double(1, 0));
+    EXPECT_EQ(0.0, empty_created.get_xy_double(1, 1));
 
-    EXPECT_EQ("10", empty_created.get_xy_string(2,0));
-    EXPECT_EQ("", empty_created.get_xy_string(2,1));
+    EXPECT_EQ("10", empty_created.get_xy_string(2, 0));
+    EXPECT_EQ("", empty_created.get_xy_string(2, 1));
 
-    //when
-    //then
-    ASSERT_EXCEPTION({ empty_created.set_xy(-1,0,10); }, std::invalid_argument, "Both index row and column must be positive > 0" );
-    ASSERT_EXCEPTION({ empty_created.set_xy(0,-1,10); }, std::invalid_argument, "Both index row and column must be positive > 0" );
-    ASSERT_EXCEPTION({ empty_created.set_xy(4,0,10); }, std::invalid_argument, "Both index row and column must be positive lower then cnumpy data index" );
-    ASSERT_EXCEPTION({ empty_created.set_xy(1,0,10); }, std::invalid_argument, "Assigned value does not match value type in cnumpy" );
 
 }
 
-TEST(testCnumpy,get_unique_column_value){
+TEST(testCnumpy, set_xy_unallowed_index) {
+
+    //given
+    Cnumpy empty_created = create_empty_cnumpy_3x3_int_double_string();
+    //then
+    ASSERT_EXCEPTION({ empty_created.set_xy(-1, 0, 10); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+    ASSERT_EXCEPTION({ empty_created.set_xy(0, -1, 10); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+    ASSERT_EXCEPTION({ empty_created.set_xy(4, 0, 10); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+    ASSERT_EXCEPTION({ empty_created.set_xy(1, 0, 10); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+}
+
+TEST(testCnumpy, get_unique_column_value) {
 
     //given
     Cnumpy data = create_empty_cnumpy_3x3_int_double_string();
 
-    std::vector<int> int_column{10,10,30};
-    std::vector<double> double_column{10.0,30.0,10.0};
-    std::vector<std::string> string_column{"10","20","30"};
+    std::vector<int> int_column{10, 10, 30};
+    std::vector<double> double_column{10.0, 30.0, 10.0};
+    std::vector<std::string> string_column{"10", "20", "30"};
 
-    data.set_column(0,int_column);
-    data.set_column(1,double_column);
-    data.set_column(2,string_column);
+    data.set_column(0, int_column);
+    data.set_column(1, double_column);
+    data.set_column(2, string_column);
 
     //when
     Cnumpy unique_int_column_values = data.get_unique_column_values(0);
-    //then
-    EXPECT_EQ(2,unique_int_column_values.get_y_dimension());
-    EXPECT_EQ(10,unique_int_column_values.get_xy_int(0,0));
-    EXPECT_EQ(30,unique_int_column_values.get_xy_int(0,1));
-
-
-    //when
     Cnumpy unique_double_column_values = data.get_unique_column_values(1);
-    //then
-    EXPECT_EQ(2,unique_double_column_values.get_y_dimension());
-    ASSERT_DOUBLE_EQ(10.0,unique_double_column_values.get_xy_double(0,0));
-    ASSERT_DOUBLE_EQ(30.0,unique_double_column_values.get_xy_double(0,1));
-
-    //when
     Cnumpy unique_string_column_values = data.get_unique_column_values(2);
+
     //then
-    EXPECT_EQ(3,unique_string_column_values.get_y_dimension());
-    EXPECT_EQ("10",unique_string_column_values.get_xy_string(0,0));
-    EXPECT_EQ("20",unique_string_column_values.get_xy_string(0,1));
-    EXPECT_EQ("30",unique_string_column_values.get_xy_string(0,2));
+    EXPECT_EQ(2, unique_int_column_values.get_y_dimension());
+    EXPECT_EQ(10, unique_int_column_values.get_xy_int(0, 0));
+    EXPECT_EQ(30, unique_int_column_values.get_xy_int(0, 1));
+
+    EXPECT_EQ(2, unique_double_column_values.get_y_dimension());
+    ASSERT_DOUBLE_EQ(10.0, unique_double_column_values.get_xy_double(0, 0));
+    ASSERT_DOUBLE_EQ(30.0, unique_double_column_values.get_xy_double(0, 1));
+
+    EXPECT_EQ(3, unique_string_column_values.get_y_dimension());
+    EXPECT_EQ("10", unique_string_column_values.get_xy_string(0, 0));
+    EXPECT_EQ("20", unique_string_column_values.get_xy_string(0, 1));
+    EXPECT_EQ("30", unique_string_column_values.get_xy_string(0, 2));
 
 
 }
 
-TEST(testCnumpy,get_min_value_in_column){
+TEST(testCnumpy, get_min_value_in_column) {
     //given
     Cnumpy data = create_empty_cnumpy_3x3_int_double_string();
 
-    std::vector<int> int_column{30,10,0};
-    std::vector<double> double_column{20.0,10.0,30.0};
-    std::vector<std::string> string_column{"aa","cc","xx"};
+    std::vector<int> int_column{30, 10, 0};
+    std::vector<double> double_column{20.0, 10.0, 30.0};
+    std::vector<std::string> string_column{"aa", "cc", "xx"};
 
     //when
-    data.set_column(0,int_column);
-    data.set_column(1,double_column);
-    data.set_column(2,string_column);
+    data.set_column(0, int_column);
+    data.set_column(1, double_column);
+    data.set_column(2, string_column);
 
 
     Cnumpy min_int_value = data.get_min_value_in_column(0);
@@ -259,24 +272,24 @@ TEST(testCnumpy,get_min_value_in_column){
     Cnumpy min_string_value = data.get_min_value_in_column(2);
 
     //then
-    EXPECT_EQ(0,min_int_value.get_xy_int(0,0));
-    ASSERT_DOUBLE_EQ(10.0,min_double_value.get_xy_double(0,0));
-    EXPECT_EQ("aa",min_string_value.get_xy_string(0,0));
+    EXPECT_EQ(0, min_int_value.get_xy_int(0, 0));
+    ASSERT_DOUBLE_EQ(10.0, min_double_value.get_xy_double(0, 0));
+    EXPECT_EQ("aa", min_string_value.get_xy_string(0, 0));
 
 }
 
-TEST(testCnumpy,get_max_value_in_column){
+TEST(testCnumpy, get_max_value_in_column) {
     //given
     Cnumpy data = create_empty_cnumpy_3x3_int_double_string();
 
-    std::vector<int> int_column{30,10,0};
-    std::vector<double> double_column{20.0,10.0,30.0};
-    std::vector<std::string> string_column{"aa","cc","xx"};
+    std::vector<int> int_column{30, 10, 0};
+    std::vector<double> double_column{20.0, 10.0, 30.0};
+    std::vector<std::string> string_column{"aa", "cc", "xx"};
 
     //when
-    data.set_column(0,int_column);
-    data.set_column(1,double_column);
-    data.set_column(2,string_column);
+    data.set_column(0, int_column);
+    data.set_column(1, double_column);
+    data.set_column(2, string_column);
 
     Cnumpy max_int_value = data.get_max_value_in_column(0);
     Cnumpy max_double_value = data.get_max_value_in_column(1);
@@ -284,106 +297,140 @@ TEST(testCnumpy,get_max_value_in_column){
 
 
     //then
-    EXPECT_EQ(30,max_int_value.get_xy_int(0,0));
-    ASSERT_DOUBLE_EQ(30.0,max_double_value.get_xy_double(0,0));
-    EXPECT_EQ("xx",max_string_value.get_xy_string(0,0));
+    EXPECT_EQ(30, max_int_value.get_xy_int(0, 0));
+    ASSERT_DOUBLE_EQ(30.0, max_double_value.get_xy_double(0, 0));
+    EXPECT_EQ("xx", max_string_value.get_xy_string(0, 0));
 
 }
 
 
-
-TEST(testCnumpy,get_xy_cnumpy){
+TEST(testCnumpy, get_xy_cnumpy) {
     //given
     Cnumpy data = create_fill_cnumpy_3x3_increased_value_int_double_string();
 
     //when
-    Cnumpy value_int_0 = data.get_xy(0,0);
-    Cnumpy value_int_1= data.get_xy(0,1);
-    Cnumpy value_int_2 = data.get_xy(0,2);
+    Cnumpy value_int_0 = data.get_xy(0, 0);
+    Cnumpy value_int_1 = data.get_xy(0, 1);
+    Cnumpy value_int_2 = data.get_xy(0, 2);
+    Cnumpy value_double_0 = data.get_xy(1, 0);
+    Cnumpy value_double_1 = data.get_xy(1, 1);
+    Cnumpy value_double_2 = data.get_xy(1, 2);
+    Cnumpy value_string_0 = data.get_xy(2, 0);
+    Cnumpy value_string_1 = data.get_xy(2, 1);
+    Cnumpy value_string_2 = data.get_xy(2, 2);
 
     //then
-    EXPECT_EQ(10,value_int_0.get_xy_int(0,0));
-    EXPECT_EQ(20,value_int_1.get_xy_int(0,0));
-    EXPECT_EQ(30,value_int_2.get_xy_int(0,0));
+    EXPECT_EQ(10, value_int_0.get_xy_int(0, 0));
+    EXPECT_EQ(20, value_int_1.get_xy_int(0, 0));
+    EXPECT_EQ(30, value_int_2.get_xy_int(0, 0));
 
+    ASSERT_DOUBLE_EQ(10.0, value_double_0.get_xy_double(0, 0));
+    ASSERT_DOUBLE_EQ(20.0, value_double_1.get_xy_double(0, 0));
+    ASSERT_DOUBLE_EQ(30.0, value_double_2.get_xy_double(0, 0));
 
-    //when
-    Cnumpy value_double_0 = data.get_xy(1,0);
-    Cnumpy value_double_1= data.get_xy(1,1);
-    Cnumpy value_double_2 = data.get_xy(1,2);
-    //then
-    ASSERT_DOUBLE_EQ(10.0,value_double_0.get_xy_double(0,0));
-    ASSERT_DOUBLE_EQ(20.0,value_double_1.get_xy_double(0,0));
-    ASSERT_DOUBLE_EQ(30.0,value_double_2.get_xy_double(0,0));
-
-
-
-    //when
-    Cnumpy value_string_0 = data.get_xy(2,0);
-    Cnumpy value_string_1 = data.get_xy(2,1);
-    Cnumpy value_string_2 = data.get_xy(2,2);
-
-    //then
-    EXPECT_EQ("10",value_string_0.get_xy_string(0,0));
-    EXPECT_EQ("20",value_string_1.get_xy_string(0,0));
-    EXPECT_EQ("30",value_string_2.get_xy_string(0,0));
-
-    ASSERT_EXCEPTION({ data.get_xy_int(-1,3); }, std::invalid_argument, "Both index row and column must be positive > 0" );
-    ASSERT_EXCEPTION({ data.get_xy_int(5,3); }, std::invalid_argument, "Both index row and column must be positive lower then cnumpy data index" );
-    ASSERT_EXCEPTION({ data.get_xy_int(2,2); }, std::invalid_argument, "Assigned value does not match value type in cnumpy"  );
-
-    ASSERT_EXCEPTION({ data.get_xy_double(-1,3); }, std::invalid_argument, "Both index row and column must be positive > 0" );
-    ASSERT_EXCEPTION({ data.get_xy_double(5,3); }, std::invalid_argument, "Both index row and column must be positive lower then cnumpy data index" );
-    ASSERT_EXCEPTION({ data.get_xy_double(0,2); }, std::invalid_argument, "Assigned value does not match value type in cnumpy"  );
-
-    ASSERT_EXCEPTION({ data.get_xy_string(-1,3); }, std::invalid_argument, "Both index row and column must be positive > 0" );
-    ASSERT_EXCEPTION({ data.get_xy_string(5,3); }, std::invalid_argument, "Both index row and column must be positive lower then cnumpy data index" );
-    ASSERT_EXCEPTION({ data.get_xy_string(0,2); }, std::invalid_argument, "Assigned value does not match value type in cnumpy" );
-
-
+    EXPECT_EQ("10", value_string_0.get_xy_string(0, 0));
+    EXPECT_EQ("20", value_string_1.get_xy_string(0, 0));
+    EXPECT_EQ("30", value_string_2.get_xy_string(0, 0));
 
 
 }
 
-TEST(testCnumpy,of){
+
+TEST(testCnumpy, get_xy_cnumpy_unallowed_index) {
+    //given
+    Cnumpy data = create_fill_cnumpy_3x3_increased_value_int_double_string();
+
+    //then
+    ASSERT_EXCEPTION({ data.get_xy_int(-1, 3); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+    ASSERT_EXCEPTION({ data.get_xy_int(5, 3); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+    ASSERT_EXCEPTION({ data.get_xy_int(2, 2); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+    ASSERT_EXCEPTION({ data.get_xy_double(-1, 3); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+    ASSERT_EXCEPTION({ data.get_xy_double(5, 3); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+    ASSERT_EXCEPTION({ data.get_xy_double(0, 2); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+    ASSERT_EXCEPTION({ data.get_xy_string(-1, 3); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+    ASSERT_EXCEPTION({ data.get_xy_string(5, 3); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+    ASSERT_EXCEPTION({ data.get_xy_string(0, 2); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+}
+
+TEST(testCnumpy, of) {
+
+    //when
     Cnumpy int_value_cnumpy = Cnumpy::of(5);
-    EXPECT_EQ(5,int_value_cnumpy.get_xy_int(0,0));
-    EXPECT_EQ(1,int_value_cnumpy.get_y_dimension());
-    EXPECT_EQ(1,int_value_cnumpy.get_x_dimension());
-
     Cnumpy double_value_cnumpy = Cnumpy::of(15.0);
-    ASSERT_DOUBLE_EQ(15.0,double_value_cnumpy.get_xy_double(0,0));
-    EXPECT_EQ(1,double_value_cnumpy.get_y_dimension());
-    EXPECT_EQ(1,double_value_cnumpy.get_x_dimension());
-
     Cnumpy string_value_cnumpy = Cnumpy::of("text");
-    EXPECT_EQ("text",string_value_cnumpy.get_xy_string(0,0));
-    EXPECT_EQ(1,double_value_cnumpy.get_y_dimension());
-    EXPECT_EQ(1,double_value_cnumpy.get_x_dimension());
+
+    //then
+    EXPECT_EQ(5, int_value_cnumpy.get_xy_int(0, 0));
+    EXPECT_EQ(1, int_value_cnumpy.get_y_dimension());
+    EXPECT_EQ(1, int_value_cnumpy.get_x_dimension());
+
+
+    ASSERT_DOUBLE_EQ(15.0, double_value_cnumpy.get_xy_double(0, 0));
+    EXPECT_EQ(1, double_value_cnumpy.get_y_dimension());
+    EXPECT_EQ(1, double_value_cnumpy.get_x_dimension());
+
+    EXPECT_EQ("text", string_value_cnumpy.get_xy_string(0, 0));
+    EXPECT_EQ(1, double_value_cnumpy.get_y_dimension());
+    EXPECT_EQ(1, double_value_cnumpy.get_x_dimension());
 }
 
-TEST(testCnumpy,constructor_from_raw_value){
+TEST(testCnumpy, constructor_from_raw_value) {
+
+    //when
     Cnumpy int_value_cnumpy(5);
-    EXPECT_EQ(5,int_value_cnumpy.get_xy_int(0,0));
-    EXPECT_EQ(1,int_value_cnumpy.get_y_dimension());
-    EXPECT_EQ(1,int_value_cnumpy.get_x_dimension());
-
     Cnumpy double_value_cnumpy(15.0);
-    ASSERT_DOUBLE_EQ(15.0,double_value_cnumpy.get_xy_double(0,0));
-    EXPECT_EQ(1,double_value_cnumpy.get_y_dimension());
-    EXPECT_EQ(1,double_value_cnumpy.get_x_dimension());
-
     Cnumpy string_value_cnumpy("text");
-    EXPECT_EQ("text",string_value_cnumpy.get_xy_string(0,0));
-    EXPECT_EQ(1,double_value_cnumpy.get_y_dimension());
-    EXPECT_EQ(1,double_value_cnumpy.get_x_dimension());
+
+    //then
+    EXPECT_EQ(5, int_value_cnumpy.get_xy_int(0, 0));
+    EXPECT_EQ(1, int_value_cnumpy.get_y_dimension());
+    EXPECT_EQ(1, int_value_cnumpy.get_x_dimension());
+
+
+    ASSERT_DOUBLE_EQ(15.0, double_value_cnumpy.get_xy_double(0, 0));
+    EXPECT_EQ(1, double_value_cnumpy.get_y_dimension());
+    EXPECT_EQ(1, double_value_cnumpy.get_x_dimension());
+
+    EXPECT_EQ("text", string_value_cnumpy.get_xy_string(0, 0));
+    EXPECT_EQ(1, double_value_cnumpy.get_y_dimension());
+    EXPECT_EQ(1, double_value_cnumpy.get_x_dimension());
 }
 
 
+TEST(testCnumpy, operator_compare_differend_type) {
+    //given
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
+
+    //then
+    ASSERT_EXCEPTION({ double_value_5_cnumpy < int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ double_value_5_cnumpy <= int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ double_value_5_cnumpy > int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ double_value_5_cnumpy >= int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ double_value_5_cnumpy == int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ double_value_5_cnumpy != int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+}
 
 
-
-TEST(testCnumpy,operator_lower){
+TEST(testCnumpy, operator_lower) {
+    //given
     Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
     Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
 
@@ -394,24 +441,78 @@ TEST(testCnumpy,operator_lower){
     Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
 
 
-    EXPECT_TRUE(int_value_5_cnumpy<int_value_10_cnumpy);
-    EXPECT_TRUE(double_value_5_cnumpy<double_value_10_cnumpy);
-    EXPECT_TRUE(string_value_aa_cnumpy<string_value_bb_cnumpy);
+    //then
+    EXPECT_TRUE(int_value_5_cnumpy < int_value_10_cnumpy);
+    EXPECT_TRUE(double_value_5_cnumpy < double_value_10_cnumpy);
+    EXPECT_TRUE(string_value_aa_cnumpy < string_value_bb_cnumpy);
 
-    EXPECT_FALSE(int_value_10_cnumpy<int_value_5_cnumpy);
-    EXPECT_FALSE(double_value_10_cnumpy<double_value_5_cnumpy);
-    EXPECT_FALSE(string_value_bb_cnumpy<string_value_aa_cnumpy);
+    EXPECT_FALSE(int_value_10_cnumpy < int_value_5_cnumpy);
+    EXPECT_FALSE(double_value_10_cnumpy < double_value_5_cnumpy);
+    EXPECT_FALSE(string_value_bb_cnumpy < string_value_aa_cnumpy);
 
-    EXPECT_FALSE(int_value_10_cnumpy<int_value_10_cnumpy);
-    EXPECT_FALSE(double_value_10_cnumpy<double_value_10_cnumpy);
-    EXPECT_FALSE(string_value_bb_cnumpy<string_value_bb_cnumpy);
-
-    ASSERT_EXCEPTION({ double_value_5_cnumpy<int_value_10_cnumpy;}, std::invalid_argument, "The types of columns are different" );
+    EXPECT_FALSE(int_value_10_cnumpy < int_value_10_cnumpy);
+    EXPECT_FALSE(double_value_10_cnumpy < double_value_10_cnumpy);
+    EXPECT_FALSE(string_value_bb_cnumpy < string_value_bb_cnumpy);
 
 
 }
 
-TEST(testCnumpy,operator_lower_or_equal){
+TEST(testCnumpy, operator_lower_or_equal) {
+    //given
+    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
+    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+
+    Cnumpy string_value_aa_cnumpy = Cnumpy::of("aa");
+    Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
+
+    //then
+    EXPECT_TRUE(int_value_5_cnumpy <= int_value_10_cnumpy);
+    EXPECT_TRUE(double_value_5_cnumpy <= double_value_10_cnumpy);
+    EXPECT_TRUE(string_value_aa_cnumpy <= string_value_bb_cnumpy);
+
+    EXPECT_FALSE(int_value_10_cnumpy <= int_value_5_cnumpy);
+    EXPECT_FALSE(double_value_10_cnumpy <= double_value_5_cnumpy);
+    EXPECT_FALSE(string_value_bb_cnumpy <= string_value_aa_cnumpy);
+
+    EXPECT_TRUE(int_value_10_cnumpy <= int_value_10_cnumpy);
+    EXPECT_TRUE(double_value_10_cnumpy <= double_value_10_cnumpy);
+    EXPECT_TRUE(string_value_bb_cnumpy <= string_value_bb_cnumpy);
+
+
+}
+
+TEST(testCnumpy, operator_greater) {
+    //given
+    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
+    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
+    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+
+    Cnumpy string_value_aa_cnumpy = Cnumpy::of("aa");
+    Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
+
+    //then
+    EXPECT_FALSE(int_value_5_cnumpy > int_value_10_cnumpy);
+    EXPECT_FALSE(double_value_5_cnumpy > double_value_10_cnumpy);
+    EXPECT_FALSE(string_value_aa_cnumpy > string_value_bb_cnumpy);
+
+    EXPECT_TRUE(int_value_10_cnumpy > int_value_5_cnumpy);
+    EXPECT_TRUE(double_value_10_cnumpy > double_value_5_cnumpy);
+    EXPECT_TRUE(string_value_bb_cnumpy > string_value_aa_cnumpy);
+
+    EXPECT_FALSE(int_value_10_cnumpy > int_value_10_cnumpy);
+    EXPECT_FALSE(double_value_10_cnumpy > double_value_10_cnumpy);
+    EXPECT_FALSE(string_value_bb_cnumpy > string_value_bb_cnumpy);
+
+
+}
+
+TEST(testCnumpy, operator_greater_or_equal) {
+    //given
     Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
     Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
 
@@ -422,24 +523,25 @@ TEST(testCnumpy,operator_lower_or_equal){
     Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
 
 
-    EXPECT_TRUE(int_value_5_cnumpy<=int_value_10_cnumpy);
-    EXPECT_TRUE(double_value_5_cnumpy<=double_value_10_cnumpy);
-    EXPECT_TRUE(string_value_aa_cnumpy<=string_value_bb_cnumpy);
+    //then
+    EXPECT_FALSE(int_value_5_cnumpy >= int_value_10_cnumpy);
+    EXPECT_FALSE(double_value_5_cnumpy >= double_value_10_cnumpy);
+    EXPECT_FALSE(string_value_aa_cnumpy >= string_value_bb_cnumpy);
 
-    EXPECT_FALSE(int_value_10_cnumpy<=int_value_5_cnumpy);
-    EXPECT_FALSE(double_value_10_cnumpy<=double_value_5_cnumpy);
-    EXPECT_FALSE(string_value_bb_cnumpy<=string_value_aa_cnumpy);
+    EXPECT_TRUE(int_value_10_cnumpy >= int_value_5_cnumpy);
+    EXPECT_TRUE(double_value_10_cnumpy >= double_value_5_cnumpy);
+    EXPECT_TRUE(string_value_bb_cnumpy >= string_value_aa_cnumpy);
 
-    EXPECT_TRUE(int_value_10_cnumpy<=int_value_10_cnumpy);
-    EXPECT_TRUE(double_value_10_cnumpy<=double_value_10_cnumpy);
-    EXPECT_TRUE(string_value_bb_cnumpy<=string_value_bb_cnumpy);
-
-    ASSERT_EXCEPTION({ double_value_5_cnumpy<=int_value_10_cnumpy;}, std::invalid_argument, "The types of columns are different" );
+    EXPECT_TRUE(int_value_10_cnumpy >= int_value_10_cnumpy);
+    EXPECT_TRUE(double_value_10_cnumpy >= double_value_10_cnumpy);
+    EXPECT_TRUE(string_value_bb_cnumpy >= string_value_bb_cnumpy);
 
 
 }
 
-TEST(testCnumpy,operator_greater){
+
+TEST(testCnumpy, operator_equal) {
+    //given
     Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
     Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
 
@@ -449,25 +551,20 @@ TEST(testCnumpy,operator_greater){
     Cnumpy string_value_aa_cnumpy = Cnumpy::of("aa");
     Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
 
+    //then
+    EXPECT_FALSE(int_value_5_cnumpy == int_value_10_cnumpy);
+    EXPECT_FALSE(double_value_5_cnumpy == double_value_10_cnumpy);
+    EXPECT_FALSE(string_value_aa_cnumpy == string_value_bb_cnumpy);
 
-    EXPECT_FALSE(int_value_5_cnumpy>int_value_10_cnumpy);
-    EXPECT_FALSE(double_value_5_cnumpy>double_value_10_cnumpy);
-    EXPECT_FALSE(string_value_aa_cnumpy>string_value_bb_cnumpy);
-
-    EXPECT_TRUE(int_value_10_cnumpy>int_value_5_cnumpy);
-    EXPECT_TRUE(double_value_10_cnumpy>double_value_5_cnumpy);
-    EXPECT_TRUE(string_value_bb_cnumpy>string_value_aa_cnumpy);
-
-    EXPECT_FALSE(int_value_10_cnumpy>int_value_10_cnumpy);
-    EXPECT_FALSE(double_value_10_cnumpy>double_value_10_cnumpy);
-    EXPECT_FALSE(string_value_bb_cnumpy>string_value_bb_cnumpy);
-
-    ASSERT_EXCEPTION({ double_value_5_cnumpy>int_value_10_cnumpy;}, std::invalid_argument, "The types of columns are different" );
+    EXPECT_TRUE(int_value_10_cnumpy == int_value_10_cnumpy);
+    EXPECT_TRUE(double_value_10_cnumpy == double_value_10_cnumpy);
+    EXPECT_TRUE(string_value_bb_cnumpy == string_value_bb_cnumpy);
 
 
 }
 
-TEST(testCnumpy,operator_greater_or_equal){
+TEST(testCnumpy, operator_not_equal) {
+    //given
     Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
     Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
 
@@ -477,74 +574,69 @@ TEST(testCnumpy,operator_greater_or_equal){
     Cnumpy string_value_aa_cnumpy = Cnumpy::of("aa");
     Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
 
+    //then
+    EXPECT_TRUE(int_value_5_cnumpy != int_value_10_cnumpy);
+    EXPECT_TRUE(double_value_5_cnumpy != double_value_10_cnumpy);
+    EXPECT_TRUE(string_value_aa_cnumpy != string_value_bb_cnumpy);
 
-    EXPECT_FALSE(int_value_5_cnumpy>=int_value_10_cnumpy);
-    EXPECT_FALSE(double_value_5_cnumpy>=double_value_10_cnumpy);
-    EXPECT_FALSE(string_value_aa_cnumpy>=string_value_bb_cnumpy);
-
-    EXPECT_TRUE(int_value_10_cnumpy>=int_value_5_cnumpy);
-    EXPECT_TRUE(double_value_10_cnumpy>=double_value_5_cnumpy);
-    EXPECT_TRUE(string_value_bb_cnumpy>=string_value_aa_cnumpy);
-
-    EXPECT_TRUE(int_value_10_cnumpy>=int_value_10_cnumpy);
-    EXPECT_TRUE(double_value_10_cnumpy>=double_value_10_cnumpy);
-    EXPECT_TRUE(string_value_bb_cnumpy>=string_value_bb_cnumpy);
-
-    ASSERT_EXCEPTION({ double_value_5_cnumpy>=int_value_10_cnumpy;}, std::invalid_argument, "The types of columns are different" );
+    EXPECT_FALSE(int_value_10_cnumpy != int_value_10_cnumpy);
+    EXPECT_FALSE(double_value_10_cnumpy != double_value_10_cnumpy);
+    EXPECT_FALSE(string_value_bb_cnumpy != string_value_bb_cnumpy);
 
 
 }
 
 
-TEST(testCnumpy,operator_equal){
-    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
+TEST(testCnumpy, mathematical_operation_differend_type) {
+    //given
+    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
     Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
 
-    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
-    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
 
-    Cnumpy string_value_aa_cnumpy = Cnumpy::of("aa");
-    Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
+    //then
 
+    ASSERT_EXCEPTION({ double_value_5_cnumpy += int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
 
-    EXPECT_FALSE(int_value_5_cnumpy==int_value_10_cnumpy);
-    EXPECT_FALSE(double_value_5_cnumpy==double_value_10_cnumpy);
-    EXPECT_FALSE(string_value_aa_cnumpy==string_value_bb_cnumpy);
+    ASSERT_EXCEPTION({ double_value_5_cnumpy -= int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
 
-    EXPECT_TRUE(int_value_10_cnumpy==int_value_10_cnumpy);
-    EXPECT_TRUE(double_value_10_cnumpy==double_value_10_cnumpy);
-    EXPECT_TRUE(string_value_bb_cnumpy==string_value_bb_cnumpy);
+    ASSERT_EXCEPTION({ double_value_5_cnumpy /= int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
 
-    ASSERT_EXCEPTION({ double_value_5_cnumpy==int_value_10_cnumpy;}, std::invalid_argument, "The types of columns are different" );
+    ASSERT_EXCEPTION({ double_value_5_cnumpy *= int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+    ASSERT_EXCEPTION({ double_value_5_cnumpy + int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+    ASSERT_EXCEPTION({ double_value_5_cnumpy * int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+    ASSERT_EXCEPTION({ double_value_5_cnumpy / int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+    ASSERT_EXCEPTION({ double_value_5_cnumpy - int_value_10_cnumpy; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
 
 
 }
 
-TEST(testCnumpy,operator_not_equal){
-    Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
-    Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
+TEST(testCnumpy, mathematical_operation_not_allowed_for_type_text) {
+    //given
+    Cnumpy text = Cnumpy::of("example text");
 
-    Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
-    Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
-
-    Cnumpy string_value_aa_cnumpy = Cnumpy::of("aa");
-    Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
-
-
-    EXPECT_TRUE(int_value_5_cnumpy!=int_value_10_cnumpy);
-    EXPECT_TRUE(double_value_5_cnumpy!=double_value_10_cnumpy);
-    EXPECT_TRUE(string_value_aa_cnumpy!=string_value_bb_cnumpy);
-
-    EXPECT_FALSE(int_value_10_cnumpy!=int_value_10_cnumpy);
-    EXPECT_FALSE(double_value_10_cnumpy!=double_value_10_cnumpy);
-    EXPECT_FALSE(string_value_bb_cnumpy!=string_value_bb_cnumpy);
-
-    ASSERT_EXCEPTION({ double_value_5_cnumpy!=int_value_10_cnumpy;}, std::invalid_argument, "The types of columns are different" );
-
+    //then
+    ASSERT_EXCEPTION({ text -= text; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::TEXT_SUBTRACTION_OPERATION_IS_NOT_ALLOWED);
+    ASSERT_EXCEPTION({ text /= text; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::TEXT_DIVIDE_OPERATION_IS_NOT_ALLOWED);
+    ASSERT_EXCEPTION({ text *= text; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::TEXT_MULTIPLICATION_IS_NOT_ALLOWED);
 }
 
-
-TEST(testCnumpy,operator_add){
+TEST(testCnumpy, operator_add) {
+    //given
     Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
     Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
     Cnumpy result_add_int = int_value_5_cnumpy + int_value_10_cnumpy;
@@ -557,18 +649,16 @@ TEST(testCnumpy,operator_add){
     Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
     Cnumpy result_add_string = string_value_aa_cnumpy + string_value_bb_cnumpy;
 
-
+    //then
     EXPECT_EQ(15, result_add_int.get_xy_int(0, 0));
-    EXPECT_DOUBLE_EQ(15.0,result_add_double.get_xy_double(0,0));
+    EXPECT_DOUBLE_EQ(15.0, result_add_double.get_xy_double(0, 0));
     EXPECT_EQ("aabb", result_add_string.get_xy_string(0, 0));
-
-    ASSERT_EXCEPTION({ double_value_5_cnumpy+int_value_10_cnumpy;}, std::invalid_argument, "The types of columns are different" );
-
 
 }
 
 
-TEST(testCnumpy,operator_add_equal){
+TEST(testCnumpy, operator_add_equal) {
+    //given
     Cnumpy result_first_int_value_5_cnumpy = Cnumpy::of(5);
     Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
     result_first_int_value_5_cnumpy += int_value_10_cnumpy;
@@ -581,17 +671,16 @@ TEST(testCnumpy,operator_add_equal){
     Cnumpy string_value_bb_cnumpy = Cnumpy::of("bb");
     result_first_string_value_aa_cnumpy += string_value_bb_cnumpy;
 
-
-    EXPECT_EQ(15, result_first_int_value_5_cnumpy.get_xy_int(0,0));
-    EXPECT_DOUBLE_EQ(15.0,result_first_double_value_5_cnumpy.get_xy_double(0,0));
+    //then
+    EXPECT_EQ(15, result_first_int_value_5_cnumpy.get_xy_int(0, 0));
+    EXPECT_DOUBLE_EQ(15.0, result_first_double_value_5_cnumpy.get_xy_double(0, 0));
     EXPECT_EQ("aabb", result_first_string_value_aa_cnumpy.get_xy_string(0, 0));
-
-    ASSERT_EXCEPTION({ double_value_10_cnumpy+=int_value_10_cnumpy;}, std::invalid_argument, "The types of columns are different" );
 
 
 }
 
-TEST(testCnumpy,operator_minus_equal){
+TEST(testCnumpy, operator_minus_equal) {
+    //given
     Cnumpy first_value_results_int = Cnumpy::of(5);
     Cnumpy second_value_int = Cnumpy::of(10);
     first_value_results_int -= second_value_int;
@@ -603,15 +692,16 @@ TEST(testCnumpy,operator_minus_equal){
 
     Cnumpy text = Cnumpy::of("text");
 
+    //then
     EXPECT_EQ(-5, first_value_results_int.get_xy_int(0, 0));
     EXPECT_DOUBLE_EQ(-5.0, first_value_results_double.get_xy_double(0, 0));
 
-    ASSERT_EXCEPTION({ first_value_results_double-=first_value_results_int;}, std::invalid_argument, "The types of columns are different" );
-    ASSERT_EXCEPTION({ text-=text;}, std::invalid_argument, "Subtraction operation on two texts is prohibited" );
 
 }
 
-TEST(testCnumpy,operator_devide_equal){
+TEST(testCnumpy, operator_devide_equal) {
+
+    //given
     Cnumpy first_value_results_int = Cnumpy::of(5);
     Cnumpy second_value_int = Cnumpy::of(10);
     first_value_results_int /= second_value_int;
@@ -622,16 +712,15 @@ TEST(testCnumpy,operator_devide_equal){
 
     Cnumpy text = Cnumpy::of("text");
 
+
+    //then
     EXPECT_EQ(0, first_value_results_int.get_xy_int(0, 0));
     EXPECT_DOUBLE_EQ(0.5, first_value_results_double.get_xy_double(0, 0));
-
-    ASSERT_EXCEPTION({ first_value_results_double/=first_value_results_int;}, std::invalid_argument, "The types of columns are different" );
-    ASSERT_EXCEPTION({ text/=text;}, std::invalid_argument, "Divide operation on two texts is prohibited" );
 
 
 }
 
-TEST(testCnumpy,operator_multiply_equal){
+TEST(testCnumpy, operator_multiply_equal) {
     Cnumpy first_value_results_int = Cnumpy::of(5);
     Cnumpy second_value_int = Cnumpy::of(10);
     first_value_results_int *= second_value_int;
@@ -645,33 +734,86 @@ TEST(testCnumpy,operator_multiply_equal){
     EXPECT_EQ(50, first_value_results_int.get_xy_int(0, 0));
     EXPECT_DOUBLE_EQ(50.0, first_value_results_double.get_xy_double(0, 0));
 
-    ASSERT_EXCEPTION({ first_value_results_double*=first_value_results_int;}, std::invalid_argument, "The types of columns are different" );
-    ASSERT_EXCEPTION({ text*=text;}, std::invalid_argument, "Multiplication operation on two texts is forbidden" );
-
 
 }
 
 
-
-TEST(testCnumpy,operator_assign_raw_int){
-    Cnumpy value = Cnumpy::of(5);
-    int raw_value_to_assign = 20;
-    value = raw_value_to_assign;
-
-    EXPECT_EQ(20, value.get_xy_int(0, 0));
-    EXPECT_EQ(1,value.get_y_dimension());
-    EXPECT_EQ(1,value.get_x_dimension());
-
+TEST(testCnumpy, raw_assignes_bad_type) {
+    //given
     Cnumpy data_3x_3 = create_empty_cnumpy_3x3_int_double_string();
     Cnumpy one_column = data_3x_3[0];
+    Cnumpy value = Cnumpy::of(5);
+    Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
+
+    //then
+    ASSERT_EXCEPTION({ value = "text"; }, std::invalid_argument, Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+    ASSERT_EXCEPTION({ one_column = 10; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+
+    ASSERT_EXCEPTION({ results[0] = std::vector<double>(); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+
+    ASSERT_EXCEPTION({ results[0] = (std::vector<int>{2, 3}); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+
+    ASSERT_EXCEPTION({ results[0] = (std::vector<double>{2.0, 3.0, 4.0}); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+    ASSERT_EXCEPTION({ (results[0]) = 10; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+
+    ASSERT_EXCEPTION({ results[0] = std::vector<double>(); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+
+    ASSERT_EXCEPTION({ results[0] = (std::vector<double>{2, 3}); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+
+    ASSERT_EXCEPTION({ results[0] = (std::vector<std::string>{"2.0", "3.0", "4.0"}); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+    ASSERT_EXCEPTION({ (results[0]) = 10; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+
+    ASSERT_EXCEPTION({ results[0] = std::vector<std::string>(); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+
+    ASSERT_EXCEPTION({ results[0] = (std::vector<std::string>{"2", "3"}); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+
+    ASSERT_EXCEPTION({ results[2] = (std::vector<int>{1, 2, 3}); }, std::invalid_argument,
+                     Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+    ASSERT_EXCEPTION({ (results[0]) = 10; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
 
 
-    ASSERT_EXCEPTION({ value ="text";}, std::invalid_argument, "Assigned value have other type then cnumpy " );
-    ASSERT_EXCEPTION({ one_column=10;}, std::invalid_argument, "Assign raw int to cnumpy is possible only for one column numpy" );
+    ASSERT_EXCEPTION({ value = "text"; }, std::invalid_argument, Exception_Cnumpy_Message::VALUE_TYPE_DO_NOT_MATCH);
+
+    ASSERT_EXCEPTION({ data_3x_3 = "10"; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+
+    ASSERT_EXCEPTION({ data_3x_3 = 11; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS);
+}
+
+TEST(testCnumpy, operator_assign_raw_int) {
+    //given
+    Cnumpy value = Cnumpy::of(5);
+    int raw_value_to_assign = 20;
+    //when
+    value = raw_value_to_assign;
+
+    //then
+    EXPECT_EQ(20, value.get_xy_int(0, 0));
+    EXPECT_EQ(1, value.get_y_dimension());
+    EXPECT_EQ(1, value.get_x_dimension());
+
 
 }
 
-TEST(testCnumpy,operator_assign_raw_vector_int){
+TEST(testCnumpy, operator_assign_raw_vector_int) {
+
+    //given
     std::vector<int> raw_column_int;
     raw_column_int.push_back(18);
     raw_column_int.push_back(28);
@@ -679,41 +821,38 @@ TEST(testCnumpy,operator_assign_raw_vector_int){
 
     Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
 
+    //when
     Cnumpy first_column = results[0];
     first_column = raw_column_int;
 
-    EXPECT_EQ(18,first_column.get_xy_int(0, 0));
-    EXPECT_EQ(28,first_column.get_xy_int(0, 1));
-    EXPECT_EQ(38,first_column.get_xy_int(0, 2));
+    //then
+    EXPECT_EQ(18, first_column.get_xy_int(0, 0));
+    EXPECT_EQ(28, first_column.get_xy_int(0, 1));
+    EXPECT_EQ(38, first_column.get_xy_int(0, 2));
 
-    EXPECT_EQ(10,results.get_xy_int(0,0) );
-    EXPECT_EQ(20,results.get_xy_int(0, 1));
-    EXPECT_EQ(30,results.get_xy_int(0, 2));
-
-
-    EXPECT_DOUBLE_EQ(10.0,results.get_xy_double(1, 0));
-    EXPECT_DOUBLE_EQ(20.0,results.get_xy_double(1, 1));
-    EXPECT_DOUBLE_EQ(30.0,results.get_xy_double(1, 2));
+    EXPECT_EQ(10, results.get_xy_int(0, 0));
+    EXPECT_EQ(20, results.get_xy_int(0, 1));
+    EXPECT_EQ(30, results.get_xy_int(0, 2));
 
 
-    EXPECT_EQ("10",results.get_xy_string(2, 0));
-    EXPECT_EQ("20",results.get_xy_string(2, 1));
-    EXPECT_EQ("30",results.get_xy_string(2, 2));
+    EXPECT_DOUBLE_EQ(10.0, results.get_xy_double(1, 0));
+    EXPECT_DOUBLE_EQ(20.0, results.get_xy_double(1, 1));
+    EXPECT_DOUBLE_EQ(30.0, results.get_xy_double(1, 2));
 
 
+    EXPECT_EQ("10", results.get_xy_string(2, 0));
+    EXPECT_EQ("20", results.get_xy_string(2, 1));
+    EXPECT_EQ("30", results.get_xy_string(2, 2));
 
-    EXPECT_EQ(3,results.get_y_dimension());
-    EXPECT_EQ(3,results.get_x_dimension());
 
+    EXPECT_EQ(3, results.get_y_dimension());
+    EXPECT_EQ(3, results.get_x_dimension());
 
-    ASSERT_EXCEPTION({ results[0] = std::vector<double>();}, std::invalid_argument, "Assign raw vector int to cnumpy is possible only for match size" );
-    ASSERT_EXCEPTION({ results[0] = (std::vector<int>{2,3});}, std::invalid_argument, "Assign raw vector int to cnumpy is possible only for one column cnumpy" );
-    ASSERT_EXCEPTION({ results[0] = (std::vector<double>{2.0,3.0,4.0});}, std::invalid_argument, "Assigned value have other type then cnumpy " );
-    ASSERT_EXCEPTION({ (results[0])=10;}, std::invalid_argument, "Assign raw int to cnumpy is possible only for one column numpy" );
 
 }
 
-TEST(testCnumpy,operator_assign_raw_vector_double){
+TEST(testCnumpy, operator_assign_raw_vector_double) {
+    //given
     std::vector<double> raw_column_int;
     raw_column_int.push_back(18.0);
     raw_column_int.push_back(28.0);
@@ -721,41 +860,40 @@ TEST(testCnumpy,operator_assign_raw_vector_double){
 
     Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
 
+    //when
     Cnumpy first_column = results[1];
     first_column = raw_column_int;
 
-    EXPECT_DOUBLE_EQ(18.0,first_column.get_xy_double(0, 0));
-    EXPECT_DOUBLE_EQ(28.0,first_column.get_xy_double(0, 1));
-    EXPECT_DOUBLE_EQ(38.0,first_column.get_xy_double(0, 2));
 
-    EXPECT_EQ(10,results.get_xy_int(0,0) );
-    EXPECT_EQ(20,results.get_xy_int(0, 1));
-    EXPECT_EQ(30,results.get_xy_int(0, 2));
+    //then
+    EXPECT_DOUBLE_EQ(18.0, first_column.get_xy_double(0, 0));
+    EXPECT_DOUBLE_EQ(28.0, first_column.get_xy_double(0, 1));
+    EXPECT_DOUBLE_EQ(38.0, first_column.get_xy_double(0, 2));
 
-
-    EXPECT_DOUBLE_EQ(10.0,results.get_xy_double(1, 0));
-    EXPECT_DOUBLE_EQ(20.0,results.get_xy_double(1, 1));
-    EXPECT_DOUBLE_EQ(30.0,results.get_xy_double(1, 2));
+    EXPECT_EQ(10, results.get_xy_int(0, 0));
+    EXPECT_EQ(20, results.get_xy_int(0, 1));
+    EXPECT_EQ(30, results.get_xy_int(0, 2));
 
 
-    EXPECT_EQ("10",results.get_xy_string(2, 0));
-    EXPECT_EQ("20",results.get_xy_string(2, 1));
-    EXPECT_EQ("30",results.get_xy_string(2, 2));
+    EXPECT_DOUBLE_EQ(10.0, results.get_xy_double(1, 0));
+    EXPECT_DOUBLE_EQ(20.0, results.get_xy_double(1, 1));
+    EXPECT_DOUBLE_EQ(30.0, results.get_xy_double(1, 2));
 
 
+    EXPECT_EQ("10", results.get_xy_string(2, 0));
+    EXPECT_EQ("20", results.get_xy_string(2, 1));
+    EXPECT_EQ("30", results.get_xy_string(2, 2));
 
-    EXPECT_EQ(3,results.get_y_dimension());
-    EXPECT_EQ(3,results.get_x_dimension());
 
-    ASSERT_EXCEPTION({ results[0] = std::vector<double>();}, std::invalid_argument, "Assign raw vector int to cnumpy is possible only for match size" );
-    ASSERT_EXCEPTION({ results[0] = (std::vector<double>{2,3});}, std::invalid_argument, "Assign raw vector int to cnumpy is possible only for match size" );
-    ASSERT_EXCEPTION({ results[0] = (std::vector<std::string>{"2.0","3.0","4.0"});}, std::invalid_argument, "Assigned value have other type then cnumpy " );
-    ASSERT_EXCEPTION({ (results[0])=10;}, std::invalid_argument, "Assign raw int to cnumpy is possible only for one column numpy" );
+    EXPECT_EQ(3, results.get_y_dimension());
+    EXPECT_EQ(3, results.get_x_dimension());
+
 
 }
 
-TEST(testCnumpy,operator_assign_raw_vector_string){
+TEST(testCnumpy, operator_assign_raw_vector_string) {
 
+    //given
     std::vector<std::string> raw_column_string;
     raw_column_string.emplace_back("18");
     raw_column_string.emplace_back("28");
@@ -763,142 +901,174 @@ TEST(testCnumpy,operator_assign_raw_vector_string){
 
     Cnumpy results = create_fill_cnumpy_3x3_increased_value_int_double_string();
 
+    //when
     Cnumpy first_column = results[2];
     first_column = raw_column_string;
 
-    EXPECT_EQ("18",first_column.get_xy_string(0, 0));
-    EXPECT_EQ("28",first_column.get_xy_string(0, 1));
-    EXPECT_EQ("38",first_column.get_xy_string(0, 2));
+    //then
+    EXPECT_EQ("18", first_column.get_xy_string(0, 0));
+    EXPECT_EQ("28", first_column.get_xy_string(0, 1));
+    EXPECT_EQ("38", first_column.get_xy_string(0, 2));
 
-    EXPECT_EQ(10,results.get_xy_int(0,0) );
-    EXPECT_EQ(20,results.get_xy_int(0, 1));
-    EXPECT_EQ(30,results.get_xy_int(0, 2));
-
-
-    EXPECT_DOUBLE_EQ(10.0,results.get_xy_double(1, 0));
-    EXPECT_DOUBLE_EQ(20.0,results.get_xy_double(1, 1));
-    EXPECT_DOUBLE_EQ(30.0,results.get_xy_double(1, 2));
+    EXPECT_EQ(10, results.get_xy_int(0, 0));
+    EXPECT_EQ(20, results.get_xy_int(0, 1));
+    EXPECT_EQ(30, results.get_xy_int(0, 2));
 
 
-    EXPECT_EQ("10",results.get_xy_string(2, 0));
-    EXPECT_EQ("20",results.get_xy_string(2, 1));
-    EXPECT_EQ("30",results.get_xy_string(2, 2));
+    EXPECT_DOUBLE_EQ(10.0, results.get_xy_double(1, 0));
+    EXPECT_DOUBLE_EQ(20.0, results.get_xy_double(1, 1));
+    EXPECT_DOUBLE_EQ(30.0, results.get_xy_double(1, 2));
 
 
+    EXPECT_EQ("10", results.get_xy_string(2, 0));
+    EXPECT_EQ("20", results.get_xy_string(2, 1));
+    EXPECT_EQ("30", results.get_xy_string(2, 2));
 
-    EXPECT_EQ(3,results.get_y_dimension());
-    EXPECT_EQ(3,results.get_x_dimension());
 
-    ASSERT_EXCEPTION({ results[0] = std::vector<std::string>();}, std::invalid_argument, "Assign raw vector int to cnumpy is possible only for one column cnumpy" );
-    ASSERT_EXCEPTION({ results[0] = (std::vector<std::string>{"2","3"});}, std::invalid_argument, "Assign raw vector int to cnumpy is possible only for one column cnumpy" );
-    ASSERT_EXCEPTION({ results[2] = (std::vector<int>{1,2,3});}, std::invalid_argument, "Assigned value have other type then cnumpy " );
-    ASSERT_EXCEPTION({ (results[0])=10;}, std::invalid_argument, "Assign raw int to cnumpy is possible only for one column numpy" );
+    EXPECT_EQ(3, results.get_y_dimension());
+    EXPECT_EQ(3, results.get_x_dimension());
+
 
 }
 
-TEST(testCnumpy,operator_assign_raw_double){
+TEST(testCnumpy, operator_assign_raw_double) {
+    //given
     Cnumpy value = Cnumpy::of(5.0);
     double raw_value_to_assign = 20;
+    //when
     value = raw_value_to_assign;
 
+    //then
     EXPECT_EQ(20.0, value.get_xy_double(0, 0));
-    EXPECT_EQ(1,value.get_y_dimension());
-    EXPECT_EQ(1,value.get_x_dimension());
-
-    Cnumpy data_3x3= create_empty_cnumpy_3x3_int_double_string();
-
-    ASSERT_EXCEPTION({ value ="text";}, std::invalid_argument, "Assigned value have other type then cnumpy " );
-    ASSERT_EXCEPTION({ data_3x3="10";}, std::invalid_argument, "Assign raw double to cnumpy is possible only for one column numpy" );
+    EXPECT_EQ(1, value.get_y_dimension());
+    EXPECT_EQ(1, value.get_x_dimension());
 
 
 }
 
-TEST(testCnumpy,operator_assign_raw_string){
+TEST(testCnumpy, operator_assign_raw_string) {
+
+    //given
     Cnumpy value = Cnumpy::of("5");
     std::string raw_value_to_assign = "20";
+
+    //when
     value = raw_value_to_assign;
 
-    EXPECT_EQ("20", value.get_xy_string(0, 0));
-    EXPECT_EQ(1,value.get_y_dimension());
-    EXPECT_EQ(1,value.get_x_dimension());
-    Cnumpy data_3x3= create_empty_cnumpy_3x3_int_double_string();
-    ASSERT_EXCEPTION({ value =11;}, std::invalid_argument, "Assigned value have other type then cnumpy " );
-    ASSERT_EXCEPTION({ data_3x3=11;}, std::invalid_argument, "Assign raw int to cnumpy is possible only for one column numpy" );
 
+    //then
+    EXPECT_EQ("20", value.get_xy_string(0, 0));
+    EXPECT_EQ(1, value.get_y_dimension());
+    EXPECT_EQ(1, value.get_x_dimension());
 
 
 }
 
 
+TEST(testCnumpy, operator_subtraction) {
 
-
-TEST(testCnumpy,operator_subtraction){
+    //given
     Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
     Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
     Cnumpy result_substract_int = int_value_5_cnumpy - int_value_10_cnumpy;
 
     Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
     Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
+    //when
     Cnumpy result_substract_double = double_value_10_cnumpy - double_value_5_cnumpy;
 
+
+    //then
     EXPECT_EQ(-5, result_substract_int.get_xy_int(0, 0));
     EXPECT_DOUBLE_EQ(5.0, result_substract_double.get_xy_double(0, 0));
 
 
-
 }
 
-TEST(testCnumpy,operator_divide){
+TEST(testCnumpy, operator_divide) {
+    //given
     Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
     Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
-    Cnumpy result_substract_int = int_value_5_cnumpy / int_value_10_cnumpy;
+
 
     Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
     Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
-    Cnumpy result_substract_double = double_value_10_cnumpy / double_value_5_cnumpy;
 
+    //when
+    Cnumpy result_substract_double = double_value_10_cnumpy / double_value_5_cnumpy;
+    Cnumpy result_substract_int = int_value_5_cnumpy / int_value_10_cnumpy;
+
+    //then
     EXPECT_EQ(0, result_substract_int.get_xy_int(0, 0));
     EXPECT_DOUBLE_EQ(2.0, result_substract_double.get_xy_double(0, 0));
 
 }
 
-TEST(testCnumpy,operator_multiple){
+TEST(testCnumpy, operator_multiple) {
+    //given
     Cnumpy int_value_5_cnumpy = Cnumpy::of(5);
     Cnumpy int_value_10_cnumpy = Cnumpy::of(10);
-    Cnumpy result_substract_int = int_value_5_cnumpy * int_value_10_cnumpy;
+
 
     Cnumpy double_value_5_cnumpy = Cnumpy::of(5.0);
     Cnumpy double_value_10_cnumpy = Cnumpy::of(10.0);
-    Cnumpy result_substract_double = double_value_10_cnumpy * double_value_5_cnumpy;
 
+    //when
+    Cnumpy result_substract_double = double_value_10_cnumpy * double_value_5_cnumpy;
+    Cnumpy result_substract_int = int_value_5_cnumpy * int_value_10_cnumpy;
+    //then
     EXPECT_EQ(50, result_substract_int.get_xy_int(0, 0));
     EXPECT_DOUBLE_EQ(50.0, result_substract_double.get_xy_double(0, 0));
 
 }
 
-TEST(testCnumpy,operator_minus){
+TEST(testCnumpy, operator_minus) {
+    //when
     Cnumpy int_value_5_cnumpy = -Cnumpy::of(5);
     Cnumpy double_value_10_cnumpy = -Cnumpy::of(10.0);
 
-
-
+    //then
     EXPECT_EQ(-5, (int_value_5_cnumpy).get_xy_int(0, 0));
     EXPECT_DOUBLE_EQ(-10.0, double_value_10_cnumpy.get_xy_double(0, 0));
 
 }
 
-TEST(testCnumpy,array_access_operator){
+
+
+TEST(testCnumpy,array_acces_operator_bad_indexes){
+    Cnumpy data_3x3 = create_empty_cnumpy_3x3_int_double_string();
+
+    ASSERT_EXCEPTION({ data_3x3[-1] = 11; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+
+    ASSERT_EXCEPTION({ data_3x3[77] = 11; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+
+    ASSERT_EXCEPTION({ data_3x3[2][-1] = 11; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::ACCESS_INDEX_MUST_BE_GREATER_OR_EQUAL_ZERO);
+
+    ASSERT_EXCEPTION({ data_3x3[2][11] = 11; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+
+    ASSERT_EXCEPTION({ data_3x3[0][0][9] = 11; }, std::invalid_argument,
+                     Exception_Cnumpy_Message::INDEXES_MUST_BE_SMALLER_THAN_DIMENSION_OF_CNUMPY);
+}
+
+TEST(testCnumpy, array_access_operator) {
+
+    //given
     Cnumpy one_value_cnumpy = Cnumpy::of(5);
-    EXPECT_EQ(5, one_value_cnumpy[0].get_xy_int(0,0));
 
     Cnumpy cnumpy_n_n = create_fill_cnumpy_3x3_increased_value_int_double_string();
 
+    //then
     Cnumpy int_rows = cnumpy_n_n[0];
-    EXPECT_EQ(10,int_rows[0].get_xy_int(0,0));
-    EXPECT_EQ(20,int_rows[1].get_xy_int(0,0));
-    EXPECT_EQ(30,int_rows[2].get_xy_int(0,0));
+    EXPECT_EQ(5, one_value_cnumpy[0].get_xy_int(0, 0));
+    EXPECT_EQ(10, int_rows[0].get_xy_int(0, 0));
+    EXPECT_EQ(20, int_rows[1].get_xy_int(0, 0));
+    EXPECT_EQ(30, int_rows[2].get_xy_int(0, 0));
 
-    EXPECT_DOUBLE_EQ(20.0,(cnumpy_n_n[1][1]).get_xy_double(0,0));
-    EXPECT_EQ("20",(cnumpy_n_n[2][1]).get_xy_string(0,0));
+    EXPECT_DOUBLE_EQ(20.0, (cnumpy_n_n[1][1]).get_xy_double(0, 0));
+    EXPECT_EQ("20", (cnumpy_n_n[2][1]).get_xy_string(0, 0));
 
 }

@@ -930,9 +930,12 @@ Cnumpy Cnumpy::operator=(std::vector<std::string> column_data){
 
 Cnumpy Cnumpy::operator[](int index) const {
 
+
+
     int array_grether_then_1N = 1;
     int one_column_array = 1;
     if (get_x_dimension() > array_grether_then_1N) {
+        throw_exception_when_access_to_no_exists_index(index,0);
         Type type_col = type_column[index];
 
         if (type_col == Type::integer_type) {
@@ -957,6 +960,7 @@ Cnumpy Cnumpy::operator[](int index) const {
 
     } else {
 
+        throw_exception_when_access_to_no_exists_index(0,index);
         int index_type_for_first_column = 0;
         Type type_col = type_column[index_type_for_first_column];
         if (type_col == Type::integer_type) {
