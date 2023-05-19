@@ -1621,3 +1621,32 @@ TEST(testCnumpy,constructor_from_vector){
 
 
 }
+
+
+TEST(testCnumpy,count_test){
+
+    //given
+   Cnumpy data_3x3 = create_empty_cnumpy_3x3_int_double_string();
+
+   data_3x3.set(0,0,18);
+   data_3x3.set(0,1,18);
+
+   data_3x3.set(1,1,17.0);
+
+   //when
+   int count_18_in_first_column_two_elements = data_3x3.count(0,Cnumpy::of(18));
+   int count_17dot_zero_in_second_column_one_element = data_3x3.count(1,Cnumpy::of(17.0));
+   int count_no_existing_values_in_third_column = data_3x3.count(2,Cnumpy::of("no exists text"));
+   int count_in_one_dimension_data = data_3x3[0].count(0,Cnumpy::of(18));
+
+   //then
+
+   ASSERT_EQ(2,count_18_in_first_column_two_elements);
+   ASSERT_EQ(1,count_17dot_zero_in_second_column_one_element);
+   ASSERT_EQ(0,count_no_existing_values_in_third_column);
+
+   ASSERT_EQ(2,count_in_one_dimension_data);
+
+
+
+}

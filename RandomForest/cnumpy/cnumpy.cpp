@@ -147,6 +147,8 @@ Cnumpy::Cnumpy(long x_dim, long y_dim, std::vector<Type> type_col, std::vector<s
 
 
 Cnumpy::Cnumpy(long x_dim, long y_dim, std::vector<Type> type_col) {
+    //find better place
+    set_math_calculations_strategy();
 
     throws_exception_when_invalid_dimension_cnumpys(x_dim,y_dim);
 
@@ -521,14 +523,17 @@ Cnumpy Cnumpy::of(std::string value) {
 
 
 Cnumpy::Cnumpy(int value) {
+
     (*this) =  create_cnumpy_with_one_value(value, Type::integer_type, default_label);
 }
 
  Cnumpy::Cnumpy(double value) {
+
      (*this) = create_cnumpy_with_one_value(value, Type::double_type, default_label);
 }
 
 Cnumpy::Cnumpy(std::string value) {
+
      (*this) = create_cnumpy_with_one_value(value, Type::string_type, default_label);
 }
 
@@ -1164,16 +1169,19 @@ Cnumpy Cnumpy::of(std::vector<std::string> data) {
 }
 
 Cnumpy::Cnumpy(std::vector<int>data) {
+
     Cnumpy result = create_cnumpy_with_one_column_from_raw_data(data,1,data.size(),Type::integer_type,default_label);
     (*this) = result;
 }
 
 Cnumpy::Cnumpy(std::vector<double>data) {
+
     Cnumpy result = create_cnumpy_with_one_column_from_raw_data(data,1,data.size(),Type::double_type,default_label);
     (*this) = result;
 }
 
 Cnumpy::Cnumpy(std::vector<std::string>data) {
+
     Cnumpy result = create_cnumpy_with_one_column_from_raw_data(data,1,data.size(),Type::string_type,default_label);
     (*this) = result;
 }
@@ -1251,5 +1259,27 @@ int Cnumpy::calculate_position_xy_value_in_raw_store(int x,int y, Type type_colu
     return offset_column + y;
 }
 
+int Cnumpy::count(int columns,Cnumpy value) const {
+    int quantity = 0;
+
+    if(get_x_dimension() > 1) {
+
+        for (int i = 0; i < get_y_dimension(); ++i) {
+            if ((*this)[columns][i] == value) {
+                quantity++;
+            }
+        }
+
+    }else{
+        for (int i = 0; i < get_y_dimension(); ++i) {
+            if ((*this)[i] == value) {
+                quantity++;
+            }
+        }
+
+
+    }
+    return quantity;
+}
 
 

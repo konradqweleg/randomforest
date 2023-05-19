@@ -4,29 +4,29 @@
 #include <vector>
 #include "type.h"
 #include "Exception_Cnumpy_Message.h"
+#include "cnumpy/math/histogram_base.h"
+
+
+#include <memory>
 
 /*
  * Warning this version Cnumpy operator [] use copy semantic so you shouldn't useage it to assign use method set
  */
-
 /*Do zrobienia
- * Copy or reference. To thinking
- *  Dodanieoperatora = tak aby mozna bylo przypisywac cnumpy 1x1,cnumpy 1xn i ,cnumpy nxn
- *  dodanie itertorow
- *  Dodanie testow brakuajcych
- *  wyjatkow kiedy argument poza  zakresem cnumpy
- *  refaktor kodu hist i pozostalych metod
  *  metoda na nazwe kolumny i typ
  */
 
 
 
+
+
 class Cnumpy {
-//!! Add operator +=, add const,iteratory,set method allows set cnumpy,testy,wyjatki poza indexem dostep
 private:
 
     static std::string default_label;
     static int first_element_index;
+
+
 
 
     std::vector<std::string> string_store = std::vector<std::string>();
@@ -46,6 +46,20 @@ private:
     int how_many_column_about_type(Type type) const;
 
     int position_actual_column_in_same_column_type(Type type, int index_column) const;
+
+
+    //std::unique_ptr<histogram> histogram_calculator_strategy;
+ // histogram* histo  = new histogram_base();
+
+protected:
+    void set_math_calculations_strategy() {
+      //  histogram * oo = new histogram_base();
+     // std::unique_ptr<histogram> pBase( new histogram_base() );
+    //  histogram_calculator_strategy = std::make_unique<histogram_base>();
+
+    }
+
+private:
 
 
     template<typename T>
@@ -108,6 +122,9 @@ private:
 public:
 
 
+    Cnumpy(const Cnumpy&){
+        set_math_calculations_strategy();
+    }
     static Cnumpy of(int value);
 
     static Cnumpy of(double value);
@@ -267,7 +284,10 @@ public:
     friend std::ostream &operator<<(std::ostream &os, Cnumpy &&obj);
 
 
+
     //Move to utils class
+
+    int count(int column_index,Cnumpy value) const;
 
     Cnumpy get_min_value_in_column(int column_index) const;
 
