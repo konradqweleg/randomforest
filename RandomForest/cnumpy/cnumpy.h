@@ -117,10 +117,7 @@ private:
 
 public:
 
-    static void set_histogram_calculation_strategy(histogram  * hist_strategy) {
-         throws_exception_when_null_pointer(hist_strategy);
-         histogram_calculator_strategy = hist_strategy;
-    }
+    static void set_histogram_calculation_strategy(histogram  * hist_strategy);
 
     static Cnumpy of(int value);
 

@@ -12,6 +12,12 @@ int Cnumpy::first_element_index = 0;
 histogram * Cnumpy::histogram_calculator_strategy = nullptr;
 
 
+ void Cnumpy::set_histogram_calculation_strategy(histogram  * hist_strategy) {
+    throws_exception_when_null_pointer(hist_strategy);
+    histogram_calculator_strategy = hist_strategy;
+}
+
+
 Cnumpy Cnumpy::hist(int column_index) const {
    throws_exception_when_null_pointer(histogram_calculator_strategy);
    return histogram_calculator_strategy->hist((*this), column_index);
