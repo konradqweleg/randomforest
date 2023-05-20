@@ -14,10 +14,16 @@ using namespace std::chrono;
 #include "csv/read_csv/ReadCSV_EachMethodOpenCloseFile.h"
 #include "entropy/Entropy.h"
 #include "cnumpy/math/histogram_base.h"
-int main() {
 
+
+
+void set_global_strategy_for_cnumpy(){
     histogram* hist_strategy = new histogram_base();
     Cnumpy::set_histogram_calculation_strategy(hist_strategy);
+}
+
+int main() {
+    set_global_strategy_for_cnumpy();
 
     csv csv_calc;
     Cnumpy data_for_test_entropy = csv_calc.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv",",");

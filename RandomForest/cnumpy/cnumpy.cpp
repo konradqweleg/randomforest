@@ -13,11 +13,9 @@ histogram * Cnumpy::histogram_calculator_strategy = nullptr;
 
 
 Cnumpy Cnumpy::hist(int column_index) const {
-   if(histogram_calculator_strategy == nullptr){
-       throw std::exception();
-   }else {
-       return histogram_calculator_strategy->hist((*this), column_index);
-   }
+   throws_exception_when_null_pointer(histogram_calculator_strategy);
+   return histogram_calculator_strategy->hist((*this), column_index);
+
 }
 
 
