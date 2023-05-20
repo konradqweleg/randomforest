@@ -1650,3 +1650,67 @@ TEST(testCnumpy,count_test){
 
 
 }
+
+TEST(testCnumpy,filtered_int_column){
+
+    //given
+    Cnumpy data_3x3 = create_fill_cnumpy_3x3_increased_value_int_double_string();
+    data_3x3.set(0,1,10);
+
+    //when
+    Cnumpy filtered_data = data_3x3.filter(0,Cnumpy::of(10));
+
+    ASSERT_EQ(2,filtered_data.get_y_dimension());
+    ASSERT_EQ(3,filtered_data.get_x_dimension());
+
+    ASSERT_EQ(10,filtered_data.get_xy_int(0,0));
+    ASSERT_EQ(10,filtered_data.get_xy_int(0,1));
+
+    ASSERT_DOUBLE_EQ(10.0,filtered_data.get_xy_double(1,0));
+    ASSERT_DOUBLE_EQ(20.0,filtered_data.get_xy_double(1,1));
+
+    ASSERT_EQ("10",filtered_data.get_xy_string(2,0));
+    ASSERT_EQ("20",filtered_data.get_xy_string(2,1));
+
+
+
+
+
+}
+
+
+TEST(testCnumpy,filtered_string_column){
+
+    //given
+    Cnumpy data_3x3 = create_fill_cnumpy_3x3_increased_value_int_double_string();
+
+    //when
+    Cnumpy filtered_data = data_3x3.filter(2,Cnumpy::of("10"));
+
+    ASSERT_EQ(1,filtered_data.get_y_dimension());
+    ASSERT_EQ(3,filtered_data.get_x_dimension());
+
+    ASSERT_EQ(10,filtered_data.get_xy_int(0,0));
+    ASSERT_DOUBLE_EQ(10.0,filtered_data.get_xy_double(1,0));
+    ASSERT_EQ("10",filtered_data.get_xy_string(2,0));
+
+
+}
+
+TEST(testCnumpy,filtered_double_column){
+
+    //given
+    Cnumpy data_3x3 = create_fill_cnumpy_3x3_increased_value_int_double_string();
+
+    //when
+    Cnumpy filtered_data = data_3x3.filter(1,Cnumpy::of(30.0));
+
+    ASSERT_EQ(1,filtered_data.get_y_dimension());
+    ASSERT_EQ(3,filtered_data.get_x_dimension());
+
+    ASSERT_EQ(30,filtered_data.get_xy_int(0,0));
+    ASSERT_DOUBLE_EQ(30.0,filtered_data.get_xy_double(1,0));
+    ASSERT_EQ("30",filtered_data.get_xy_string(2,0));
+
+
+}

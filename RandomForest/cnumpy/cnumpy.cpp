@@ -1187,4 +1187,28 @@ int Cnumpy::count(int columns,Cnumpy value) const {
     return quantity;
 }
 
+Cnumpy Cnumpy::filter(int column_where_filter, Cnumpy filter_value) {
+    int count_value = count(column_where_filter,filter_value);
+    Cnumpy filtered_data = Cnumpy(get_x_dimension(), count_value, get_type_columns(), get_column_name());
+
+    int filtered_i_index = 0;
+    for(int i=0;i<get_y_dimension();++i){
+
+        if((*this)[column_where_filter][i] == filter_value){
+
+            for(int j=0;j<get_x_dimension();++j){
+                Cnumpy value = (*this)[j][i];
+                filtered_data.set(j,filtered_i_index,value);
+
+            }
+            filtered_i_index++;
+        }
+
+
+
+    }
+
+    return filtered_data;
+}
+
 

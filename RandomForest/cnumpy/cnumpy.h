@@ -117,6 +117,7 @@ private:
 
 public:
 
+
     static void set_histogram_calculation_strategy(histogram  * hist_strategy);
 
     static Cnumpy of(int value);
@@ -291,6 +292,7 @@ public:
 
     Cnumpy hist(int column_index) const;
 
+    Cnumpy filter(int column_where_filter,Cnumpy filter_value);
 
 };
 

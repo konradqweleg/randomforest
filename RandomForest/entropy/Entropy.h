@@ -52,29 +52,32 @@ public:
     }
 
     Cnumpy CNUMPY_calculate_entropy_all_data_based_on_column(Cnumpy data,int index_column_determine_all_entropy_dataset){
-        std::cout<<std::endl;
         Cnumpy histogram_determine_column = data.hist(index_column_determine_all_entropy_dataset);
         Cnumpy entropy = Cnumpy::of(0.0);
 
-        std::cout<<histogram_determine_column;
-
         for(int i=0;i<histogram_determine_column.get_y_dimension();++i){
-
-            std::cout<<"START I "<<i<<std::endl;
-            std::cout<<"VALUE "<<((double)histogram_determine_column[i][1].get_xy_int(0,0))<<std::endl;
-            Cnumpy percentage_quantity_in_all_data_values = Cnumpy::of(((double)histogram_determine_column[i][1].get_xy_int(0,0)) / (data.get_y_dimension()));
-            std::cout<<"PGA "<<std::endl << percentage_quantity_in_all_data_values<<std::endl;
+            Cnumpy percentage_quantity_in_all_data_values = Cnumpy::of(((double)histogram_determine_column[1][i].get_xy_int(0,0)) / (data.get_y_dimension()));
             Cnumpy log_percentage_quantity_in_all_values =  Cnumpy::of( log2(percentage_quantity_in_all_data_values.get_xy_double(0,0)));
-            std::cout<<"PGA LOG"<<std::endl << log_percentage_quantity_in_all_values<<std::endl;
             Cnumpy entropy_one_value = percentage_quantity_in_all_data_values * log_percentage_quantity_in_all_values;
-            std::cout<<"Entropy"<<std::endl << entropy<<std::endl;
-            std::cout<<"Entropy One values"<<std::endl << entropy_one_value<<std::endl;
             entropy-=entropy_one_value;
         }
 
         return entropy;
     }
 
+    Cnumpy CNUMPY_calculate_entropy_column_in_predict_column(Cnumpy data,int index_column,int index_predict_column){
+//        Cnumpy histogram_column = data.hist(index_column);
+//        Cnumpy entropy = Cnumpy::of(0.0);
+//
+//        for(int i=0;i<histogram_determine_column.get_y_dimension();++i){
+//            Cnumpy percentage_quantity_in_all_data_values = Cnumpy::of(((double)histogram_determine_column[1][i].get_xy_int(0,0)) / (data.get_y_dimension()));
+//            Cnumpy log_percentage_quantity_in_all_values =  Cnumpy::of( log2(percentage_quantity_in_all_data_values.get_xy_double(0,0)));
+//            Cnumpy entropy_one_value = percentage_quantity_in_all_data_values * log_percentage_quantity_in_all_values;
+//            entropy-=entropy_one_value;
+//        }
+//
+//        return entropy;
+    }
 
 
 
