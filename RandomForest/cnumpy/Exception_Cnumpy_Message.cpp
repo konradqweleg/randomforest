@@ -14,3 +14,4 @@
   std::string Exception_Cnumpy_Message::TEXT_MULTIPLICATION_IS_NOT_ALLOWED = "Text multiplication is not allowed";
   std::string Exception_Cnumpy_Message::TEXT_NEGATION_IS_NOT_ALLOWED= "Text negation is not allowed";
   std::string Exception_Cnumpy_Message::OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS = "Operation allowed only for same matrix dimensions";
+  std::string Exception_Cnumpy_Message::NULL_POINTER_STRATEGY = "The pointer for the strategy is null";

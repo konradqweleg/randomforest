@@ -5,9 +5,7 @@
 #ifndef RANDOMFOREST_HISTOGRAM_BASE_H
 #define RANDOMFOREST_HISTOGRAM_BASE_H
 
-
 #include "histogram.h"
-#include "../cnumpy.h"
 
 class histogram_base : public histogram{
 public:

@@ -4,6 +4,7 @@
 
 #include "histogram_base.h"
 
+
 Cnumpy histogram_base::hist(Cnumpy data, int column_index) {
 
     Cnumpy unique_values_hist_key = data.get_unique_column_values(column_index);

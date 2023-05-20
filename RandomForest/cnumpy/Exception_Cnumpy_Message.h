@@ -18,6 +18,7 @@ public:
      static std::string TEXT_MULTIPLICATION_IS_NOT_ALLOWED;
      static std::string TEXT_NEGATION_IS_NOT_ALLOWED;
      static std::string OPERATION_ALLOWED_ONLY_FOR_SAME_MATRIX_DIMENSIONS;
+     static std::string NULL_POINTER_STRATEGY;
 
 
 };

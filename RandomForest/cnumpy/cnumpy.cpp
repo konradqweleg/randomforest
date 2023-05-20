@@ -6,8 +6,20 @@
 #include "../Collection_Utility/Collection_Utility.h"
 #include <bits/stdc++.h>
 
+#include "math/histogram.h"
 std::string Cnumpy::default_label = "*";
 int Cnumpy::first_element_index = 0;
+histogram * Cnumpy::histogram_calculator_strategy = nullptr;
+
+
+Cnumpy Cnumpy::hist(int column_index) const {
+   if(histogram_calculator_strategy == nullptr){
+       throw std::exception();
+   }else {
+       return histogram_calculator_strategy->hist((*this), column_index);
+   }
+}
+
 
 
 
@@ -147,8 +159,7 @@ Cnumpy::Cnumpy(long x_dim, long y_dim, std::vector<Type> type_col, std::vector<s
 
 
 Cnumpy::Cnumpy(long x_dim, long y_dim, std::vector<Type> type_col) {
-    //find better place
-    set_math_calculations_strategy();
+
 
     throws_exception_when_invalid_dimension_cnumpys(x_dim,y_dim);
 
@@ -355,116 +366,6 @@ Cnumpy Cnumpy::get_max_value_in_column(int column_index) const {
 }
 
 
-Cnumpy Cnumpy::hist(int column_index, double bins) const {
-    Type column_type = type_column[column_index];
-
-
-    if (column_type != Type::string_type) {
-        Cnumpy step = Cnumpy::of(bins);
-        if (column_type == Type::integer_type) {
-            int bins_as_int = (int) bins;
-            step = Cnumpy::of(bins_as_int);
-        }
-
-        Cnumpy min_value = get_min_value_in_column(column_index);
-        Cnumpy max_value = get_max_value_in_column(column_index);
-
-
-        Cnumpy column_to_hist_values = (*this)[column_index];
-        std::map<Cnumpy, int> histogram_values;
-
-
-        while (min_value < max_value) {
-            if (histogram_values.count(min_value) == 0) {
-                histogram_values[min_value] = 0;
-            } else {
-                histogram_values[min_value] = histogram_values[min_value] + 1;
-            }
-
-            min_value = min_value + step;
-
-        }
-
-        for (int i = 0; i < column_to_hist_values.y_dimension; i++) {
-            Cnumpy elem = column_to_hist_values[i];
-            Cnumpy bucket_for_element = elem / step;
-            histogram_values[bucket_for_element] = histogram_values[bucket_for_element] + 1;
-
-        }
-
-
-        std::vector<Type> type_column_histogram_cnumpy;
-        type_column_histogram_cnumpy.push_back(column_type);
-        type_column_histogram_cnumpy.push_back(Type::integer_type);
-
-        std::vector<std::string> columns_name_histogram_cnumpy;
-        columns_name_histogram_cnumpy.push_back("value");
-        columns_name_histogram_cnumpy.push_back("quantity");
-
-
-        std::vector<Cnumpy> key_hist_cnumpy;
-        std::vector<int> value_count_cnumpy;
-
-        for (const auto &entry: histogram_values) {
-            key_hist_cnumpy.push_back(entry.first);
-            value_count_cnumpy.push_back(entry.second);
-        }
-
-        Cnumpy results = Cnumpy(2, key_hist_cnumpy.size(), type_column_histogram_cnumpy, columns_name_histogram_cnumpy);
-        results.set_column(0, key_hist_cnumpy);
-        results.set_column(1, value_count_cnumpy);
-        return results;
-    } else {
-
-
-        if (bins > 1 || bins < 0.95) {
-            throw std::invalid_argument("For text, the division index cannot be different from 1");
-        }
-
-        Cnumpy column_to_hist_values = (*this)[column_index];
-        std::map<Cnumpy, int> histogram_values;
-
-
-        for (int i = 0; i < column_to_hist_values.y_dimension; i++) {
-
-            if (histogram_values.count(column_to_hist_values[i]) == 0) {
-                histogram_values[column_to_hist_values[i]] = 1;
-            } else {
-                histogram_values[column_to_hist_values[i]] = histogram_values[column_to_hist_values[i]] + 1;
-            }
-
-
-        }
-
-
-        std::vector<Type> type_column_histogram_cnumpy;
-        type_column_histogram_cnumpy.push_back(column_type);
-        type_column_histogram_cnumpy.push_back(Type::integer_type);
-
-        std::vector<std::string> columns_name_histogram_cnumpy;
-        columns_name_histogram_cnumpy.push_back("value");
-        columns_name_histogram_cnumpy.push_back("quantity");
-
-
-        std::vector<Cnumpy> key_hist_cnumpy;
-        std::vector<int> value_count_cnumpy;
-
-        for (const auto &entry: histogram_values) {
-            key_hist_cnumpy.push_back(entry.first);
-            value_count_cnumpy.push_back(entry.second);
-        }
-
-        Cnumpy results = Cnumpy(2, key_hist_cnumpy.size(), type_column_histogram_cnumpy, columns_name_histogram_cnumpy);
-        results.set_column(0, key_hist_cnumpy);
-        results.set_column(1, value_count_cnumpy);
-
-        return results;
-
-
-    }
-
-
-}
 
 
 Cnumpy Cnumpy::get_unique_column_values(int column_index) const {

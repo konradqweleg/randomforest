@@ -4,7 +4,6 @@
 #include <vector>
 #include "type.h"
 #include "Exception_Cnumpy_Message.h"
-#include "cnumpy/math/histogram_base.h"
 
 
 #include <memory>
@@ -15,7 +14,8 @@
 /*Do zrobienia
  *  metoda na nazwe kolumny i typ
  */
-
+class histogram;
+class histogram_base;
 
 
 
@@ -48,19 +48,15 @@ private:
     int position_actual_column_in_same_column_type(Type type, int index_column) const;
 
 
-    //std::unique_ptr<histogram> histogram_calculator_strategy;
- // histogram* histo  = new histogram_base();
 
-protected:
-    void set_math_calculations_strategy() {
-      //  histogram * oo = new histogram_base();
-     // std::unique_ptr<histogram> pBase( new histogram_base() );
-    //  histogram_calculator_strategy = std::make_unique<histogram_base>();
+    static histogram* histogram_calculator_strategy;
 
+
+    static void throws_exception_when_null_pointer(void * ptr){
+        if(ptr == nullptr){
+            throw std::invalid_argument(Exception_Cnumpy_Message::NULL_POINTER_STRATEGY);
+        }
     }
-
-private:
-
 
     template<typename T>
     static Cnumpy
@@ -121,10 +117,11 @@ private:
 
 public:
 
-
-    Cnumpy(const Cnumpy&){
-        set_math_calculations_strategy();
+    static void set_histogram_calculation_strategy(histogram  * hist_strategy) {
+         throws_exception_when_null_pointer(hist_strategy);
+         histogram_calculator_strategy = hist_strategy;
     }
+
     static Cnumpy of(int value);
 
     static Cnumpy of(double value);
@@ -295,7 +292,7 @@ public:
 
     Cnumpy get_unique_column_values(int column_index) const;
 
-    Cnumpy hist(int column_index, double bins = 1.0) const;
+    Cnumpy hist(int column_index) const;
 
 
 };

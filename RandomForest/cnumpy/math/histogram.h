@@ -11,7 +11,6 @@
 #include "../cnumpy.h"
 
 
-class Cnumpy;
 
 class histogram{
 
