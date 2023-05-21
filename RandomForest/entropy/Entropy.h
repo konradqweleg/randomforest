@@ -65,19 +65,65 @@ public:
         return entropy;
     }
 
-    Cnumpy CNUMPY_calculate_entropy_column_in_predict_column(Cnumpy data,int index_column,int index_predict_column){
-//        Cnumpy histogram_column = data.hist(index_column);
-//        Cnumpy entropy = Cnumpy::of(0.0);
-//
-//        for(int i=0;i<histogram_determine_column.get_y_dimension();++i){
-//            Cnumpy percentage_quantity_in_all_data_values = Cnumpy::of(((double)histogram_determine_column[1][i].get_xy_int(0,0)) / (data.get_y_dimension()));
-//            Cnumpy log_percentage_quantity_in_all_values =  Cnumpy::of( log2(percentage_quantity_in_all_data_values.get_xy_double(0,0)));
-//            Cnumpy entropy_one_value = percentage_quantity_in_all_data_values * log_percentage_quantity_in_all_values;
-//            entropy-=entropy_one_value;
-//        }
-//
-//        return entropy;
+
+    Cnumpy CNUMPY_calculate_information_profit_for_column(Cnumpy data,int column,int predict_column){
+        Cnumpy predict_column_entropy = CNUMPY_calculate_entropy_all_data_based_on_column(data,predict_column);
+        Cnumpy values_entropy = CNUMPY_calculate_entropy_for_columns(data,column,predict_column);
+        return predict_column_entropy - values_entropy;
     }
+
+
+    Cnumpy CNUMPY_calculate_entropy_for_columns(Cnumpy data, int column_index, int predict_column_index){
+        Cnumpy unique_values = data.get_unique_column_values(column_index);
+     //   std::cout<<unique_values;
+
+
+
+
+      //  std::vector<Type> calc{Type::double_type};
+      //  std::vector<std::string> name{"exb"};
+      //  Cnumpy exibition_value = Cnumpy(1, unique_values.get_y_dimension(), calc, name);
+
+        Cnumpy final_result = Cnumpy::of(0.0);
+
+        for(int i=0;i<unique_values.get_y_dimension();++i) {
+         //   std::cout<<"Obliczam dla wartosci atrybutu = "<<unique_values[i]<<std::endl;
+            Cnumpy filter_orignal_data = data.filter(column_index, unique_values[i]);
+            Cnumpy histo = filter_orignal_data.hist(predict_column_index);
+            Cnumpy result = Cnumpy::of(0.0);
+            for(int j=0;j<histo.get_y_dimension();++j){
+
+             Cnumpy xx   =  (   (double) histo[1][j].get_xy_int(0,0)       /       (double) (filter_orignal_data.get_y_dimension())         )    *  log2(                   (double) histo[1][j].get_xy_int(0,0)       /       (double) (filter_orignal_data.get_y_dimension())    );
+             result -= xx;
+              //  result -= (-(double)((histo[1][j].get_xy_int(0,0)) / (double) (filter_orignal_data.get_y_dimension())))
+            }
+
+       //     std::cout<<"RR";
+          //  std::cout<<result;
+         //   std::cout<<"Jak licze "<<std::endl;
+          //  std::cout<<histo.get_y_dimension()<<std::endl;
+            Cnumpy yyy = data.count(column_index,unique_values[i]);
+          //  std::cout<<"..:"<<yyy.get_xy_int(0,0)<<std::endl;
+          //  std::cout<<data.get_y_dimension()<<std::endl;
+          //  std::cout<<result.get_xy_double(0,0)<<std::endl;
+            Cnumpy score = Cnumpy::of( ((double)yyy.get_xy_int(0,0) /(double) data.get_y_dimension()) * result.get_xy_double(0,0));
+
+          //  std::cout<<"Wynik";
+          //  std::cout<<score;
+            final_result +=  score;
+
+
+
+        }
+
+     //  std::cout<<"Koniec"<<std::endl;
+     //  std::cout<<final_result;
+
+        return final_result;
+    }
+
+
+
 
 
 

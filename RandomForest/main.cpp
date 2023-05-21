@@ -26,14 +26,23 @@ int main() {
     set_global_strategy_for_cnumpy();
 
     csv csv_calc;
-    Cnumpy data_for_test_entropy = csv_calc.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv",",");
+    Cnumpy data_for_test_entropy = csv_calc.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\tests\\data.csv",",");
     Cnumpy hist_column =  data_for_test_entropy.hist(0);
-    std::cout<<hist_column;
+    //std::cout<<hist_column;
 
 
     Entropy entropy_calc;
+
+    entropy_calc.CNUMPY_calculate_entropy_for_columns(data_for_test_entropy, 1, 2);
+
+
+    Cnumpy column_1 = entropy_calc.CNUMPY_calculate_information_profit_for_column(data_for_test_entropy,0,2);
+    Cnumpy column_2 = entropy_calc.CNUMPY_calculate_information_profit_for_column(data_for_test_entropy,1,2);
+
+    std::cout<<column_1;
+    std::cout<<column_2;
    // std::cout<<entropy_calc.calculate_entropy_all_data_based_on_column(data_for_test_entropy,0)<<std::endl;
-    std::cout<<entropy_calc.CNUMPY_calculate_entropy_all_data_based_on_column(data_for_test_entropy,0)<<std::endl;
+  //  std::cout<<entropy_calc.CNUMPY_calculate_entropy_all_data_based_on_column(data_for_test_entropy,0)<<std::endl;
 
 
   //  Cnumpy xd = Cnumpy::of(100);
