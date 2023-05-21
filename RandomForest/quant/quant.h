@@ -42,38 +42,111 @@ class quant_utility {
 public:
 
     //this is only my method so is no quite optimal for example, parametrized is good option
-    static std::vector<double> quant_column_double_betweeen_method_result_avg_group(std::vector<double> column_data, double percentage_group_in_split) {
-        double hundred_percentage = 1.0;
-        int how_many_groups = hundred_percentage / percentage_group_in_split;
+    static Cnumpy quant_column_double_betweeen_method_result_avg_group(Cnumpy data,int column_index, int how_many_groups) {
 
         std::vector<double> result;
 
-        double min_value = *min_element(std::begin(column_data), std::end(column_data));
-        double max_value = *max_element(std::begin(column_data), std::end(column_data));
+        double min_value = data.get_min_value_in_column(column_index).get_xy_double(0,0);
+        double max_value = data.get_max_value_in_column(column_index).get_xy_double(0,0);
 
         double diff_min_max = max_value - min_value;
         double step = diff_min_max / how_many_groups;
         double threshold = min_value + step;
 
+        std::cout<<diff_min_max<<std::endl;
+        std::cout<<step<<std::endl;
+        std::cout<<threshold<<std::endl;
 
-        for (int i = 0; i < how_many_groups; i++) {
+        double min_ =0.0;
+        double max_ =1.0;
 
-            for (double value: column_data) {
-                if (value < threshold && value > threshold - step) {
+        for (double value: data.get_column_double(column_index)) {
+            double depart = (value-min_value) / ((double)step);
+                std::cout<<"Przedzial : "<<depart<<std::endl;
+
+                for(int i =0;i<how_many_groups;++i){
+                    if( depart >= min_ && depart < max_ ){
+
+                        double department_range_avg =  (step * (i+1));
+                        std::cout<<"Prognoza "<<i<< " Wartosc:"<<department_range_avg<<std::endl;
+                        result.push_back(department_range_avg);
+
+                        break;
+                    }
+
+                    if(i == (how_many_groups-1)){
+
+                        double department_range_avg =  (step * (i+1));
+                        result.push_back(department_range_avg);
+                        std::cout<<"Prognoza "<<i<< " Wartosc:"<<department_range_avg<<std::endl;
+                    }
+                    min_ +=1.0;
+                    max_+=1.0;
+                }
+                min_ =0.0;
+                max_ =1.0;
 
 
-                    double department_range_avg = threshold + (threshold - (threshold-step))/2;
-                    result.push_back(  department_range_avg);
+        }
+
+//        for (int i = 0; i < how_many_groups; i++) {
+//
+//            for (double value: data.get_column_double(column_index)) {
+//                if (value < threshold && value > threshold - step) {
+//
+//                    double department_range_avg = threshold + (threshold - (threshold-step))/2;
+//                    result.push_back(  department_range_avg);
+//                }
+//            }
+//            threshold += step;
+//
+//        }
+
+        return Cnumpy::of(result);
+    }
+
+
+    static Cnumpy CNUMPY_quant_column_double_betweeen_method_result_avg_group(Cnumpy data,int index_column, int how_groups) {
+        std::cout<<":D";
+        Cnumpy how_many_groups = Cnumpy::of(how_groups);
+
+        Cnumpy result = data[index_column];
+
+        Cnumpy min_value = data.get_min_value_in_column(index_column);
+        Cnumpy max_value = data.get_max_value_in_column(index_column);
+
+        Cnumpy diff_min_max = max_value - min_value;
+        Cnumpy step = diff_min_max / how_many_groups;
+        Cnumpy threshold = min_value + step;
+
+        std::cout<<diff_min_max;
+        std::cout<<step;
+        std::cout<<threshold;
+        for (Cnumpy i = 0; i < how_many_groups; ) {
+
+            for (int j=0;j<data.get_y_dimension();++j) {
+                Cnumpy value = data[index_column][j];
+                Cnumpy lower_band = threshold - step;
+                if ( (value < threshold) && (value > lower_band)) {
+
+                    Cnumpy lower = threshold-step;
+                    Cnumpy right_band = (threshold - lower);
+                    Cnumpy two = Cnumpy::of(2.0);
+                    Cnumpy avg_threshold = right_band/two;
+                    Cnumpy department_range_avg = threshold + right_band;
+                    result.set(j,department_range_avg);
                     std::cout<<" Th: "<<threshold<<"  "<<department_range_avg<<std::endl;
                 }
             }
             threshold += step;
 
+
+            Cnumpy one = Cnumpy::of(1);
+            i +=one;
         }
 
         return result;
     }
-
 
 
 
