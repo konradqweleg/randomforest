@@ -33,11 +33,11 @@ int main() {
 
     Entropy entropy_calc;
 
-    entropy_calc.CNUMPY_calculate_entropy_for_columns(data_for_test_entropy, 1, 2);
+    entropy_calc.calculate_entropy_for_columns(data_for_test_entropy, 1, 2);
 
 
-    Cnumpy column_1 = entropy_calc.CNUMPY_calculate_information_profit_for_column(data_for_test_entropy,0,2);
-    Cnumpy column_2 = entropy_calc.CNUMPY_calculate_information_profit_for_column(data_for_test_entropy,1,2);
+    Cnumpy column_1 = entropy_calc.calculate_information_profit_for_column(data_for_test_entropy, 0, 2);
+    Cnumpy column_2 = entropy_calc.calculate_information_profit_for_column(data_for_test_entropy, 1, 2);
 
     std::cout<<column_1;
     std::cout<<column_2;
