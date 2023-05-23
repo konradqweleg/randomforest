@@ -18,6 +18,6 @@ add_executable(randomforest
      #   RandomForest/Google_tests/cnumpy_test.cpp
         RandomForest/text/Text_operation.cpp RandomForest/text/Text_operation.h RandomForest/files/Files_utility.cpp RandomForest/files/Files_utility.h
        # RandomForest/Google_tests/text_operation_test.cpp
-        RandomForest/csv/read_csv/ReadCSV.h RandomForest/csv/read_csv/ReadCSVBuffered.cpp RandomForest/csv/read_csv/ReadCSVBuffered.h RandomForest/csv/read_csv/ReadCSV_EachMethodOpenCloseFile.cpp RandomForest/csv/read_csv/ReadCSV_EachMethodOpenCloseFile.h RandomForest/entropy/Entropy.cpp RandomForest/entropy/Entropy.h RandomForest/Collection_Utility/Collection_Utility.h RandomForest/cnumpy/Exception_Cnumpy_Message.cpp RandomForest/cnumpy/Exception_Cnumpy_Message.h RandomForest/cnumpy/math/histogram.h RandomForest/cnumpy/math/histogram_base.cpp RandomForest/cnumpy/math/histogram_base.h)
+        RandomForest/csv/read_csv/ReadCSV.h RandomForest/csv/read_csv/ReadCSVBuffered.cpp RandomForest/csv/read_csv/ReadCSVBuffered.h RandomForest/csv/read_csv/ReadCSV_EachMethodOpenCloseFile.cpp RandomForest/csv/read_csv/ReadCSV_EachMethodOpenCloseFile.h RandomForest/entropy/Entropy.cpp RandomForest/entropy/Entropy.h RandomForest/Collection_Utility/Collection_Utility.h RandomForest/cnumpy/Exception_Cnumpy_Message.cpp RandomForest/cnumpy/Exception_Cnumpy_Message.h RandomForest/cnumpy/math/histogram.h RandomForest/cnumpy/math/histogram_base.cpp RandomForest/cnumpy/math/histogram_base.h RandomForest/quant/quant.cpp)
 
 add_subdirectory(RandomForest/Google_tests) #
