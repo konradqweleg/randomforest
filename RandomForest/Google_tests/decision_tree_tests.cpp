@@ -39,7 +39,61 @@ TEST(test_decision_tree,construct_tree){
 
     csv csv_reader;
     Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\treedata\\data.csv", ",");
-    tree.construct_general_tree(data,2);
+   tree_node x =  tree.construct_general_tree(data,2);
 
+   std::cout<<x.get_name();
+   std::cout<<"KONIEC";
+
+}
+
+TEST(test_decision_tree,construct_tree_and_predict){
+    decision_tree tree;
+
+    csv csv_reader;
+    Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\treedata\\data.csv", ",");
+
+
+    tree_node x =  tree.construct_general_tree(data,2);
+
+
+
+    std::vector<Type> string_column{Type::integer_type,Type::integer_type,Type::integer_type};
+
+   Cnumpy elem(data.get_x_dimension(),1,string_column);
+   elem.set(0,0,2);
+   elem.set(1,0,1);
+   elem.set(2,0,1);
+
+
+    tree.returnReturnLabel(x,elem);
+
+    std::cout<<"KONIEC";
+
+}
+
+TEST(test_decision_tree,construct_tree_and_predict_iris){
+    decision_tree tree;
+
+    csv csv_reader;
+    Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv", ",");
+
+
+    tree_node x =  tree.construct_general_tree(data,4);
+
+//5.4,3.7,1.5,.2,"Setosa"
+
+    std::vector<Type> string_column{Type::double_type,Type::double_type,Type::double_type,Type::double_type,Type::string_type};
+
+    Cnumpy elem(5,1,string_column);
+    elem.set(0,0,5.4);
+    elem.set(1,0,3.7);
+    elem.set(2,0,1.5);
+    elem.set(3,0,0.2);
+    elem.set(4,0,"Setosa");
+
+
+    tree.returnReturnLabel(x,elem);
+
+    std::cout<<"KONIEC";
 
 }

@@ -65,21 +65,30 @@ public:
     }
 
 
+    int ileRazy = 0;
+
     tree_node create_lvl_below(Cnumpy data,tree_node& node,int predict_column_index){
+
+        ileRazy++;
+        std::cout<<"Ile razy wywołuje "<<ileRazy<<" pcindex"<<predict_column_index<<std::endl;
+        std::cout<<data;
         int number_max_profit_for_level = node.get_level();
         int max_index_profit_for_level_column = get_index_column_with_max_information_profit(data, number_max_profit_for_level, predict_column_index);
 
         if(node.is_root()){
             Cnumpy unique_value = data.get_unique_column_values(max_index_profit_for_level_column);
             std::cout<<"Korzen "<<std::endl;
+            std::cout<<unique_value;
 
             for(int i=0;i<unique_value.get_y_dimension();++i){
                 tree_node child(unique_value[i],max_index_profit_for_level_column,1,Cnumpy::of(0));
                 std::cout<<" Dzieci korzenia "<<child.get_name()<<std::endl;
-                create_lvl_below(data,child,2);
+                create_lvl_below(data,child,predict_column_index);
                 node.add_child(child);
 
             }
+
+            return node;
 
             std::cout<<std::endl<<std::endl;
 
@@ -102,9 +111,16 @@ public:
                 return child;
             }
 
-            Cnumpy filtered = data.filter(max_index_profit_for_level_column,node.get_value());
+            Cnumpy filtered = data.filter(node.get_decision_index(),node.get_value());
+            std::cout<<"filtered"<<std::endl;
+            std::cout<<filtered;
             Cnumpy unique_labels = filtered.get_unique_column_values(predict_column_index);
 
+
+            std::cout<<"y dim = "<<unique_labels.get_y_dimension()<<"index max predict"<<max_index_profit_for_level_column<<"predict"<<predict_column_index<<std::endl;
+            std::cout<<"WARTOŚĆI"<<std::endl;
+            std::cout<<unique_labels;
+            std::cout<<std::endl;
             if(unique_labels.get_y_dimension() == 1){
                 std::cout<<"Wszystkie predykcje dla wartości takie same"<<std::endl;
                 tree_node child(node.get_value(),-1,node.get_level()+1,filtered[predict_column_index][0]);
@@ -128,17 +144,19 @@ public:
 
             Cnumpy unique_value = data.get_unique_column_values(max_index_profit_for_level_column);
             std::cout<<"Tworze dzieci bo mogę :D "<<std::endl;
+            std::cout<<unique_value;
             for(int i=0;i<unique_value.get_y_dimension();++i){
 
                 std::cout<<"--> "<<std::endl<<unique_value[i]<<std::endl;
                 tree_node child(unique_value[i],max_index_profit_for_level_column,node.get_level()+1,Cnumpy::of(0));
                 //  std::cout<<" Dziecko "<<child.get_name()<<std::endl;
-                create_lvl_below(data,child,2);
+                Cnumpy data_ft = data.filter(max_index_profit_for_level_column,node.get_value());
+                create_lvl_below(data_ft,child,predict_column_index);
                 node.add_child(child);
 
             }
 
-
+            return  node;
 
 
 
@@ -155,14 +173,42 @@ public:
 
 
     tree_node construct_general_tree(Cnumpy data,int predict_column_index){
-        tree_node root;
-        root.set_level(0);
+        tree_node* root = new tree_node;
+        (*root).set_level(0);
         int column_with_max_information_profit = get_index_column_with_max_information_profit(data,0,predict_column_index);
-        create_lvl_below(data,root,predict_column_index);
+        return create_lvl_below(data,(*root),predict_column_index);
 
     }
 
 
+
+    Cnumpy returnReturnLabel(tree_node node,Cnumpy row,int index =0){
+        std::cout << "Przechodze!!!";
+        std::vector<tree_node> children = node.get_children();
+
+        if(node.is_leaf()){
+            std::cout << "JEstem lisciem moja etykieta to";
+            std::cout<<node.get_label();
+            return node.get_label();
+        }else {
+
+            for (int i = 0; i < children.size(); ++i) {
+                Cnumpy child = children[i].get_value();
+                Cnumpy i_am = row[index];
+
+                if (child == i_am) {
+                    std::cout << "Przechodze";
+
+                    std::cout << children[i].get_label();
+                  return  returnReturnLabel(children[i],row,index+1);
+
+                }
+            }
+        }
+
+
+
+    }
 
 
 
