@@ -70,6 +70,7 @@ public:
     tree_node create_lvl_below(Cnumpy data,tree_node& node,int predict_column_index){
 
         ileRazy++;
+
         std::cout<<"Ile razy wywołuje "<<ileRazy<<" pcindex"<<predict_column_index<<std::endl;
         std::cout<<data;
         int number_max_profit_for_level = node.get_level();
@@ -108,6 +109,11 @@ public:
                 std::cout<<std::endl;
                 std::cout<<"PROGNOZA ::1 ="<<std::endl<<label_final<<std::endl;
                 tree_node child(node.get_value(),-1,node.get_level()+1,label_final);
+                child.set_label(label_final);
+
+                //
+                node.set_label(label_final);
+
                 std::cout<<child.get_name();
                 return child;
             }
@@ -125,7 +131,12 @@ public:
             if(unique_labels.get_y_dimension() == 1){
                 std::cout<<"Wszystkie predykcje dla wartości takie same"<<std::endl;
                 std::cout<<"PROGNOZA ::2 ="<<std::endl<<filtered[predict_column_index][0]<<std::endl;
+                //
+                node.set_label(filtered[predict_column_index][0]);
+
+
                 tree_node child(node.get_value(),-1,node.get_level()+1,filtered[predict_column_index][0]);
+                child.set_label(filtered[predict_column_index][0]);
                 std::cout<<child.get_name();
                 return child;
 
@@ -136,7 +147,13 @@ public:
                 std::cout<<"PROGNOZA ::3 BRAK;"<<std::endl;
 
                 tree_node child(node.get_value(),-1,node.get_level()+1,Cnumpy::of("Brak"));
+                child.set_label(Cnumpy::of("BRAK"));
+
+                //
+
+                node.set_label(Cnumpy::of("BRAK"));
                 std::cout<<child.get_name();
+
                 return child;
             }
 
@@ -152,12 +169,13 @@ public:
             for(int i=0;i<unique_value.get_y_dimension();++i){
 
                 std::cout<<"--> "<<std::endl<<unique_value[i]<<std::endl;
-                tree_node child(unique_value[i],max_index_profit_for_level_column,node.get_level()+1,Cnumpy::of(0));
+                tree_node child(unique_value[i],max_index_profit_for_level_column,node.get_level()+1,Cnumpy::of("BRAK!!!"));
                   std::cout<<" Dziecko "<<child.get_name()<<std::endl;
                   std::cout<<data;
                   std::cout<<node.get_value();
                 Cnumpy data_ft = data.filter(max_index_profit_for_level_column,unique_value[i]);
                 std::cout<<"ft"<<std::endl;
+        //        child.set_label(Cnumpy::of("xD"));
                 create_lvl_below(data_ft,child,predict_column_index);
                 node.add_child(child);
 
@@ -191,10 +209,14 @@ public:
 
     Cnumpy returnReturnLabel(tree_node node,Cnumpy row,int index =0){
         std::cout << "Przechodze!!!";
-        std::cout<<"Elem:"<<node.get_value()<<" , "<<node.get_label();
-        std::vector<tree_node> children = node.get_children();
+        std::cout<<"Elemwnt:"<<std::endl<<node.get_value()<<std::endl<<"WARTOSC  "<<node.get_label()<<std::endl;
 
-        if(node.is_leaf()){
+        if(!node.is_leaf()) {
+            std::cout << "KOLUMNA PREDYKCJI " << node.get_children()[0].get_decision_index() << std::endl;
+        }
+        std::vector<tree_node> children = node.get_children();
+        std::cout<<"ILSOC DZIECI "<<children.size()<<std::endl;
+        if(children.size()==0){
             std::cout << "JEstem lisciem moja etykieta to";
             std::cout<<node.get_label();
             return node.get_label();
@@ -202,16 +224,20 @@ public:
 
             for (int i = 0; i < children.size(); ++i) {
                 Cnumpy child = children[i].get_value();
-                Cnumpy i_am = row[index];
-
+                int dec_index = children[i].get_decision_index();
+                Cnumpy i_am = row[dec_index];
+                std::cout <<std::endl<< " INDEX PRED : "<<children[i].get_decision_index()<<std::endl;
                 if (child == i_am) {
-                    std::cout << "Przechodze";
 
-                    std::cout << children[i].get_label();
+
+                 //   std::cout << children[i].get_label();
+                  //  std::cout << children[i].get_value();
                   return  returnReturnLabel(children[i],row,index+1);
 
                 }
             }
+
+            return Cnumpy::of("BRAK");
         }
 
 

@@ -75,7 +75,7 @@ TEST(test_decision_tree,construct_tree_and_predict_iris){
     decision_tree tree;
 
     csv csv_reader;
-    Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\iris\\data.csv", ",");
+    Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\iris_subset\\data.csv", ",");
 
 
     tree_node x =  tree.construct_general_tree(data,4);
@@ -85,8 +85,8 @@ TEST(test_decision_tree,construct_tree_and_predict_iris){
     std::vector<Type> string_column{Type::double_type,Type::double_type,Type::double_type,Type::double_type,Type::string_type};
 
     Cnumpy elem(5,1,string_column);
-    elem.set(0,0,5.4);
-    elem.set(1,0,3.7);
+    elem.set(0,0,5.1);
+    elem.set(1,0,3.8);
     elem.set(2,0,1.5);
     elem.set(3,0,0.2);
     elem.set(4,0,"Setosa");
