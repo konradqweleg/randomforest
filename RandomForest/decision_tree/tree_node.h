@@ -26,7 +26,11 @@ private:
 public:
 
     Cnumpy get_label(){
-        return value;
+        return label;
+    }
+
+    void set_label(Cnumpy lab){
+        label = lab;
     }
 
 

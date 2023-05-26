@@ -106,6 +106,7 @@ public:
                 std::cout<<std::endl;
                 std::cout<<label_final;
                 std::cout<<std::endl;
+                std::cout<<"PROGNOZA ::1 ="<<std::endl<<label_final<<std::endl;
                 tree_node child(node.get_value(),-1,node.get_level()+1,label_final);
                 std::cout<<child.get_name();
                 return child;
@@ -123,6 +124,7 @@ public:
             std::cout<<std::endl;
             if(unique_labels.get_y_dimension() == 1){
                 std::cout<<"Wszystkie predykcje dla wartości takie same"<<std::endl;
+                std::cout<<"PROGNOZA ::2 ="<<std::endl<<filtered[predict_column_index][0]<<std::endl;
                 tree_node child(node.get_value(),-1,node.get_level()+1,filtered[predict_column_index][0]);
                 std::cout<<child.get_name();
                 return child;
@@ -131,6 +133,8 @@ public:
 
             if(node.get_level() == (data.get_x_dimension()-1)){
                 std::cout<<"Koniec kolumn do predykcji"<<std::endl;
+                std::cout<<"PROGNOZA ::3 BRAK;"<<std::endl;
+
                 tree_node child(node.get_value(),-1,node.get_level()+1,Cnumpy::of("Brak"));
                 std::cout<<child.get_name();
                 return child;
@@ -140,8 +144,8 @@ public:
 
 
 
-
-
+            std::cout<<"Tworze dzieci bo mogę :Dxd "<<std::endl;
+            std::cout<<data;
             Cnumpy unique_value = data.get_unique_column_values(max_index_profit_for_level_column);
             std::cout<<"Tworze dzieci bo mogę :D "<<std::endl;
             std::cout<<unique_value;
@@ -149,8 +153,11 @@ public:
 
                 std::cout<<"--> "<<std::endl<<unique_value[i]<<std::endl;
                 tree_node child(unique_value[i],max_index_profit_for_level_column,node.get_level()+1,Cnumpy::of(0));
-                //  std::cout<<" Dziecko "<<child.get_name()<<std::endl;
-                Cnumpy data_ft = data.filter(max_index_profit_for_level_column,node.get_value());
+                  std::cout<<" Dziecko "<<child.get_name()<<std::endl;
+                  std::cout<<data;
+                  std::cout<<node.get_value();
+                Cnumpy data_ft = data.filter(max_index_profit_for_level_column,unique_value[i]);
+                std::cout<<"ft"<<std::endl;
                 create_lvl_below(data_ft,child,predict_column_index);
                 node.add_child(child);
 
@@ -184,6 +191,7 @@ public:
 
     Cnumpy returnReturnLabel(tree_node node,Cnumpy row,int index =0){
         std::cout << "Przechodze!!!";
+        std::cout<<"Elem:"<<node.get_value()<<" , "<<node.get_label();
         std::vector<tree_node> children = node.get_children();
 
         if(node.is_leaf()){
