@@ -85,10 +85,10 @@ TEST(test_decision_tree,construct_tree_and_predict_iris){
     std::vector<Type> string_column{Type::double_type,Type::double_type,Type::double_type,Type::double_type,Type::string_type};
 
     Cnumpy elem(5,1,string_column);
-    elem.set(0,0,5.1);
-    elem.set(1,0,3.8);
-    elem.set(2,0,1.5);
-    elem.set(3,0,0.2);
+    elem.set(0,0,6.5);
+    elem.set(1,0,3.0);
+    elem.set(2,0,5.2);
+    elem.set(3,0,2.0);
     elem.set(4,0,"Setosa");
 
 
