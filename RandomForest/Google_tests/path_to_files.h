@@ -9,6 +9,11 @@
 class path_to_file{
 public:
     static std::string FULL_IRIS_DATASETS;
+    static std::string CALCULATION_DATA;
+    static std::string HOW_MANY_LINES;
+    static std::string IRIS_SUBSET;
+
+
 };
 
 

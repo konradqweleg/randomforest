@@ -6,7 +6,7 @@
 #include "csv/csv.h"
 #include "entropy/Entropy.h"
 #include "cnumpy/math/histogram_base.h"
-
+#include "path_to_files.h"
 
 
 TEST(quant_tests, quant_double_column) {
@@ -27,7 +27,7 @@ TEST(quant_tests,quant_double_column_if_calculate_for_iris_dataset){
     Cnumpy::set_histogram_calculation_strategy(hist_strategy);
 
     csv csv_reader;
-    Cnumpy data_for_test_entropy = csv_reader.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\datasets\\iris\\data.csv", ",");
+    Cnumpy data_for_test_entropy = csv_reader.read_cnumpy_from_csv(path_to_file::FULL_IRIS_DATASETS, ",");
 
     Cnumpy results = quant::quant_column_double_betweeen_method_result_avg_group(data_for_test_entropy, 0, 10);
 

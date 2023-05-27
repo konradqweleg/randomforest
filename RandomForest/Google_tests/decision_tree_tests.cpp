@@ -6,11 +6,12 @@
 #include "decision_tree/decision_tree.h"
 
 #include "gtest/gtest.h"
+#include "path_to_files.h"
 TEST(test_decision_tree,get_index_column_wchich_max_profit){
     decision_tree tree;
 
     csv csv_reader;
-    Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\tests\\data.csv", ",");
+    Cnumpy data = csv_reader.read_cnumpy_from_csv(path_to_file::CALCULATION_DATA, ",");
     int index_first = tree.get_index_column_with_max_information_profit(data, 0, 2);
     int index_second = tree.get_index_column_with_max_information_profit(data, 1, 2);
 
@@ -23,7 +24,7 @@ TEST(test_decision_tree,get_index_column_wchich_max_profit_if_working_for_iris_d
     decision_tree tree;
 
     csv csv_reader;
-    Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\iris\\data.csv", ",");
+    Cnumpy data = csv_reader.read_cnumpy_from_csv(path_to_file::FULL_IRIS_DATASETS, ",");
     int index_first = tree.get_index_column_with_max_information_profit(data, 0, 2);
     int index_second = tree.get_index_column_with_max_information_profit(data, 1, 2);
 
@@ -36,7 +37,7 @@ TEST(test_decision_tree,construct_tree){
     decision_tree tree;
 
     csv csv_reader;
-    Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\treedata\\data.csv", ",");
+    Cnumpy data = csv_reader.read_cnumpy_from_csv(path_to_file::CALCULATION_DATA, ",");
     tree_node root =  tree.construct_general_tree(data, 2);
     Cnumpy first_child_value = root.get_children()[0].get_value();
     Cnumpy second_child_value = root.get_children()[1].get_value();
@@ -56,7 +57,7 @@ TEST(test_decision_tree,construct_tree_and_predict){
     decision_tree tree;
 
     csv csv_reader;
-    Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\treedata\\data.csv", ",");
+    Cnumpy data = csv_reader.read_cnumpy_from_csv(path_to_file::CALCULATION_DATA, ",");
 
 
     tree_node root =  tree.construct_general_tree(data, 2);
@@ -74,11 +75,11 @@ TEST(test_decision_tree,construct_tree_and_predict){
 
 }
 
-TEST(test_decision_tree,construct_tree_and_predict_iris){
+TEST(test_decision_tree,construct_tree_and_predict_iris_subset){
     decision_tree tree;
 
     csv csv_reader;
-    Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\iris_subset\\data.csv", ",");
+    Cnumpy data = csv_reader.read_cnumpy_from_csv(path_to_file::IRIS_SUBSET, ",");
     tree_node root =  tree.construct_general_tree(data, 4);
 
     std::vector<Type> string_column{Type::double_type,Type::double_type,Type::double_type,Type::double_type,Type::string_type};
