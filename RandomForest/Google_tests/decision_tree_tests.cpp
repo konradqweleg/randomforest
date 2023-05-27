@@ -39,10 +39,10 @@ TEST(test_decision_tree,construct_tree){
 
     csv csv_reader;
     Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\treedata\\data.csv", ",");
-   tree_node x =  tree.construct_general_tree(data,2);
+    tree_node x =  tree.construct_general_tree(data,2);
 
-   std::cout<<x.get_name();
-   std::cout<<"KONIEC";
+    std::cout<<x.get_name();
+    std::cout<<"KONIEC";
 
 }
 
@@ -59,13 +59,13 @@ TEST(test_decision_tree,construct_tree_and_predict){
 
     std::vector<Type> string_column{Type::integer_type,Type::integer_type,Type::integer_type};
 
-   Cnumpy elem(data.get_x_dimension(),1,string_column);
-   elem.set(0,0,2);
-   elem.set(1,0,1);
-   elem.set(2,0,1);
+    Cnumpy elem(data.get_x_dimension(),1,string_column);
+    elem.set(0,0,2);
+    elem.set(1,0,1);
+    elem.set(2,0,1);
 
 
-    tree.returnReturnLabel(x,elem);
+    tree.predict(x, elem);
 
     std::cout<<"KONIEC";
 
@@ -92,7 +92,7 @@ TEST(test_decision_tree,construct_tree_and_predict_iris){
     elem.set(4,0,"Setosa");
 
 
-    tree.returnReturnLabel(x,elem);
+    tree.predict(x, elem);
 
     std::cout<<"KONIEC";
 

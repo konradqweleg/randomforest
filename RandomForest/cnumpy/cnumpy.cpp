@@ -1189,9 +1189,7 @@ int Cnumpy::count(int columns,Cnumpy value) const {
 
 Cnumpy Cnumpy::filter(int column_where_filter, Cnumpy filter_value) {
     int count_value = count(column_where_filter,filter_value);
-    std::cout<<"xdim = " <<get_x_dimension()<<" count"<<count_value;
     Cnumpy filtered_data = Cnumpy(get_x_dimension(), count_value, get_type_columns(), get_column_name());
-    std::cout<<"x2";
     int filtered_i_index = 0;
     for(int i=0;i<get_y_dimension();++i){
 
@@ -1204,8 +1202,6 @@ Cnumpy Cnumpy::filter(int column_where_filter, Cnumpy filter_value) {
             }
             filtered_i_index++;
         }
-
-
 
     }
 

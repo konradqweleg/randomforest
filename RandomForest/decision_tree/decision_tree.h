@@ -31,152 +31,95 @@ public:
         return a.second > b.second;
     }
 
-    int get_index_column_with_max_information_profit(Cnumpy data,int wchich_number,int predict_column){
+    int get_index_column_with_max_information_profit(Cnumpy data, int which_number, int predict_column){
         histogram* hist_strategy = new histogram_base();
         Cnumpy::set_histogram_calculation_strategy(hist_strategy);
         Entropy entropy_strategy;
-        csv csv_reader;
 
-        std::map<int,double> entropy_value;
+        std::map<int,double> index_column_information_profit;
 
         for(int i=0;i<data.get_x_dimension();++i){
+
             if(i==predict_column){
                 continue;
             }
-            Cnumpy entropy_columns = entropy_strategy.calculate_information_profit_for_column(data, i, predict_column);
 
-            entropy_value[i] = entropy_columns.get_xy_double(0,0);
-
-
+            Cnumpy information_profit_for_column = entropy_strategy.calculate_information_profit_for_column(data, i, predict_column);
+            index_column_information_profit[i] = information_profit_for_column.get_xy_double(0, 0);
 
         }
 
 
-        std::vector<std::pair<int, double>> sVector;
-        for(auto m: entropy_value){
-            sVector.push_back(std::make_pair(m.first, m.second));
+        std::vector<std::pair<int, double>> index_column_information_profit_vector;
+        for(auto m: index_column_information_profit){
+            index_column_information_profit_vector.push_back(std::make_pair(m.first, m.second));
         }
 
 
-        sort(sVector.begin(), sVector.end(), sortByVal);
+        sort(index_column_information_profit_vector.begin(), index_column_information_profit_vector.end(), sortByVal);
 
-        return sVector[wchich_number].first;
+        return index_column_information_profit_vector[which_number].first;
 
     }
 
 
-    int ileRazy = 0;
 
-    tree_node create_lvl_below(Cnumpy data,tree_node& node,int predict_column_index){
 
-        ileRazy++;
 
-     //   std::cout<<"Ile razy wywołuje "<<ileRazy<<" pcindex"<<predict_column_index<<std::endl;
-     //   std::cout<<data;
-        int number_max_profit_for_level = node.get_level();
-        int max_index_profit_for_level_column = get_index_column_with_max_information_profit(data, number_max_profit_for_level, predict_column_index);
+
+    tree_node create_lower_level_tree(Cnumpy data, tree_node& node, int predict_column_index){
+
+        int number_column_max_profit_for_level = node.get_level();
+        int max_index_profit_for_level_column = get_index_column_with_max_information_profit(data, number_column_max_profit_for_level, predict_column_index);
 
         if(node.is_root()){
-            Cnumpy unique_value = data.get_unique_column_values(max_index_profit_for_level_column);
-        //    std::cout<<"Korzen "<<std::endl;
-        //    std::cout<<unique_value;
+            Cnumpy unique_values_in_column = data.get_unique_column_values(max_index_profit_for_level_column);
 
-            for(int i=0;i<unique_value.get_y_dimension();++i){
-                tree_node child(unique_value[i],max_index_profit_for_level_column,1,Cnumpy::of(0));
-             //   std::cout<<" Dzieci korzenia "<<child.get_name()<<std::endl;
-                create_lvl_below(data,child,predict_column_index);
+            for(int i=0; i < unique_values_in_column.get_y_dimension(); ++i){
+                tree_node child(unique_values_in_column[i], max_index_profit_for_level_column, 1, Cnumpy::of(0));
+                create_lower_level_tree(data, child, predict_column_index);
                 node.add_child(child);
-
             }
 
             return node;
-
-            std::cout<<std::endl<<std::endl;
-
         }else{
             Cnumpy how_many_same_element_in_column = data.count(node.get_decision_index(),node.get_value());
-       //     std::cout<<node.get_value()<<std::endl;
-      //      std::cout<<"Ilość wystąpień tej wartośći to : "<<how_many_same_element_in_column.get_xy_int(0,0)<<" w kolumnie "<<node.get_decision_index();
-
 
             if(how_many_same_element_in_column.get_xy_int(0,0) == 1){
 
-            //    std::cout<<"Jedna taka wartosć w zbiorze"<<std::endl;
-                Cnumpy label_final = data.filter(node.get_decision_index(),node.get_value());
-                label_final = label_final[predict_column_index];
-            //    std::cout<<std::endl;
-             //   std::cout<<label_final;
-            //    std::cout<<std::endl;
-            //    std::cout<<"PROGNOZA ::1 ="<<std::endl<<label_final<<std::endl;
-                tree_node child(node.get_value(),-1,node.get_level()+1,label_final);
-                child.set_label(label_final);
+                Cnumpy one_rows_with_value = data.filter(node.get_decision_index(), node.get_value());
+                tree_node child(node.get_value(), -1,node.get_level()+1, one_rows_with_value);
 
-                //
-                node.set_label(label_final);
-
-            //    std::cout<<child.get_name();
                 return child;
             }
 
-            Cnumpy filtered = data.filter(node.get_decision_index(),node.get_value());
-           // std::cout<<"filtered"<<std::endl;
-          //  std::cout<<filtered;
-            Cnumpy unique_labels = filtered.get_unique_column_values(predict_column_index);
+            Cnumpy rows_with_same_value_in_column = data.filter(node.get_decision_index(), node.get_value());
+            Cnumpy unique_labels_in_column = rows_with_same_value_in_column.get_unique_column_values(predict_column_index);
 
+            if(unique_labels_in_column.get_y_dimension() == 1){
 
-          //  std::cout<<"y dim = "<<unique_labels.get_y_dimension()<<"index max predict"<<max_index_profit_for_level_column<<"predict"<<predict_column_index<<std::endl;
-          //  std::cout<<"WARTOŚĆI"<<std::endl;
-          //  std::cout<<unique_labels;
-         //   std::cout<<std::endl;
-            if(unique_labels.get_y_dimension() == 1){
-             //   std::cout<<"Wszystkie predykcje dla wartości takie same"<<std::endl;
-            //    std::cout<<"PROGNOZA ::2 ="<<std::endl<<filtered[predict_column_index][0]<<std::endl;
-                //
-                node.set_label(filtered[predict_column_index][0]);
+                node.set_label(rows_with_same_value_in_column[predict_column_index][0]);
+                tree_node child(node.get_value(), -1,node.get_level()+1, rows_with_same_value_in_column[predict_column_index][0]);
+                child.set_label(rows_with_same_value_in_column[predict_column_index][0]);
 
-
-                tree_node child(node.get_value(),-1,node.get_level()+1,filtered[predict_column_index][0]);
-                child.set_label(filtered[predict_column_index][0]);
-              //  std::cout<<child.get_name();
                 return child;
 
             }
 
             if(node.get_level() == (data.get_x_dimension()-1)){
-            //    std::cout<<"Koniec kolumn do predykcji"<<std::endl;
-            //    std::cout<<"PROGNOZA ::3 BRAK;"<<std::endl;
-
                 tree_node child(node.get_value(),-1,node.get_level()+1,Cnumpy::of("Brak"));
-                child.set_label(Cnumpy::of("BRAK"));
-
-                //
-
-                node.set_label(Cnumpy::of("BRAK"));
-                std::cout<<child.get_name();
-
                 return child;
             }
 
+            Cnumpy next_level_unique_values = data.get_unique_column_values(max_index_profit_for_level_column);
+
+            for(int i=0; i < next_level_unique_values.get_y_dimension(); ++i){
 
 
+                tree_node child(next_level_unique_values[i], max_index_profit_for_level_column, node.get_level() + 1, Cnumpy::of("BRAK!!!"));
 
-
-          //  std::cout<<"Tworze dzieci bo mogę :Dxd "<<std::endl;
-          //  std::cout<<data;
-            Cnumpy unique_value = data.get_unique_column_values(max_index_profit_for_level_column);
-          //  std::cout<<"Tworze dzieci bo mogę :D "<<std::endl;
-           // std::cout<<unique_value;
-            for(int i=0;i<unique_value.get_y_dimension();++i){
-
-             //   std::cout<<"--> "<<std::endl<<unique_value[i]<<std::endl;
-                tree_node child(unique_value[i],max_index_profit_for_level_column,node.get_level()+1,Cnumpy::of("BRAK!!!"));
-                //  std::cout<<" Dziecko "<<child.get_name()<<std::endl;
-               //   std::cout<<data;
-               //   std::cout<<node.get_value();
-                Cnumpy data_ft = data.filter(max_index_profit_for_level_column,unique_value[i]);
-                //std::cout<<"ft"<<std::endl;
-        //        child.set_label(Cnumpy::of("xD"));
-                create_lvl_below(data_ft,child,predict_column_index);
+                Cnumpy rows_with_same_value = data.filter(max_index_profit_for_level_column, next_level_unique_values[i]);
+                create_lower_level_tree(rows_with_same_value, child, predict_column_index);
                 node.add_child(child);
 
             }
@@ -201,38 +144,30 @@ public:
         tree_node* root = new tree_node;
         (*root).set_level(0);
         int column_with_max_information_profit = get_index_column_with_max_information_profit(data,0,predict_column_index);
-        return create_lvl_below(data,(*root),predict_column_index);
+        return create_lower_level_tree(data, (*root), predict_column_index);
 
     }
 
 
 
-    Cnumpy returnReturnLabel(tree_node node,Cnumpy row,int index =0){
-        std::cout << "Przechodze!!!";
-        std::cout<<"Elemwnt:"<<std::endl<<node.get_value()<<std::endl<<"WARTOSC  "<<node.get_label()<<std::endl;
+    Cnumpy predict(tree_node node, Cnumpy row_to_predict, int index = 0){
 
-        if(!node.is_leaf()) {
-            std::cout << "KOLUMNA PREDYKCJI " << node.get_children()[0].get_decision_index() << std::endl;
-        }
-        std::vector<tree_node> children = node.get_children();
-        std::cout<<"ILSOC DZIECI "<<children.size()<<std::endl;
-        if(children.size()==0){
-            std::cout << "JEstem lisciem moja etykieta to";
+
+        std::vector<tree_node> children_elem_tree = node.get_children();
+
+
+        if(node.is_leaf()){
             std::cout<<node.get_label();
             return node.get_label();
         }else {
 
-            for (int i = 0; i < children.size(); ++i) {
-                Cnumpy child = children[i].get_value();
-                int dec_index = children[i].get_decision_index();
-                Cnumpy i_am = row[dec_index];
-                std::cout <<std::endl<< " INDEX PRED : "<<children[i].get_decision_index()<<std::endl;
-                if (child == i_am) {
+            for (int i = 0; i < children_elem_tree.size(); ++i) {
+                Cnumpy child = children_elem_tree[i].get_value();
+                int decision_index = children_elem_tree[i].get_decision_index();
+                Cnumpy value_in_decision_index_column = row_to_predict[decision_index];
+                if (child == value_in_decision_index_column) {
 
-
-                 //   std::cout << children[i].get_label();
-                  //  std::cout << children[i].get_value();
-                  return  returnReturnLabel(children[i],row,index+1);
+                    return predict(children_elem_tree[i], row_to_predict, index + 1);
 
                 }
             }
@@ -240,15 +175,7 @@ public:
             return Cnumpy::of("BRAK");
         }
 
-
-
     }
-
-
-
-
-
-
 
 
 };
