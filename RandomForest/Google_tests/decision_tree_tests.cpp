@@ -69,8 +69,8 @@ TEST(test_decision_tree,construct_tree_and_predict){
     value_to_predict.set(2, 0, 1);
 
 
-    Cnumpy predict = tree.predict(root, value_to_predict);
-
+    Cnumpy predict = tree.predict_verbose(root, value_to_predict);
+    std::cout<<predict;
     //to do check results
 
 }

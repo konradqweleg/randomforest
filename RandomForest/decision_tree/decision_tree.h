@@ -175,6 +175,43 @@ public:
 
     }
 
+    Cnumpy predict_verbose(tree_node node, Cnumpy row_to_predict, int index = 0){
+
+
+        std::vector<tree_node> children_elem_tree = node.get_children();
+
+        std::cout<<std::endl<<"ELEMENT "<<std::endl;
+        std::cout<<node.get_value()<<std::endl;
+
+
+
+        if(node.is_leaf()){
+            std::cout<<"JESTEM LIŚĆIEM MOJA PREDYKCJA TO "<<std::endl;
+            std::cout<<node.get_label()<<std::endl;
+            return node.get_label();
+        }else {
+
+            std::cout<<"JESTEM WĘZŁEM MAM "<<children_elem_tree.size()<<" DZIECI "<<std::endl;
+            for (int i = 0; i < children_elem_tree.size(); ++i) {
+                Cnumpy child = children_elem_tree[i].get_value();
+                int decision_index = children_elem_tree[i].get_decision_index();
+                Cnumpy value_in_decision_index_column = row_to_predict[decision_index];
+
+
+
+                if (child == value_in_decision_index_column) {
+                    std::cout<<"ZNALAZŁEM PASUJĄCE DZIECKO"<<std::endl;
+                    return predict_verbose(children_elem_tree[i], row_to_predict, index + 1);
+
+                }
+            }
+
+            std::cout<<"BRAK PASUJĄCEGO ELEMENTU"<<std::endl;
+            return Cnumpy::of("BRAK");
+        }
+
+    }
+
 
 };
 
