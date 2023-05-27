@@ -32,17 +32,23 @@ TEST(test_decision_tree,get_index_column_wchich_max_profit_if_working_for_iris_d
 }
 
 
-//construct_general_tree
-
 TEST(test_decision_tree,construct_tree){
     decision_tree tree;
 
     csv csv_reader;
     Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\treedata\\data.csv", ",");
-    tree_node x =  tree.construct_general_tree(data,2);
+    tree_node root =  tree.construct_general_tree(data, 2);
+    Cnumpy first_child_value = root.get_children()[0].get_value();
+    Cnumpy second_child_value = root.get_children()[1].get_value();
+    Cnumpy third_child_value = root.get_children()[2].get_value();
 
-    std::cout<<x.get_name();
-    std::cout<<"KONIEC";
+    ASSERT_EQ(3, root.get_children().size());
+    ASSERT_TRUE(root.is_root());
+    ASSERT_FALSE(root.is_leaf());
+
+    ASSERT_EQ(0,first_child_value.get_xy_int(0,0));
+    ASSERT_EQ(1,second_child_value.get_xy_int(0,0));
+    ASSERT_EQ(2,third_child_value.get_xy_int(0,0));
 
 }
 
@@ -53,21 +59,18 @@ TEST(test_decision_tree,construct_tree_and_predict){
     Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\treedata\\data.csv", ",");
 
 
-    tree_node x =  tree.construct_general_tree(data,2);
-
-
+    tree_node root =  tree.construct_general_tree(data, 2);
 
     std::vector<Type> string_column{Type::integer_type,Type::integer_type,Type::integer_type};
+    Cnumpy value_to_predict(data.get_x_dimension(), 1, string_column);
+    value_to_predict.set(0, 0, 2);
+    value_to_predict.set(1, 0, 1);
+    value_to_predict.set(2, 0, 1);
 
-    Cnumpy elem(data.get_x_dimension(),1,string_column);
-    elem.set(0,0,2);
-    elem.set(1,0,1);
-    elem.set(2,0,1);
 
+    Cnumpy predict = tree.predict(root, value_to_predict);
 
-    tree.predict(x, elem);
-
-    std::cout<<"KONIEC";
+    //to do check results
 
 }
 
@@ -76,24 +79,18 @@ TEST(test_decision_tree,construct_tree_and_predict_iris){
 
     csv csv_reader;
     Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\datasets\\iris_subset\\data.csv", ",");
-
-
-    tree_node x =  tree.construct_general_tree(data,4);
-
-//5.4,3.7,1.5,.2,"Setosa"
+    tree_node root =  tree.construct_general_tree(data, 4);
 
     std::vector<Type> string_column{Type::double_type,Type::double_type,Type::double_type,Type::double_type,Type::string_type};
 
     Cnumpy elem(5,1,string_column);
-    elem.set(0,0,6.5);
-    elem.set(1,0,3.0);
-    elem.set(2,0,5.2);
-    elem.set(3,0,2.0);
-    elem.set(4,0,"Setosa");
+    elem.set(0,0,6.9);
+    elem.set(1,0,3.1);
+    elem.set(2,0,4.9);
+    elem.set(3,0,1.5);
+    elem.set(4,0,"?");
 
-
-    tree.predict(x, elem);
-
-    std::cout<<"KONIEC";
+    Cnumpy result = tree.predict(root, elem);
+    ASSERT_EQ("BRAK",result.get_xy_string(0,0));
 
 }

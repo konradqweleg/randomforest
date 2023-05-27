@@ -143,7 +143,6 @@ public:
     tree_node construct_general_tree(Cnumpy data,int predict_column_index){
         tree_node* root = new tree_node;
         (*root).set_level(0);
-        int column_with_max_information_profit = get_index_column_with_max_information_profit(data,0,predict_column_index);
         return create_lower_level_tree(data, (*root), predict_column_index);
 
     }
@@ -157,7 +156,6 @@ public:
 
 
         if(node.is_leaf()){
-            std::cout<<node.get_label();
             return node.get_label();
         }else {
 

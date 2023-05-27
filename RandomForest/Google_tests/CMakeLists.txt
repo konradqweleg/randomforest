@@ -7,5 +7,5 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 # 'Google_Tests_run' is the target name
 # 'test1.cpp tests2.cpp' are source files with tests
-add_executable(Google_Tests_run quant_test.cpp cnumpy_test.cpp csv_test.cpp text_operation_test.cpp files_test.cpp exception_assert_for_gtest.h histogram_base_tests.cpp entropy_tests.cpp decision_tree_tests.cpp)
+add_executable(Google_Tests_run quant_test.cpp cnumpy_test.cpp csv_test.cpp text_operation_test.cpp files_test.cpp exception_assert_for_gtest.h histogram_base_tests.cpp entropy_tests.cpp decision_tree_tests.cpp path_to_files.h path_to_files.cpp)
 target_link_libraries(Google_Tests_run gtest gtest_main)

@@ -7,8 +7,9 @@
 #include "../csv/read_csv/ReadCSVBuffered.cpp"
 #include "../csv/read_csv/ReadCSV_EachMethodOpenCloseFile.h"
 #include "../csv/read_csv/ReadCSV_EachMethodOpenCloseFile.cpp"
+#include "path_to_files.h"
 
-std::string path_to_iris_test_csv_file = "C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\Google_tests\\test_data\\iris.csv";
+
 
 
 std::vector<std::string> create_pattern_column_name_from_iris_datasets(){
@@ -37,7 +38,7 @@ const int rows_in_iris_datasets = 150;
 
 TEST(test_csv,read_csv_buffered){
     csv csv_with_buffered_reader(new ReadCSVBuffered());
-    Cnumpy read_data = csv_with_buffered_reader.read_cnumpy_from_csv(path_to_iris_test_csv_file,",");
+    Cnumpy read_data = csv_with_buffered_reader.read_cnumpy_from_csv(path_to_file::FULL_IRIS_DATASETS,",");
 
     std::vector<std::string> iris_columns_name = read_data.get_column_name();
     std::vector<std::string> expected_columns_name = create_pattern_column_name_from_iris_datasets();
@@ -66,7 +67,7 @@ TEST(test_csv,read_csv_buffered){
 
 TEST(test_csv,read_csv_each_function_open_close_file){
     csv csv_with_buffered_reader(new ReadCSV_EachMethodOpenCloseFile());
-    Cnumpy read_data = csv_with_buffered_reader.read_cnumpy_from_csv(path_to_iris_test_csv_file,",");
+    Cnumpy read_data = csv_with_buffered_reader.read_cnumpy_from_csv(path_to_file::FULL_IRIS_DATASETS,",");
 
     std::vector<std::string> iris_columns_name = read_data.get_column_name();
     std::vector<std::string> expected_columns_name = create_pattern_column_name_from_iris_datasets();

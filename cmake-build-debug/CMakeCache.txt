@@ -608,6 +608,8 @@ _Python_EXECUTABLE:INTERNAL=C:/Users/konra/AppData/Local/Programs/Python/Python3
 //Python Properties
 _Python_INTERPRETER_PROPERTIES:INTERNAL=Python;3;9;5;64;;cp39-win_amd64;C:\Users\konra\AppData\Local\Programs\Python\Python39\Lib;C:\Users\konra\AppData\Local\Programs\Python\Python39\Lib;C:\Users\konra\AppData\Local\Programs\Python\Python39\Lib\site-packages;C:\Users\konra\AppData\Local\Programs\Python\Python39\Lib\site-packages
 _Python_INTERPRETER_SIGNATURE:INTERNAL=8468d3bd77b624f0fe174ccf37431a56
+//Interpreter reason failure
+_Python_Interpreter_REASON_FAILURE:INTERNAL=
 //NumPy reason failure
 _Python_NumPy_REASON_FAILURE:INTERNAL=
 cmake_package_name:INTERNAL=GTest
