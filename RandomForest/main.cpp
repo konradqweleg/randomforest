@@ -91,6 +91,33 @@ double count_effectiveness(Cnumpy datasets,tree_node root,decision_tree tree){
 
 }
 
+
+Cnumpy compare_result_to_expected_result(Cnumpy datasets,tree_node root,decision_tree tree){
+
+    std::vector<Type> result_columns_type{Type::string_type, Type::string_type,Type::string_type};
+    std::vector<std::string> result_columns_name{"Expected","Predict","STATUS"};
+
+    Cnumpy results (3, datasets.get_y_dimension(), result_columns_type,result_columns_name);
+
+    for(int i=0;i<datasets.get_y_dimension();++i){
+        Cnumpy prediction = predict_value_from_dataset(datasets,root,tree,i);
+
+        Cnumpy correct_row_prediction = datasets[4][i];
+        results.set(0,i, correct_row_prediction);
+        results.set(1,i, prediction);
+
+        if(correct_row_prediction == prediction){
+           results.set(2,i,"MATCH");
+        }else{
+           results.set(2,i,"MISMATCH");
+        }
+
+    }
+
+    return results;
+
+}
+
 int main() {
     set_global_strategy_for_cnumpy();
 
@@ -98,24 +125,13 @@ int main() {
 
     csv csv_reader;
     Cnumpy data = csv_reader.read_cnumpy_from_csv(path_to_file::IRIS_SUBSET, ",");
-    tree_node root =  tree.construct_general_tree_verbose(data, 4);
+    tree_node root =  tree.construct_general_tree(data, 4);
 
     Cnumpy test_data = create_test_datasets();
     double percent_correct = count_effectiveness(test_data,root,tree);
-    std::cout<<"Skutecznosc modelu to = "<<percent_correct<<std::endl;
-
-   // std::vector<Type> string_column{Type::double_type,Type::double_type,Type::double_type,Type::double_type,Type::string_type};
-
-//    Cnumpy elem(5,1,string_column);
-//    elem.set(0,0,6.9);
-//    elem.set(1,0,3.1);
-//    elem.set(2,0,4.9);
-//    elem.set(3,0,1.5);
-//    elem.set(4,0,"?");
-//
-//    Cnumpy result = tree.predict(root, elem);
-//    std::cout<<result<<std::endl;
-
+    std::cout<<"Model Efficiency = "<<percent_correct<<std::endl;
+    Cnumpy result_label =  compare_result_to_expected_result(test_data,root,tree);
+    std::cout<<result_label<<std::endl;
 
 
 }
