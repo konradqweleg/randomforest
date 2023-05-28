@@ -16,6 +16,7 @@ using namespace std::chrono;
 #include "cnumpy/math/histogram_base.h"
 #include "Google_tests/path_to_files.h"
 #include "Google_tests//path_to_files.cpp"
+#include "create_data_set.h"
 
 
 
@@ -118,7 +119,7 @@ Cnumpy compare_result_to_expected_result(Cnumpy datasets,tree_node root,decision
 
 }
 
-int main() {
+void check_one_tree_prediction(){
     set_global_strategy_for_cnumpy();
 
     decision_tree tree;
@@ -132,6 +133,18 @@ int main() {
     std::cout<<"Model Efficiency = "<<percent_correct<<std::endl;
     Cnumpy result_label =  compare_result_to_expected_result(test_data,root,tree);
     std::cout<<result_label<<std::endl;
+}
+
+
+
+void check_forrest_prediction(){
+    create_data_set create_dataset;
+    create_dataset.create_files(10,path_to_file::IRIS_SUBSET,120,"C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\Google_tests\\test_data\\datasets_for_random_forrest_splited");
+
+}
+
+int main() {
+    check_forrest_prediction();
 
 
 }
