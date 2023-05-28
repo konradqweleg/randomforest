@@ -60,18 +60,17 @@ TEST(test_decision_tree,construct_tree_and_predict){
     Cnumpy data = csv_reader.read_cnumpy_from_csv(path_to_file::CALCULATION_DATA, ",");
 
 
-    tree_node root =  tree.construct_general_tree(data, 2);
+    tree_node root =  tree.construct_general_tree_verbose(data, 2);
 
     std::vector<Type> string_column{Type::integer_type,Type::integer_type,Type::integer_type};
     Cnumpy value_to_predict(data.get_x_dimension(), 1, string_column);
     value_to_predict.set(0, 0, 2);
-    value_to_predict.set(1, 0, 1);
-    value_to_predict.set(2, 0, 1);
+    value_to_predict.set(1, 0, 0);
+    value_to_predict.set(2, 0, 0);
 
 
     Cnumpy predict = tree.predict_verbose(root, value_to_predict);
-    std::cout<<predict;
-    //to do check results
+    ASSERT_EQ(0,predict.get_xy_int(0,0));
 
 }
 

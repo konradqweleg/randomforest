@@ -1188,7 +1188,14 @@ int Cnumpy::count(int columns,Cnumpy value) const {
 }
 
 Cnumpy Cnumpy::filter(int column_where_filter, Cnumpy filter_value) {
+
+   //  std::cout<<"Filtruje po kolumnie "<<column_where_filter;
+   //  std::cout<<"wartosc"<<std::endl;
+ //    std::cout<<filter_value;
+   //  std::cout<<(*this);
+
     int count_value = count(column_where_filter,filter_value);
+
     Cnumpy filtered_data = Cnumpy(get_x_dimension(), count_value, get_type_columns(), get_column_name());
     int filtered_i_index = 0;
     for(int i=0;i<get_y_dimension();++i){

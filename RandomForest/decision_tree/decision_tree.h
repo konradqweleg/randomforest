@@ -140,10 +140,157 @@ public:
     }
 
 
+    tree_node create_lower_level_tree_verbose(Cnumpy data, tree_node& node, int predict_column_index){
+
+        std::cout<<"ZBIÓR DANYCH"<<std::endl;
+        std::cout<<data<<std::endl;
+
+
+        int number_column_max_profit_for_level = node.get_level();
+        int max_index_profit_for_level_column = get_index_column_with_max_information_profit(data, number_column_max_profit_for_level, predict_column_index);
+
+        std::cout<<"INDEX KOLUMNY Z MAKSYMALNYM ZYSKIEM INFORMACYJNYM DLA POZIOMU = "<<max_index_profit_for_level_column<<std::endl;
+        std::cout<<"ELEMENT"<<std::endl;
+        std::cout<<node.get_value()<<std::endl;
+
+
+        if(node.is_root()){
+            Cnumpy unique_values_in_column = data.get_unique_column_values(max_index_profit_for_level_column);
+
+            std::cout<<"JESTEM KORZENIEM, UNIKALNE WARTOSĆI "<<std::endl;
+
+            std::cout<<unique_values_in_column<<std::endl;
+
+            for(int i=0; i < unique_values_in_column.get_y_dimension(); ++i){
+                tree_node child(unique_values_in_column[i], max_index_profit_for_level_column, 1, Cnumpy::of(0));
+                create_lower_level_tree_verbose(data, child, predict_column_index);
+                node.add_child(child);
+            }
+
+            return node;
+        }else{
+            Cnumpy how_many_same_element_in_column = data.count(node.get_decision_index(),node.get_value());
+
+            std::cout<<"1";
+            if(how_many_same_element_in_column.get_xy_int(0,0) == 1){
+
+                std::cout<<"TYLKO JEDEN WIERSZ WYNIKOWY O TEJ WARTOŚĆI ETYKIETA"<<std::endl;
+
+
+                Cnumpy one_rows_with_value = data.filter(node.get_decision_index(), node.get_value());
+                tree_node child(node.get_value(), -1,node.get_level()+1, one_rows_with_value[predict_column_index]);
+
+                std::cout<<one_rows_with_value[predict_column_index]<<std::endl;
+                node.set_label(one_rows_with_value[predict_column_index][0]);
+
+                return child;
+            }
+
+            Cnumpy rows_with_same_value_in_column = data.filter(node.get_decision_index(), node.get_value());
+            Cnumpy unique_labels_in_column = rows_with_same_value_in_column.get_unique_column_values(predict_column_index);
+            std::cout<<"2";
+            if(unique_labels_in_column.get_y_dimension() == 1){
+
+                std::cout<<"WSZYSTKIE WIERSZE DAJA TA SAMA PREDYKCJE ETYKIETA TO"<< std::endl;
+                node.set_label(rows_with_same_value_in_column[predict_column_index][0]);
+                tree_node child(node.get_value(), -1,node.get_level()+1, rows_with_same_value_in_column[predict_column_index][0]);
+                child.set_label(rows_with_same_value_in_column[predict_column_index][0]);
+                std::cout<<rows_with_same_value_in_column[predict_column_index][0]<<std::endl;
+                //node.add_child(child);
+                node.set_label(rows_with_same_value_in_column[predict_column_index][0]);
+
+                return child;
+
+            }
+
+            std::cout<<"3";
+            std::cout<<node.get_level();
+            std::cout<<"4";
+            std::cout<<data.get_y_dimension();
+            std::cout<<"5";
+            if(node.get_level() == (data.get_x_dimension()-1)){
+                std::cout<<"BRAK KOLUMN DO DALSZEJ PREDYKCJI BRAK WYNIKU"<<std::endl;
+                tree_node child(node.get_value(),-1,node.get_level()+1,Cnumpy::of("Brak"));
+              //  node.add_child(child);
+                return child;
+            }
+            std::cout<<"4";
+
+            std::cout<<"UNI NEXT";
+         //   std::cout<<next_level_unique_values;
+            Cnumpy order_2_filter = data.filter(node.get_decision_index(),node.get_value());
+            std::cout<<"6";
+            Cnumpy next_level_unique_values = order_2_filter.get_unique_column_values(max_index_profit_for_level_column);
+
+
+           Cnumpy   xd = next_level_unique_values;
+            std::cout<<"7";
+            std::cout<<"ELEMENTY NASTEPNEGO POZIOMU"<<std::endl;
+            std::cout<<xd<<std::endl;
+            std::cout<<"8";
+            for(int i=0; i < xd.get_y_dimension(); ++i){
+
+                std::cout<<"9";
+                tree_node child(xd[i], max_index_profit_for_level_column, node.get_level() + 1, Cnumpy::of("BRAK!!!"));
+
+
+
+//                std::cout<<"FILTRUJE PO "<<std::endl;
+//                std::cout<<xd[i];
+//
+//                std::cout<<"Kolumna "<<max_index_profit_for_level_column<<std::endl;
+//
+//                std::cout<<"DANE"<<std::endl;
+//                std::cout<<data;
+                std::cout<<"10";
+                Cnumpy rows_with_same_value = data.filter(max_index_profit_for_level_column, xd[i]);
+                rows_with_same_value = rows_with_same_value.filter(node.get_decision_index(),node.get_value());
+//                std::cout<<"WIESZ Z TĄ SAMĄ WARTOSCIA"<<std::endl;
+//                std::cout<<xd[i]<<std::endl;
+//                std::cout<<std::endl;
+//                std::cout<<rows_with_same_value<<std::endl;
+
+//                std::cout<<"AKTUALNY WIERSZ FILTR :"<<node.get_decision_index()<< std::endl;
+//                std::cout<<"FILTX"<<std::endl;
+//                std::cout<<node.get_value();
+
+              //  Cnumpy order_2_filter = rows_with_same_value.filter(node.get_decision_index(),node.get_value());
+             //   std::cout<<order_2_filter<<std::endl;
+                std::cout<<"11";
+                create_lower_level_tree_verbose(rows_with_same_value, child, predict_column_index);
+                std::cout<<"12";
+                node.add_child(child);
+
+            }
+
+            return  node;
+
+
+
+
+        }
+
+
+
+
+
+
+
+    }
+
+
     tree_node construct_general_tree(Cnumpy data,int predict_column_index){
         tree_node* root = new tree_node;
         (*root).set_level(0);
         return create_lower_level_tree(data, (*root), predict_column_index);
+
+    }
+
+
+    tree_node construct_general_tree_verbose(Cnumpy data,int predict_column_index){
+        tree_node* root = new tree_node;
+        (*root).set_level(0);
+        return create_lower_level_tree_verbose(data, (*root), predict_column_index);
 
     }
 
