@@ -41,21 +41,21 @@ Cnumpy predict_value_from_dataset(Cnumpy datasets,tree_node root,decision_tree t
 Cnumpy create_test_datasets(){
     std::vector<Type> columns_in_iris_datasets{Type::double_type, Type::double_type, Type::double_type, Type::double_type, Type::string_type};
     Cnumpy iris_test_data(5, 10, columns_in_iris_datasets);
-
+//5.6,2.7,4.2,1.3,"Versicolor"
     std::vector<double> sepal_length{
-            4.6,4.6,5.5,6.9,5.9,5.4,6.2,6,6.5,7.7
+            4.6,4.6,5.5,6.9,5.6,5.4,6.2,6,6.5,7.7
     };
 
     std::vector<double> sepal_width{
-            3.4,3.6,4.3,3.1,3.2,3.0,2.9,3.0,3.0,3.0
+            3.4,3.6,4.3,3.1,2.7,3.0,2.9,3.0,3.0,3.0
     };
 
     std::vector<double> petal_length{
-            1.4,1.0,1.4,4.9,4.8,4.5,4.3,4.8,5.2,6.1
+            1.4,1.0,1.4,4.9,4.2,4.5,4.3,4.8,5.2,6.1
     };
 
     std::vector<double> petal_width{
-            0.3,0.2,0.2,1.5,1.8,1.5,1.3,1.8,2.0,2.3
+            0.3,0.2,0.2,1.5,1.3,1.5,1.3,1.8,2.0,2.3
     };
 
     std::vector<std::string> label{
@@ -138,12 +138,71 @@ void check_one_tree_prediction(){
 
 
 void check_forrest_prediction(){
+    set_global_strategy_for_cnumpy();
     create_data_set create_dataset;
-    create_dataset.create_files(10,path_to_file::IRIS_SUBSET,120,"C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\Google_tests\\test_data\\datasets_for_random_forrest_splited");
+    create_dataset.create_files(10,path_to_file::IRIS_SUBSET,10,"C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\Google_tests\\test_data\\datasets_for_random_forrest_splited");
+
+    std::vector<Cnumpy> predicts_all;
+
+    for(int i=0;i<10;++i){
+        std::cout<<"1"<<std::endl;
+        decision_tree tree;
+        std::cout<<"2"<<std::endl;
+        csv csv_reader;
+        std::cout<<"3"<<std::endl;
+        Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\Google_tests\\test_data\\datasets_for_random_forrest_splited\\"+std::to_string(i)+"\\data.csv", ",");
+        std::cout<<"4"<<std::endl;
+        tree_node root =  tree.construct_general_tree(data, 4);
+        std::cout<<"5"<<std::endl;
+        Cnumpy test_data = create_test_datasets();
+        std::cout<<"6"<<std::endl;
+        //Cnumpy result_label =  compare_result_to_expected_result(test_data,root,tree);//to
+        std::cout<<"7"<<std::endl;
+  //      predicts_all.push_back(result_label);//to
+        std::cout<<"8"<<std::endl;
+    }
+
+
+    int number =1;
+
+    std::vector<Type> result_columns_type{Type::string_type, Type::integer_type,Type::integer_type,Type::integer_type,Type::integer_type,Type::string_type};
+    std::vector<std::string> result_columns_name{"Expected","EMPTY","Setosa","Versricolor","Virginica","Predicted"};
+
+    Cnumpy results (5, 10, result_columns_type,result_columns_name);
+    for(Cnumpy data:predicts_all){
+        std::cout<<std::endl<<"Drzewo numer"<<number<<" wyniki "<<std::endl;
+        std::cout<<data;
+
+        for(int j=0;j<10;++j){
+            Cnumpy predicted = data[1][j];
+
+            if(predicted.get_xy_string(0,0) == "BRAK"){
+                results.set(1,j,results[1][j].get_xy_int(0,0)+1);
+            }else if(predicted.get_xy_string(0,0) == "Setosa" ){
+                results.set(2,j,results[2][j].get_xy_int(0,0)+1);
+            }else if(predicted.get_xy_string(0,0) == "Versicolor" ){
+                results.set(3,j, results[3][j].get_xy_int(0,0)+1);
+            }else{
+                results.set(4,j, results[4][j].get_xy_int(0,0)+1);
+            }
+            results.set(0,j,data[0][j]);
+
+        }
+
+        number++;
+    }
+
+
+
+
+    std::cout<<"WYNIKI CAŁOŚĆI"<<std::endl;
+    std::cout<<results;
+
 
 }
 
 int main() {
+    //check_forrest_prediction();
     check_forrest_prediction();
 
 
