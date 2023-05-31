@@ -302,6 +302,8 @@ public:
                 Cnumpy child = children_elem_tree[i].get_value();
                 int decision_index = children_elem_tree[i].get_decision_index();
                 Cnumpy value_in_decision_index_column = row_to_predict[decision_index];
+                std::cout<<"child"<<child;
+                std::cout<<value_in_decision_index_column;
                 if (child == value_in_decision_index_column) {
 
                     return predict(children_elem_tree[i], row_to_predict, index + 1);

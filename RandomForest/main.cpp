@@ -33,7 +33,10 @@ Cnumpy predict_value_from_dataset(Cnumpy datasets,tree_node root,decision_tree t
     row.set(3, 0, datasets[3][index_y]);
     row.set(4, 0, datasets[4][index_y]);
 
+    std::cout<<"111->"<<std::endl;
+    std::cout<<row;
     Cnumpy result = tree.predict(root, row);
+    std::cout<<"222->"<<std::endl;
     return result;
 
 }
@@ -101,8 +104,9 @@ Cnumpy compare_result_to_expected_result(Cnumpy datasets,tree_node root,decision
     Cnumpy results (3, datasets.get_y_dimension(), result_columns_type,result_columns_name);
 
     for(int i=0;i<datasets.get_y_dimension();++i){
+        std::cout<<"x1"<<std::endl;
         Cnumpy prediction = predict_value_from_dataset(datasets,root,tree,i);
-
+        std::cout<<"x2"<<std::endl;
         Cnumpy correct_row_prediction = datasets[4][i];
         results.set(0,i, correct_row_prediction);
         results.set(1,i, prediction);
@@ -140,7 +144,7 @@ void check_one_tree_prediction(){
 void check_forrest_prediction(){
     set_global_strategy_for_cnumpy();
     create_data_set create_dataset;
-    create_dataset.create_files(10,path_to_file::IRIS_SUBSET,10,"C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\Google_tests\\test_data\\datasets_for_random_forrest_splited");
+    create_dataset.create_files(10,path_to_file::IRIS_SUBSET,15,"C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\Google_tests\\test_data\\datasets_for_random_forrest_splited");
 
     std::vector<Cnumpy> predicts_all;
 
@@ -150,15 +154,16 @@ void check_forrest_prediction(){
         std::cout<<"2"<<std::endl;
         csv csv_reader;
         std::cout<<"3"<<std::endl;
-        Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\konra\\Documents\\PVM_Projekt\\randomforest\\RandomForest\\Google_tests\\test_data\\datasets_for_random_forrest_splited\\"+std::to_string(i)+"\\data.csv", ",");
+        Cnumpy data = csv_reader.read_cnumpy_from_csv("C:\\Users\\Konrad\\Documents\\repo\\randomforrest\\randomforest\\RandomForest\\Google_tests\\test_data\\datasets_for_random_forrest_splited\\"+std::to_string(i)+"\\data.csv", ",");
+        std::cout<<data;
         std::cout<<"4"<<std::endl;
         tree_node root =  tree.construct_general_tree(data, 4);
         std::cout<<"5"<<std::endl;
         Cnumpy test_data = create_test_datasets();
         std::cout<<"6"<<std::endl;
-        //Cnumpy result_label =  compare_result_to_expected_result(test_data,root,tree);//to
+        Cnumpy result_label =  compare_result_to_expected_result(test_data,root,tree);//to
         std::cout<<"7"<<std::endl;
-  //      predicts_all.push_back(result_label);//to
+        predicts_all.push_back(result_label);//to
         std::cout<<"8"<<std::endl;
     }
 
@@ -168,7 +173,7 @@ void check_forrest_prediction(){
     std::vector<Type> result_columns_type{Type::string_type, Type::integer_type,Type::integer_type,Type::integer_type,Type::integer_type,Type::string_type};
     std::vector<std::string> result_columns_name{"Expected","EMPTY","Setosa","Versricolor","Virginica","Predicted"};
 
-    Cnumpy results (5, 10, result_columns_type,result_columns_name);
+    Cnumpy results (6, 10, result_columns_type,result_columns_name);
     for(Cnumpy data:predicts_all){
         std::cout<<std::endl<<"Drzewo numer"<<number<<" wyniki "<<std::endl;
         std::cout<<data;
@@ -192,11 +197,79 @@ void check_forrest_prediction(){
         number++;
     }
 
+  //  results.set(5,0,"xD");
+    std::cout<<"RR"<<results.get_x_dimension();
+    for(int y=0;y<results.get_y_dimension();++y){
+
+        std::cout<<y<<std::endl;
+        Cnumpy empty = results[1][y];
+        Cnumpy setosa = results [2][y];
+        Cnumpy versicolor = results[3][y];
+        Cnumpy virginica = results[4][y];
+        std::cout<<y<<std::endl;
+        if(empty > setosa && empty > versicolor  && empty >virginica){
+            std::cout<<y<<"(1)"<<std::endl;
+            int random_index = rand() % 3;
+
+            if(random_index == 0){
+                results.set(5,y,"Setosa");
+            }else if(random_index ==1){
+                results.set(5,y,"Versicolor");
+            }else{
+                results.set(5,y,"Virginica");
+            }
+            std::cout<<y<<"(1:)"<<std::endl;
+
+        }else if(setosa > empty && setosa > versicolor && setosa > virginica){
+            std::cout<<y<<"(2)"<<std::endl;
+            results.set(5,y,"Setosa");
+            std::cout<<y<<"(2-)"<<std::endl;
+        }else if(versicolor >empty && versicolor > setosa && versicolor >virginica){
+            std::cout<<y<<"(3)"<<std::endl;
+            results.set(5,y,"Versicolor");
+            std::cout<<y<<"(3-)"<<std::endl;
+        }else if(virginica > empty && virginica >setosa && virginica > versicolor){
+            std::cout<<y<<"(4)"<<std::endl;
+            results.set(5,y,"Virginica");
+            std::cout<<y<<"(4-)"<<std::endl;
+        }else{
+            std::cout<<y<<"(5)"<<std::endl;
+            int random_index = rand() % 3;
+
+            if(random_index == 0){
+                results.set(5,y,"Setosa");
+            }else if(random_index ==1){
+                results.set(5,y,"Versicolor");
+            }else{
+                results.set(5,y,"Virginica");
+            }
+            std::cout<<y<<"(5-)"<<std::endl;
+        }
+
+
+
+
+
+    }
+
 
 
 
     std::cout<<"WYNIKI CAŁOŚĆI"<<std::endl;
     std::cout<<results;
+
+
+
+    int correct_answers=0;
+    for(int k=0;k<results.get_y_dimension();++k){
+
+        Cnumpy expected = results[0][k];
+        Cnumpy predicted = results[5][k];
+        if(expected == predicted){
+            correct_answers++;
+        }
+    }
+    std::cout<<"Skutecznosc modelu to  "<< ((double )correct_answers)/((double )results.get_y_dimension())  <<std::endl;
 
 
 }
