@@ -26,9 +26,6 @@ private:
     static std::string default_label;
     static int first_element_index;
 
-
-
-
     std::vector<std::string> string_store = std::vector<std::string>();
     std::vector<double> double_store = std::vector<double>();
     std::vector<int> int_store = std::vector<int>();
@@ -48,9 +45,7 @@ private:
     int position_actual_column_in_same_column_type(Type type, int index_column) const;
 
 
-
     static histogram* histogram_calculator_strategy;
-
 
     static void throws_exception_when_null_pointer(void * ptr){
         if(ptr == nullptr){

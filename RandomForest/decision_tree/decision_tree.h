@@ -161,24 +161,24 @@ public:
 
     tree_node create_lower_level_tree_verbose(Cnumpy data, tree_node& node, int predict_column_index){
 
-        std::cout<<"ZBIÓR DANYCH"<<std::endl;
-        std::cout<<data<<std::endl;
+      //  std::cout<<"ZBIÓR DANYCH"<<std::endl;
+      //  std::cout<<data<<std::endl;
 
 
         int number_column_max_profit_for_level = node.get_level();
         int max_index_profit_for_level_column = get_index_column_with_max_information_profit(data, number_column_max_profit_for_level, predict_column_index);
 
-        std::cout<<"INDEX KOLUMNY Z MAKSYMALNYM ZYSKIEM INFORMACYJNYM DLA POZIOMU = "<<max_index_profit_for_level_column<<std::endl;
-        std::cout<<"ELEMENT"<<std::endl;
-        std::cout<<node.get_value()<<std::endl;
+     //   std::cout<<"INDEX KOLUMNY Z MAKSYMALNYM ZYSKIEM INFORMACYJNYM DLA POZIOMU = "<<max_index_profit_for_level_column<<std::endl;
+     //   std::cout<<"ELEMENT"<<std::endl;
+    //    std::cout<<node.get_value()<<std::endl;
 
 
         if(node.is_root()){
             Cnumpy unique_values_in_column = data.get_unique_column_values(max_index_profit_for_level_column);
 
-            std::cout<<"JESTEM KORZENIEM, UNIKALNE WARTOSĆI "<<std::endl;
+          //  std::cout<<"JESTEM KORZENIEM, UNIKALNE WARTOSĆI "<<std::endl;
 
-            std::cout<<unique_values_in_column<<std::endl;
+         //   std::cout<<unique_values_in_column<<std::endl;
 
             for(int i=0; i < unique_values_in_column.get_y_dimension(); ++i){
                 tree_node child(unique_values_in_column[i], max_index_profit_for_level_column, 1, Cnumpy::of(0));
@@ -193,13 +193,13 @@ public:
 
             if(how_many_same_element_in_column.get_xy_int(0,0) == 1){
 
-                std::cout<<"TYLKO JEDEN WIERSZ WYNIKOWY O TEJ WARTOŚĆI ETYKIETA"<<std::endl;
+              //  std::cout<<"TYLKO JEDEN WIERSZ WYNIKOWY O TEJ WARTOŚĆI ETYKIETA"<<std::endl;
 
 
                 Cnumpy one_rows_with_value = data.filter(node.get_decision_index(), node.get_value());
                 tree_node child(node.get_value(), -1,node.get_level()+1, one_rows_with_value[predict_column_index]);
 
-                std::cout<<one_rows_with_value[predict_column_index]<<std::endl;
+              //  std::cout<<one_rows_with_value[predict_column_index]<<std::endl;
                 node.set_label(one_rows_with_value[predict_column_index][0]);
 
                 return child;
@@ -210,11 +210,11 @@ public:
 
             if(unique_labels_in_column.get_y_dimension() == 1){
 
-                std::cout<<"WSZYSTKIE WIERSZE DAJA TA SAMA PREDYKCJE ETYKIETA TO"<< std::endl;
+            //    std::cout<<"WSZYSTKIE WIERSZE DAJA TA SAMA PREDYKCJE ETYKIETA TO"<< std::endl;
                 node.set_label(rows_with_same_value_in_column[predict_column_index][0]);
                 tree_node child(node.get_value(), -1,node.get_level()+1, rows_with_same_value_in_column[predict_column_index][0]);
                 child.set_label(rows_with_same_value_in_column[predict_column_index][0]);
-                std::cout<<rows_with_same_value_in_column[predict_column_index][0]<<std::endl;
+              //  std::cout<<rows_with_same_value_in_column[predict_column_index][0]<<std::endl;
 
                 node.set_label(rows_with_same_value_in_column[predict_column_index][0]);
 
@@ -227,7 +227,7 @@ public:
             std::cout<<data.get_y_dimension();
 
             if(node.get_level() == (data.get_x_dimension()-1)){
-                std::cout<<"BRAK KOLUMN DO DALSZEJ PREDYKCJI BRAK WYNIKU"<<std::endl;
+          //      std::cout<<"BRAK KOLUMN DO DALSZEJ PREDYKCJI BRAK WYNIKU"<<std::endl;
                 tree_node child(node.get_value(),-1,node.get_level()+1,Cnumpy::of("Brak"));
 
                 return child;
@@ -302,8 +302,8 @@ public:
                 Cnumpy child = children_elem_tree[i].get_value();
                 int decision_index = children_elem_tree[i].get_decision_index();
                 Cnumpy value_in_decision_index_column = row_to_predict[decision_index];
-                std::cout<<"child"<<child;
-                std::cout<<value_in_decision_index_column;
+             //   std::cout<<"child"<<child;
+              //  std::cout<<value_in_decision_index_column;
                 if (child == value_in_decision_index_column) {
 
                     return predict(children_elem_tree[i], row_to_predict, index + 1);
@@ -321,18 +321,18 @@ public:
 
         std::vector<tree_node> children_elem_tree = node.get_children();
 
-        std::cout<<std::endl<<"ELEMENT "<<std::endl;
-        std::cout<<node.get_value()<<std::endl;
+      //  std::cout<<std::endl<<"ELEMENT "<<std::endl;
+      //  std::cout<<node.get_value()<<std::endl;
 
 
 
         if(node.is_leaf()){
-            std::cout<<"JESTEM LIŚĆIEM MOJA PREDYKCJA TO "<<std::endl;
-            std::cout<<node.get_label()<<std::endl;
+      //      std::cout<<"JESTEM LIŚĆIEM MOJA PREDYKCJA TO "<<std::endl;
+       //     std::cout<<node.get_label()<<std::endl;
             return node.get_label();
         }else {
 
-            std::cout<<"JESTEM WĘZŁEM MAM "<<children_elem_tree.size()<<" DZIECI "<<std::endl;
+          //  std::cout<<"JESTEM WĘZŁEM MAM "<<children_elem_tree.size()<<" DZIECI "<<std::endl;
             for (int i = 0; i < children_elem_tree.size(); ++i) {
                 Cnumpy child = children_elem_tree[i].get_value();
                 int decision_index = children_elem_tree[i].get_decision_index();
@@ -341,13 +341,13 @@ public:
 
 
                 if (child == value_in_decision_index_column) {
-                    std::cout<<"ZNALAZŁEM PASUJĄCE DZIECKO"<<std::endl;
+                //    std::cout<<"ZNALAZŁEM PASUJĄCE DZIECKO"<<std::endl;
                     return predict_verbose(children_elem_tree[i], row_to_predict, index + 1);
 
                 }
             }
 
-            std::cout<<"BRAK PASUJĄCEGO ELEMENTU"<<std::endl;
+         //   std::cout<<"BRAK PASUJĄCEGO ELEMENTU"<<std::endl;
             return Cnumpy::of("BRAK");
         }
 

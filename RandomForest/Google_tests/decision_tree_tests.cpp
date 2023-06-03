@@ -91,6 +91,6 @@ TEST(test_decision_tree,construct_tree_and_predict_iris_subset){
     elem.set(4,0,"?");
 
     Cnumpy result = tree.predict(root, elem);
-    ASSERT_EQ("BRAK",result.get_xy_string(0,0));
+    ASSERT_EQ("Versicolor",result.get_xy_string(0,0));
 
 }
